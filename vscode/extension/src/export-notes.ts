@@ -15,9 +15,13 @@ export class ExportCommand extends Command {
   }
 
   override async execute() {
-    const [ws] = vscode.workspace.workspaceFolders ?? [];
-    if (ws) {
+    this.#log.show(true);
+    const [ws = null] = vscode.workspace.workspaceFolders ?? [];
+    if (ws != null) {
       await this.#executeInWorkspace(ws);
+    } else {
+      vscode.window.showErrorMessage("No workspace folder found.");
+      this.#log.error("No workspace folder found.");
     }
   }
 
