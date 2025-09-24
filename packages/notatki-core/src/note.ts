@@ -1,6 +1,5 @@
-import { type FieldNode, type NoteNode, type PropertyNode } from "@notatki/parser";
+import { type FieldNode, type NoteNode } from "@notatki/parser";
 import { type Model, type ModelField, ModelMap } from "./model.js";
-import { loc } from "./nodes.js";
 
 export class NoteList implements Iterable<Note> {
   readonly #types: ModelMap;
@@ -119,28 +118,6 @@ export class Note implements Iterable<NoteField> {
     this.#node = value;
   }
 
-  toNode(): NoteNode {
-    const properties: PropertyNode[] = [];
-    properties.push({ name: { text: "type", loc }, value: { text: this.#type.name, loc }, loc });
-    properties.push({ name: { text: "deck", loc }, value: { text: this.#deck, loc }, loc });
-    properties.push({ name: { text: "tags", loc }, value: { text: this.#tags, loc }, loc });
-    const fields: FieldNode[] = [];
-    if (this.#id.value) {
-      fields.push(this.#id.toNode());
-    }
-    for (const field of this.#fields.values()) {
-      if (field.value) {
-        fields.push(field.toNode());
-      }
-    }
-    return {
-      properties,
-      fields,
-      end: { text: "~~~", loc },
-      loc,
-    };
-  }
-
   static isIdField(fieldName: string): boolean {
     return fieldName.toLowerCase() === "id";
   }
@@ -177,13 +154,5 @@ export class NoteField {
 
   set node(value: FieldNode | null) {
     this.#node = value;
-  }
-
-  toNode(): FieldNode {
-    return {
-      name: { text: this.#type.name.toLowerCase(), loc },
-      value: { text: this.#value, loc },
-      loc,
-    };
   }
 }

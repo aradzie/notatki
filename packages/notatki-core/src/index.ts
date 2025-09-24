@@ -1,6 +1,7 @@
 export * from "./export-notes.js";
 export * from "./insert-note-id.js";
 export * from "./model.js";
+export * from "./nodes.js";
 export * from "./note.js";
 export * from "./note-parser.js";
 export * from "./output.js";
