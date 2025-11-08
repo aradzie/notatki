@@ -1,5 +1,7 @@
 .idea
 .vscode
+.venv
+__pycache__
 node_modules
 dist
 tmp

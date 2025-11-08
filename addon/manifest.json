@@ -1,0 +1,7 @@
+{
+  "package": "notatki",
+  "name": "Notatki JSON import/export",
+  "conflicts": [],
+  "min_point_version": 50,
+  "homepage": "https://github.com/aradzie/notatki"
+}

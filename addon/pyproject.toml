@@ -1,0 +1,11 @@
+[project]
+name = "addon"
+version = "0.1.0"
+description = "Anki addon for exporting and importing notes in a simple JSON format."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "aqt>=25.9.2",
+  "dataclasses-json>=0.6.7",
+  "mypy>=1.18.2",
+]
