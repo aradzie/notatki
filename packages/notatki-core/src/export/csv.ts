@@ -1,17 +1,7 @@
 import { formatField } from "@notatki/format";
 import { type NoteList } from "../note.js";
 
-export type ExportCsvOptions = {
-  signal?: AbortSignal;
-};
-
-export async function exportCsv(
-  col: NoteList,
-  { signal = new AbortController().signal }: Readonly<ExportCsvOptions> = {},
-): Promise<string> {
-  if (signal.aborted) {
-    throw new Error("Aborted");
-  }
+export async function exportCsv(col: NoteList): Promise<string> {
   let width = 0;
   for (const note of col) {
     width = Math.max(width, note.type.fields.length);

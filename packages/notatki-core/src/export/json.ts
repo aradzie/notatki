@@ -29,17 +29,7 @@ export type JNote = {
   fields: Record<string, string>;
 };
 
-export type ExportJsonOptions = {
-  signal?: AbortSignal;
-};
-
-export async function exportJson(
-  col: NoteList,
-  { signal = new AbortController().signal }: Readonly<ExportJsonOptions> = {},
-): Promise<string> {
-  if (signal.aborted) {
-    throw new Error("Aborted");
-  }
+export async function exportJson(col: NoteList): Promise<string> {
   const models: JModel[] = [];
   const notes: JNote[] = [];
   for (const model of col.types) {
