@@ -1,10 +1,14 @@
 import { glob } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { format, join, parse, resolve } from "node:path";
 
 const cwd = process.cwd();
 
-export function pathTo(...file: string[]): string {
-  return resolve(cwd, ...file);
+export function pathTo(...parts: string[]): string {
+  return resolve(cwd, ...parts);
+}
+
+export function withExt(path: string, ext: string): string {
+  return format({ ...parse(path), base: undefined, ext });
 }
 
 export async function findNoteFiles(

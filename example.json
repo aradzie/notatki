@@ -19,8 +19,8 @@
       "cards": [
         {
           "name": "Card 1",
-          "ftpl": "{Front}",
-          "btpl": "{{FrontSide}}\n<hr/>\n{{Back}}"
+          "front": "{Front}",
+          "back": "{{FrontSide}}\n<hr/>\n{{Back}}"
         }
       ],
       "styles": ""
@@ -31,10 +31,7 @@
       "guid": "2f41eea0-3f71-4a87-8b6a-284cdbb7d56e",
       "type": "Basic",
       "deck": "Example",
-      "tags": [
-        "A",
-        "B"
-      ],
+      "tags": ["A", "B"],
       "fields": {
         "Front": "Capital of France",
         "Back": "Paris"
@@ -44,10 +41,7 @@
       "guid": "2ae9bc3c-1153-43cd-8553-6dac265509d0",
       "type": "Basic",
       "deck": "Example",
-      "tags": [
-        "B",
-        "C"
-      ],
+      "tags": ["B", "C"],
       "fields": {
         "Front": "Capital of Germany",
         "Back": "Berlin"
@@ -57,10 +51,7 @@
       "guid": "feb2f9e6-2ba6-4e36-9630-8acfd4486b02",
       "type": "Basic",
       "deck": "Example",
-      "tags": [
-        "C",
-        "D"
-      ],
+      "tags": ["C", "D"],
       "fields": {
         "Front": "Capital of Poland",
         "Back": "Warsaw"

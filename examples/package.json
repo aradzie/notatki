@@ -5,7 +5,7 @@
   "scripts": {
     "insert-id": "notatki insert-id",
     "reformat": "notatki reformat",
-    "export": "notatki export",
+    "export": "notatki export --csv --json",
     "build": "npm run insert-id && npm run reformat && npm run export"
   }
 }

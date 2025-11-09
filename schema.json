@@ -36,14 +36,14 @@
                 "name": {
                   "type": "string"
                 },
-                "ftpl": {
+                "front": {
                   "type": "string"
                 },
-                "btpl": {
+                "back": {
                   "type": "string"
                 }
               },
-              "required": ["name", "ftpl", "btpl"]
+              "required": ["name", "front", "back"]
             }
           },
           "styles": {

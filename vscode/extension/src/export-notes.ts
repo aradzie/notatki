@@ -1,4 +1,4 @@
-import { exportNotes, NoteParser } from "@notatki/core";
+import { exportCsv, NoteParser } from "@notatki/core";
 import vscode from "vscode";
 import { Command } from "./command.js";
 import { allSearchPath, cmdExportNotes, excludeSearchPath, modelExt, noteExt } from "./constants.js";
@@ -47,8 +47,8 @@ export class ExportCommand extends Command {
     } else {
       this.#errors.clearAllErrors();
       if (notes.length > 0) {
-        const out = vscode.Uri.joinPath(ws.uri, "notes.txt");
-        await vscode.workspace.fs.writeFile(out, Buffer.from(exportNotes(notes)));
+        const out = vscode.Uri.joinPath(ws.uri, "notes.csv");
+        await vscode.workspace.fs.writeFile(out, Buffer.from(await exportCsv(notes)));
         vscode.window.showInformationMessage(`Exported ${notes.length} note(s) to "${out.fsPath}".`);
         this.#log.info(`Exported ${notes.length} note(s) to ${out.fsPath}`);
       } else {

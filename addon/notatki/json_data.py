@@ -15,8 +15,8 @@ class JModelField(DataClassJsonMixin):
 @dataclass
 class JModelCard(DataClassJsonMixin):
   name: str
-  ftpl: str
-  btpl: str
+  front: str
+  back: str
 
 
 @dataclass_json

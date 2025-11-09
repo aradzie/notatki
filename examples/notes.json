@@ -1,0 +1,248 @@
+{
+  "models": [
+    {
+      "id": 1607392319,
+      "name": "Basic",
+      "cloze": false,
+      "fields": [
+        {
+          "name": "Front"
+        },
+        {
+          "name": "Back"
+        }
+      ],
+      "cards": [
+        {
+          "name": "Card 1",
+          "front": "{{Front}}",
+          "back": "{{FrontSide}}<hr>{{Back}}"
+        }
+      ],
+      "styles": ""
+    },
+    {
+      "id": 1607392320,
+      "name": "Basic (and reversed card)",
+      "cloze": false,
+      "fields": [
+        {
+          "name": "Front"
+        },
+        {
+          "name": "Back"
+        }
+      ],
+      "cards": [
+        {
+          "name": "Card 1",
+          "front": "{{Front}}",
+          "back": "{{FrontSide}}<hr>{{Back}}"
+        },
+        {
+          "name": "Card 2",
+          "front": "{{Back}}",
+          "back": "{{FrontSide}}<hr>{{Front}}"
+        }
+      ],
+      "styles": ""
+    },
+    {
+      "id": 1607392321,
+      "name": "Basic (optional reversed card)",
+      "cloze": false,
+      "fields": [
+        {
+          "name": "Front"
+        },
+        {
+          "name": "Back"
+        },
+        {
+          "name": "Add Reverse"
+        }
+      ],
+      "cards": [
+        {
+          "name": "Card 1",
+          "front": "{{Front}}",
+          "back": "{{FrontSide}}<hr>{{Back}}"
+        },
+        {
+          "name": "Card 2",
+          "front": "{{#Add Reverse}}{{Back}}{{/Add Reverse}}",
+          "back": "{{FrontSide}}<hr>{{Front}}"
+        }
+      ],
+      "styles": ""
+    },
+    {
+      "id": 1607392322,
+      "name": "Basic (type in the answer)",
+      "cloze": false,
+      "fields": [
+        {
+          "name": "Front"
+        },
+        {
+          "name": "Back"
+        }
+      ],
+      "cards": [
+        {
+          "name": "Card 1",
+          "front": "{{Front}}<br>{{type:Back}}",
+          "back": "{{Front}}<hr>{{Back}}"
+        }
+      ],
+      "styles": ""
+    },
+    {
+      "id": 1607392323,
+      "name": "Cloze",
+      "cloze": true,
+      "fields": [
+        {
+          "name": "Text"
+        },
+        {
+          "name": "Back Extra"
+        }
+      ],
+      "cards": [
+        {
+          "name": "Cloze",
+          "front": "{{cloze:Text}}",
+          "back": "{{cloze:Text}}<br>{{Back Extra}}"
+        }
+      ],
+      "styles": ""
+    },
+    {
+      "id": 7702450,
+      "name": "Basic Math",
+      "cloze": false,
+      "fields": [
+        {
+          "name": "Front"
+        },
+        {
+          "name": "Back"
+        },
+        {
+          "name": "Related"
+        },
+        {
+          "name": "Extra"
+        }
+      ],
+      "cards": [
+        {
+          "name": "Card 1",
+          "front": "<div class=\"front\">{{Front}}</div>",
+          "back": "{{FrontSide}}\n<hr>\n<div class=\"back\">\n  {{Back}}\n\n  {{#Related}}\n    <p class=\"sub\">Related</p>\n    {{Related}}\n  {{/Related}}\n\n  {{#Extra}}\n    <p class=\"sub\">Extra</p>\n    {{Extra}}\n  {{/Extra}}\n</div>"
+        }
+      ],
+      "styles": "@media (min-width: 600px) {\n  .card {\n    max-width: 40rem;\n    margin: 1rem auto;\n    padding: 1rem;\n    border: 1px solid gray;\n    box-shadow: 0 10px 15px rgba(0,0,0,0.1);\n  }\n}\n.front {\n  text-align: center;\n}\n.back {\n  text-align: start;\n}\n.sub {\n  font-weight: bold;\n  color: gray;\n  border-bottom: 1px solid gray;\n}"
+    },
+    {
+      "id": 7702451,
+      "name": "Basic Math (and reversed card)",
+      "cloze": false,
+      "fields": [
+        {
+          "name": "Front"
+        },
+        {
+          "name": "Back"
+        },
+        {
+          "name": "Related"
+        },
+        {
+          "name": "Extra"
+        }
+      ],
+      "cards": [
+        {
+          "name": "Card 1",
+          "front": "<div class=\"front\">{{Front}}</div>",
+          "back": "{{FrontSide}}\n<hr>\n<div class=\"back\">\n  {{Back}}\n\n  {{#Related}}\n    <p class=\"sub\">Related</p>\n    {{Related}}\n  {{/Related}}\n\n  {{#Extra}}\n    <p class=\"sub\">Extra</p>\n    {{Extra}}\n  {{/Extra}}\n</div>"
+        },
+        {
+          "name": "Card 2",
+          "front": "<div class=\"front\">{{Back}}</div>",
+          "back": "{{FrontSide}}\n<hr>\n<div class=\"back\">\n  {{Front}}\n\n  {{#Related}}\n    <p class=\"sub\">Related</p>\n    {{Related}}\n  {{/Related}}\n\n  {{#Extra}}\n    <p class=\"sub\">Extra</p>\n    {{Extra}}\n  {{/Extra}}\n</div>"
+        }
+      ],
+      "styles": "@media (min-width: 600px) {\n  .card {\n    max-width: 40rem;\n    margin: 1rem auto;\n    padding: 1rem;\n    border: 1px solid gray;\n    box-shadow: 0 10px 15px rgba(0,0,0,0.1);\n  }\n}\n.front {\n  text-align: center;\n}\n.back {\n  text-align: start;\n}\n.sub {\n  font-weight: bold;\n  color: gray;\n  border-bottom: 1px solid gray;\n}"
+    }
+  ],
+  "notes": [
+    {
+      "guid": "8ed2ae0e-4141-4969-bbac-b2190c46b8dd",
+      "type": "Cloze",
+      "deck": "Geography",
+      "tags": [
+        "Geography",
+        "Capital"
+      ],
+      "fields": {
+        "Text": "<p>The capital of {{c1::Mongolia::country}} is {{c2::Ulaanbaatar::city}}.</p>",
+        "Back Extra": ""
+      }
+    },
+    {
+      "guid": "bd35b5d7-1964-4b2a-a9a9-d7cc44e8283a",
+      "type": "Cloze",
+      "deck": "Geography",
+      "tags": [
+        "Geography",
+        "Capital"
+      ],
+      "fields": {
+        "Text": "<p>The capital of {{c1::Syria::country}} is {{c2::Damascus::city}}.</p>",
+        "Back Extra": ""
+      }
+    },
+    {
+      "guid": "d48924b0-56da-4cfe-9869-7e7e88a5d93d",
+      "type": "Basic",
+      "deck": "Math",
+      "tags": [
+        "Math",
+        "Equation"
+      ],
+      "fields": {
+        "Front": "<p>Quadratic Formula</p>",
+        "Back": "\\[ x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\]"
+      }
+    },
+    {
+      "guid": "44011d69-198a-4800-8597-5889ab90c6d2",
+      "type": "Basic",
+      "deck": "Math",
+      "tags": [
+        "Math",
+        "Equation"
+      ],
+      "fields": {
+        "Front": "<p>Euler&#39;s Formula</p>",
+        "Back": "\\[ \\begin{align*}\n    e^{ix}  &= \\cos x + i \\sin x \\\\\n    e^{-ix} &= \\cos x - i \\sin x\n\\end{align*} \\]"
+      }
+    },
+    {
+      "guid": "521c65f9-e0e1-4fa6-8033-21c9fff6aac9",
+      "type": "Basic",
+      "deck": "Math",
+      "tags": [
+        "Math",
+        "Definition"
+      ],
+      "fields": {
+        "Front": "<p>Mean Value Theorem</p>",
+        "Back": "<p>The <strong>Mean Value Theorem</strong> states that if a function \\( f \\) is continuous on the closed interval \\( [a, b] \\) and differentiable on the open interval \\( (a, b) \\), then there exists at least one \\( c \\in (a, b) \\) such that</p>\n\\[ f'(c) = \\frac{f(b) - f(a)}{b - a} \\]"
+      }
+    }
+  ]
+}
