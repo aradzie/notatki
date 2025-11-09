@@ -1,6 +1,6 @@
 {
   "name": "@notatki/format",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A collection of tools for creating and syncing Anki notes from simple text files.",
   "keywords": [
     "anki",
