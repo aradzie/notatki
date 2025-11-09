@@ -1,15 +1,19 @@
-import { exportCsv, NoteParser } from "@notatki/core";
+import { exportAnki, exportCsv, exportJson, NoteParser } from "@notatki/core";
 import vscode from "vscode";
 import { Command } from "./command.js";
 import { allSearchPath, cmdExportNotes, excludeSearchPath, modelExt, noteExt } from "./constants.js";
 import { type ErrorChecker } from "./errors.js";
 
+type Format = "anki" | "csv" | "json";
+
 export class ExportCommand extends Command {
+  readonly #format: Format;
   readonly #errors: ErrorChecker;
   readonly #log: vscode.LogOutputChannel;
 
-  constructor(errors: ErrorChecker, log: vscode.LogOutputChannel) {
+  constructor(format: Format, errors: ErrorChecker, log: vscode.LogOutputChannel) {
     super(cmdExportNotes);
+    this.#format = format;
     this.#errors = errors;
     this.#log = log;
   }
@@ -47,8 +51,23 @@ export class ExportCommand extends Command {
     } else {
       this.#errors.clearAllErrors();
       if (notes.length > 0) {
-        const out = vscode.Uri.joinPath(ws.uri, "notes.csv");
-        await vscode.workspace.fs.writeFile(out, Buffer.from(await exportCsv(notes)));
+        let out: vscode.Uri;
+        let data: Buffer;
+        switch (this.#format) {
+          case "anki":
+            out = vscode.Uri.joinPath(ws.uri, "notes.apkg");
+            data = Buffer.from(await exportAnki(notes));
+            break;
+          case "csv":
+            out = vscode.Uri.joinPath(ws.uri, "notes.csv");
+            data = Buffer.from(await exportCsv(notes));
+            break;
+          case "json":
+            out = vscode.Uri.joinPath(ws.uri, "notes.json");
+            data = Buffer.from(await exportJson(notes));
+            break;
+        }
+        await vscode.workspace.fs.writeFile(out, data);
         vscode.window.showInformationMessage(`Exported ${notes.length} note(s) to "${out.fsPath}".`);
         this.#log.info(`Exported ${notes.length} note(s) to ${out.fsPath}`);
       } else {

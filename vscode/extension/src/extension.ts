@@ -17,7 +17,7 @@ export async function activate(context: vscode.ExtensionContext) {
   new NotesFormatter(context);
   new ModelsFormatter(context);
   new PreviewManager(context, models);
-  new ExportCommand(errors, log).attach(context);
+  new ExportCommand("json", errors, log).attach(context);
   new InsertIdCommand().attach(context);
   context.subscriptions.push(vscode.workspace.onWillSaveTextDocument(insertIdOnSave));
 }
