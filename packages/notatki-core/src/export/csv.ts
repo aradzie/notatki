@@ -29,6 +29,8 @@ export async function exportCsv(col: NoteList): Promise<string> {
   return lines.join("\n");
 }
 
+exportCsv.ext = "txt";
+
 function escape(value: string | null): string {
   if (value == null) {
     return "";

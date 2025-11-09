@@ -1,1 +1,1 @@
-file_ext = "json"
+file_ext = "notatki.json"

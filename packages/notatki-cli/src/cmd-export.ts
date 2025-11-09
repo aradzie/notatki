@@ -35,17 +35,17 @@ export async function exportCmd({
   console.log(`Parsed ${notes.length} note(s).`);
   if (notes.length > 0) {
     if (!(csv || json)) {
-      const path = withExt(out, ".apkg");
+      const path = withExt(out, `.${exportAnki.ext}`);
       await writeFile(path, await exportAnki(notes));
       console.log(`Exported notes to "${path}".`);
     }
     if (csv) {
-      const path = withExt(out, ".csv");
+      const path = withExt(out, `.${exportCsv.ext}`);
       await writeFile(path, await exportCsv(notes));
       console.log(`Exported notes to "${path}" in CSV format.`);
     }
     if (json) {
-      const path = withExt(out, ".json");
+      const path = withExt(out, `.${exportJson.ext}`);
       await writeFile(path, await exportJson(notes));
       console.log(`Exported notes to "${path}" in JSON format.`);
     }

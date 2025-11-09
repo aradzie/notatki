@@ -55,15 +55,15 @@ export class ExportCommand extends Command {
         let data: Buffer;
         switch (this.#format) {
           case "anki":
-            out = vscode.Uri.joinPath(ws.uri, "notes.apkg");
+            out = vscode.Uri.joinPath(ws.uri, `notes.${exportAnki.ext}`);
             data = Buffer.from(await exportAnki(notes));
             break;
           case "csv":
-            out = vscode.Uri.joinPath(ws.uri, "notes.csv");
+            out = vscode.Uri.joinPath(ws.uri, `notes.${exportCsv.ext}`);
             data = Buffer.from(await exportCsv(notes));
             break;
           case "json":
-            out = vscode.Uri.joinPath(ws.uri, "notes.json");
+            out = vscode.Uri.joinPath(ws.uri, `notes.${exportJson.ext}`);
             data = Buffer.from(await exportJson(notes));
             break;
         }

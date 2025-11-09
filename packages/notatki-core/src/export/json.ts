@@ -73,3 +73,5 @@ export async function exportJson(col: NoteList): Promise<string> {
   }
   return JSON.stringify({ models, notes } satisfies JCollection, null, 2);
 }
+
+exportJson.ext = "notatki.json";
