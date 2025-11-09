@@ -167,7 +167,7 @@ export class NoteParser {
       cloze: node.cloze != null,
       fields,
       cards,
-      styling: node.styling?.text ?? "",
+      styles: node.styles?.text ?? "",
     });
   }
 

@@ -42,7 +42,7 @@ type Model = {
   readonly cloze: boolean;
   readonly fields: readonly ModelField[];
   readonly cards: readonly ModelCard[];
-  readonly styling: string;
+  readonly styles: string;
 };
 
 type ModelField = {

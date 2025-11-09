@@ -3,7 +3,7 @@ import { Output } from "./output.js";
 
 export function printModelNodes(nodes: Iterable<ModelNode>): string {
   const out = new Output();
-  for (const { name, id, cloze, fields, cards, styling } of nodes) {
+  for (const { name, id, cloze, fields, cards, styles } of nodes) {
     out.separate();
     out.print(`model ${name.text}`);
     out.separate();
@@ -29,9 +29,9 @@ export function printModelNodes(nodes: Iterable<ModelNode>): string {
       out.print("~~~");
       out.separate();
     }
-    if (styling != null) {
-      out.print("styling");
-      out.print(styling.text);
+    if (styles != null) {
+      out.print("styles");
+      out.print(styles.text);
       out.print("~~~");
     }
   }

@@ -20,7 +20,7 @@ front
 ~~~
 back
 ~~~
-styling
+styles
 ~~~
 `,
   );

@@ -82,10 +82,10 @@ export class PreviewRenderer<Context extends RendererContext = RendererContext> 
 
   renderModelStyles(ctx: Context) {
     for (const type of ctx.notes.types) {
-      if (type.styling) {
+      if (type.styles) {
         ctx.out.print(`<style>`);
         ctx.out.print(`[data-type="${type.name}"] {`);
-        ctx.out.print(type.styling);
+        ctx.out.print(type.styles);
         ctx.out.print(`}`);
         ctx.out.print(`</style>`);
       }

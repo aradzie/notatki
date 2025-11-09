@@ -181,7 +181,7 @@ function peg$parse(input, options) {
   const peg$c11 = "card";
   const peg$c12 = "front";
   const peg$c13 = "back";
-  const peg$c14 = "styling";
+  const peg$c14 = "styles";
   const peg$c15 = "{{";
   const peg$c16 = "}}";
   const peg$c17 = "#";
@@ -213,7 +213,7 @@ function peg$parse(input, options) {
   const peg$e15 = peg$literalExpectation("card", false);
   const peg$e16 = peg$literalExpectation("front", false);
   const peg$e17 = peg$literalExpectation("back", false);
-  const peg$e18 = peg$literalExpectation("styling", false);
+  const peg$e18 = peg$literalExpectation("styles", false);
   const peg$e19 = peg$literalExpectation("{{", false);
   const peg$e20 = peg$classExpectation(["#", "/", "^"], false, false, false);
   const peg$e21 = peg$literalExpectation("}}", false);
@@ -241,7 +241,7 @@ function peg$parse(input, options) {
   function peg$f11(text) {    return { text, loc: location() };  }
   function peg$f12(text) {    return { text, loc: location() };  }
   function peg$f13(list) {    return list;  }
-  function peg$f14(name, id, cloze, fields, cards, styling) {    return { name, id, cloze, fields, cards, styling, loc: location() }  }
+  function peg$f14(name, id, cloze, fields, cards, styles) {    return { name, id, cloze, fields, cards, styles, loc: location() }  }
   function peg$f15(text) {    return { text, loc: location() };  }
   function peg$f16(id) {    return { id, value: Number.parseInt(id.text), loc: location() };  }
   function peg$f17(text) {    return { text, loc: location() };  }
@@ -1453,7 +1453,7 @@ function peg$parse(input, options) {
                 s12 = peg$FAILED;
               }
             }
-            s12 = peg$parseModelStyling();
+            s12 = peg$parseModelStyles();
             if (s12 !== peg$FAILED) {
               s13 = peg$parse_();
               s14 = peg$parseNewline();
@@ -1832,13 +1832,13 @@ function peg$parse(input, options) {
     return s0;
   }
 
-  function peg$parseModelStyling() {
+  function peg$parseModelStyles() {
     let s0, s1, s2, s3, s4;
 
     s0 = peg$currPos;
-    if (input.substr(peg$currPos, 7) === peg$c14) {
+    if (input.substr(peg$currPos, 6) === peg$c14) {
       s1 = peg$c14;
-      peg$currPos += 7;
+      peg$currPos += 6;
     } else {
       s1 = peg$FAILED;
       if (peg$silentFails === 0) { peg$fail(peg$e18); }

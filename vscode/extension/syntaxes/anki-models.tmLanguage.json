@@ -80,7 +80,7 @@
     },
     {
       "name": "meta.block.css",
-      "begin": "^(styling)[ \\t]*\\n",
+      "begin": "^(styles)[ \\t]*\\n",
       "beginCaptures": {
         "1": { "name": "keyword.control.anki-models" }
       },

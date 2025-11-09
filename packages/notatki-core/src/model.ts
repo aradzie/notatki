@@ -4,7 +4,7 @@ export type Model = {
   readonly cloze: boolean;
   readonly fields: readonly ModelField[];
   readonly cards: readonly ModelCard[];
-  readonly styling: string;
+  readonly styles: string;
 };
 
 export type ModelField = {
@@ -34,7 +34,7 @@ export class ModelMap implements Iterable<Model> {
         back: "{{FrontSide}}<hr>{{Back}}",
       },
     ],
-    styling: "",
+    styles: "",
   } as const satisfies Model;
 
   static readonly basicAndReversedCard = {
@@ -57,7 +57,7 @@ export class ModelMap implements Iterable<Model> {
         back: "{{FrontSide}}<hr>{{Front}}",
       },
     ],
-    styling: "",
+    styles: "",
   } as const satisfies Model;
 
   static readonly basicOptionalReversedCard = {
@@ -81,7 +81,7 @@ export class ModelMap implements Iterable<Model> {
         back: "{{FrontSide}}<hr>{{Front}}",
       },
     ],
-    styling: "",
+    styles: "",
   } as const satisfies Model;
 
   static readonly basicTypeInAnswer = {
@@ -99,7 +99,7 @@ export class ModelMap implements Iterable<Model> {
         back: "{{Front}}<hr>{{Back}}",
       },
     ],
-    styling: "",
+    styles: "",
   } as const satisfies Model;
 
   static readonly cloze = {
@@ -117,7 +117,7 @@ export class ModelMap implements Iterable<Model> {
         back: "{{cloze:Text}}<br>{{Back Extra}}",
       },
     ],
-    styling: "",
+    styles: "",
   } as const satisfies Model;
 
   static readonly internal: readonly Model[] = [

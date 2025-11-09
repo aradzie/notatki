@@ -27,8 +27,8 @@ front
 back
 [back]
 ~~~
-styling
-[styling]
+styles
+[styles]
 ~~~
 `),
     [
@@ -75,8 +75,8 @@ styling
             },
           },
         ],
-        styling: {
-          text: "[styling]",
+        styles: {
+          text: "[styles]",
         },
       },
     ],

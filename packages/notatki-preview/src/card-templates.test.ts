@@ -27,7 +27,7 @@ test("render templates", () => {
       { name: "Extra", required: false },
     ],
     cards: [card1],
-    styling: "",
+    styles: "",
   };
   const templates = new CardTemplates(new ModelMap([model1]));
 
@@ -89,7 +89,7 @@ test("conditional", () => {
       { name: "Extra", required: false },
     ],
     cards: [card1],
-    styling: "",
+    styles: "",
   };
   const templates = new CardTemplates(new ModelMap([model1]));
 

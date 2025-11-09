@@ -58,8 +58,8 @@ Model =
   cloze:( ( _ Newline )* @ModelCloze _ Newline )?
   fields:( ( _ Newline )* @ModelField _ Newline )*
   cards:( ( _ Newline )* @ModelCard )*
-  styling:( ( _ Newline )* @ModelStyling _ Newline )?
-  { return { name, id, cloze, fields, cards, styling, loc: location() } }
+  styles:( ( _ Newline )* @ModelStyles _ Newline )?
+  { return { name, id, cloze, fields, cards, styles, loc: location() } }
 
 ModelId =
   "id" Whitespace id:( text:$[0-9]+ { return { text, loc: location() }; } )
@@ -93,8 +93,8 @@ ModelCardBack =
   text:MultilineText
   { return { text, loc: location() } }
 
-ModelStyling =
-  "styling" _ Newline
+ModelStyles =
+  "styles" _ Newline
   text:MultilineText
   { return { text, loc: location() } }
 

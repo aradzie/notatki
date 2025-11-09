@@ -26,7 +26,7 @@ test("card data", () => {
       { name: "Extra", required: false },
     ],
     cards: [card1],
-    styling: "",
+    styles: "",
   };
   const note = new Note(model1);
   note.deck = "A::B::C";

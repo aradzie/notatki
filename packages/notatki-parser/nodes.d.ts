@@ -26,7 +26,7 @@ export type ModelNode = {
   cloze: Token;
   fields: ModelFieldNode[];
   cards: ModelCardNode[];
-  styling: CardStylingNode | null;
+  styles: CardStylesNode | null;
 } & Node;
 
 export type ModelIdNode = {
@@ -53,7 +53,7 @@ export type CardBackNode = {
   text: string;
 } & Node;
 
-export type CardStylingNode = {
+export type CardStylesNode = {
   text: string;
 } & Node;
 
