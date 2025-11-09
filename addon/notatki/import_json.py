@@ -1,17 +1,48 @@
 import json
-import os
 
-from PyQt6.QtWidgets import QFileDialog
 from anki.collection import Collection, AddNoteRequest
 from anki.notes import Note
-from aqt import mw
+from aqt import AnkiQt
+from aqt.import_export.importing import Importer, IMPORTERS
 from aqt.operations import QueryOp
 from aqt.utils import showInfo, showWarning
 
+from .const import file_ext
 from .json_data import JCollection, JNote
 
 
-class Importer:
+class JsonImporter(Importer):
+  accepted_file_endings = [f".{file_ext}"]
+
+  @classmethod
+  def do_import(cls, mw: AnkiQt, path: str) -> None:
+    def do_import(col: Collection) -> State:
+      state = State(col)
+      state.start(path)
+      return state
+
+    def on_success(state: State) -> None:
+      if state.exp:
+        showWarning(str(state.exp))
+      else:
+        showInfo(f"Added {len(state.added)} and "
+                 f"updated {len(state.updated)} notes, "
+                 f"{len(state.failed)} errors.")
+      mw.reset()
+
+    op = QueryOp(
+      parent=mw,
+      op=lambda col: do_import(col),
+      success=on_success,
+    )
+    op.with_progress().run_in_background()
+
+
+def init_importer():
+  IMPORTERS.append(JsonImporter)
+
+
+class State:
   col: Collection
   notes: dict[str, Note] = dict()  # Maps guids to notes.
   to_update: list[AddNoteRequest] = []  # Existing notes to be updated.
@@ -19,11 +50,22 @@ class Importer:
   updated: list[JNote] = []  # Updated notes.
   added: list[JNote] = []  # Added notes.
   failed: list[JNote] = []  # Notes with errors.
+  unknown_models: set[str] = set()
+  unknown_fields: set[str] = set()
+  exp: Exception = None
 
   def __init__(self, col: Collection):
     self.col = col
 
-  def run(self, jcol):
+  def start(self, path):
+    try:
+      with open(path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+      jcol = JCollection.load(data)
+    except Exception as e:
+      self.exp = Exception(f"Error reading Notatki JSON file: {e}")
+      return
+
     self.load_notes()
     for jnote in jcol.notes:
       self.process_note(jnote)
@@ -50,6 +92,8 @@ class Importer:
           self.to_add.append(AddNoteRequest(note, deck_id))
           self.added.append(jnote)
           return True
+      else:
+        self.unknown_models.add(jnote.type)
     self.failed.append(jnote)
     return False
 
@@ -61,6 +105,7 @@ class Importer:
       if key in note:
         note[key] = value
       else:
+        self.unknown_fields.add(key)
         return False
     return True
 
@@ -77,48 +122,3 @@ class Importer:
     self.col.update_notes(changed_notes)
     self.col.update_cards(changed_cards)
     self.col.add_notes(self.to_add)
-
-
-def start_import(jcol: JCollection) -> None:
-  op = QueryOp(
-    parent=mw,
-    op=lambda col: do_import(col, jcol),
-    success=on_success,
-  )
-  op.with_progress().run_in_background()
-
-
-def do_import(col: Collection, jcol: JCollection) -> Importer:
-  importer = Importer(col)
-  importer.run(jcol)
-  return importer
-
-
-def on_success(importer: Importer) -> None:
-  showInfo(f"Added {len(importer.added)} and "
-           f"updated {len(importer.updated)} notes, "
-           f"{len(importer.failed)} errors.")
-  mw.reset()
-
-
-def import_notes_from_json():
-  path, _ = QFileDialog.getOpenFileName(mw, "Select JSON file to import", None, "JSON Files (*.json)")
-
-  if not os.path.exists(path):
-    showWarning(f"Could not find notes JSON file {path}")
-    return
-
-  try:
-    with open(path, "r", encoding="utf-8") as file:
-      data = json.load(file)
-  except Exception as e:
-    showWarning(f"Malformed notes JSON file: {e}")
-    return
-
-  try:
-    jcol = JCollection.load(data)
-  except Exception as e:
-    showWarning(f"Invalid notes JSON data: {e}")
-    return
-
-  start_import(jcol)

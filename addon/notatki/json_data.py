@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Any, Dict
 
+from anki.models import NotetypeDict
 from dataclasses_json import dataclass_json, DataClassJsonMixin
 from marshmallow import EXCLUDE
 
@@ -28,6 +29,27 @@ class JModel(DataClassJsonMixin):
   fields: List[JModelField]
   cards: List[JModelCard]
   styles: str
+
+  @classmethod
+  def from_model(cls, model: NotetypeDict) -> 'JModel':
+    return JModel(
+      id=model["id"],
+      name=model["name"],
+      cloze=model["type"] == 1,
+      fields=[
+        JModelField(
+          name=v["name"],
+        ) for v in model["flds"]
+      ],
+      cards=[
+        JModelCard(
+          name=v["name"],
+          front=v["qfmt"],
+          back=v["afmt"]
+        ) for v in model["tmpls"]
+      ],
+      styles=model["css"],
+    )
 
 
 @dataclass_json
