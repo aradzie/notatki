@@ -22,8 +22,8 @@ class JsonImporter(Importer):
       return state
 
     def on_success(state: State) -> None:
-      if state.exp:
-        showWarning(str(state.exp))
+      if state.err:
+        showWarning(str(state.err))
       else:
         showInfo(f"Added {len(state.added)} and "
                  f"updated {len(state.updated)} notes, "
@@ -52,7 +52,7 @@ class State:
   failed: list[JNote] = []  # Notes with errors.
   unknown_models: set[str] = set()
   unknown_fields: set[str] = set()
-  exp: Exception = None
+  err: Exception = None
 
   def __init__(self, col: Collection):
     self.col = col
@@ -63,7 +63,7 @@ class State:
         data = json.load(file)
       jcol = JCollection.load(data)
     except Exception as e:
-      self.exp = Exception(f"Error reading Notatki JSON file: {e}")
+      self.err = Exception(f"Error reading Notatki JSON file: {e}")
       return
 
     self.load_notes()
