@@ -1,6 +1,6 @@
 {
   "name": "@notatki/sync",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A collection of tools for creating and syncing Anki notes from simple text files.",
   "keywords": [
     "anki",
@@ -19,9 +19,9 @@
   "type": "module",
   "main": "dist/index.js",
   "dependencies": {
-    "@notatki/core": "^0.0.5",
-    "@notatki/format": "^0.0.5",
-    "@notatki/parser": "^0.0.5"
+    "@notatki/core": "^0.0.6",
+    "@notatki/format": "^0.0.6",
+    "@notatki/parser": "^0.0.6"
   },
   "scripts": {
     "compile": "rm -fr dist && tsc",
