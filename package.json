@@ -35,18 +35,18 @@
     "rich-assert": "^0.0.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
-    "esbuild": "^0.25.10",
-    "eslint": "^9.36.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "prettier": "^3.6.2",
-    "stylelint": "^16.24.0",
+    "@eslint/js": "^9.39.0",
+    "esbuild": "^0.27.0",
+    "eslint": "^9.39.0",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "prettier": "^3.8.0",
+    "stylelint": "^16.26.0",
     "stylelint-config-recommended": "^17.0.0",
     "stylelint-order": "^7.0.0",
-    "stylelint-plugin-logical-css": "^1.2.3",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.0"
+    "stylelint-plugin-logical-css": "^1.2.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.53.0"
   },
   "scripts": {
     "compile": "npm run compile --workspaces --if-present",
