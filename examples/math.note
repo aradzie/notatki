@@ -2,12 +2,12 @@
 !deck: Math
 !tags: Math Equation
 
-!id: d48924b0-56da-4cfe-9869-7e7e88a5d93d
+!id: PjHgZNbLbL
 !front: Quadratic Formula
 !back: $$ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $$
 ~~~
 
-!id: 44011d69-198a-4800-8597-5889ab90c6d2
+!id: tfFUmGwnVe
 !front: Euler's Formula
 !back:
 $$
@@ -20,7 +20,7 @@ $$
 
 !tags: Math Definition
 
-!id: 521c65f9-e0e1-4fa6-8033-21c9fff6aac9
+!id: 8x5YMmQyYQ
 !front: Mean Value Theorem
 !back:
 The **Mean Value Theorem** states that if a function $f$ is continuous on the closed interval $[a, b]$ and differentiable on the open interval $(a, b)$, then there exists at least one $c \in (a, b)$ such that

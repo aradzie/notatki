@@ -1,10 +1,7 @@
 import { type NoteNode } from "@notatki/parser";
 import { loc } from "./nodes.js";
 import { Note } from "./note.js";
-
-export type IdGenerator = () => string;
-
-export const idGenerator: IdGenerator = () => crypto.randomUUID();
+import { type IdGenerator, idGenerator } from "./note-id.js";
 
 export function insertNoteId(nodes: NoteNode[], gen: IdGenerator = idGenerator): boolean {
   let changed = false;
