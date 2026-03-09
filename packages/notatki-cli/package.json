@@ -23,7 +23,6 @@
   "dependencies": {
     "@notatki/core": "^0.0.5",
     "@notatki/preview": "^0.0.5",
-    "@notatki/sync": "^0.0.5",
     "commander": "^14.0.0"
   },
   "scripts": {

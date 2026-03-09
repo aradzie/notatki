@@ -1,6 +1,6 @@
 {
   "package": "notatki",
-  "name": "Notatki JSON import/export",
+  "name": "Notatki text notes importer",
   "conflicts": [],
   "min_point_version": 50,
   "homepage": "https://github.com/aradzie/notatki"

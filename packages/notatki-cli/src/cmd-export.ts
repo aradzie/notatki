@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { exportAnki, exportCsv, exportJson, NoteParser } from "@notatki/core";
+import { exportAnki, exportCsv, NoteParser } from "@notatki/core";
 import { generatePreview } from "@notatki/preview";
 import { findNoteFiles, withExt } from "./io.js";
 
@@ -8,13 +8,11 @@ export async function exportCmd({
   out,
   preview,
   csv,
-  json,
 }: {
   dir: string;
   out: string;
   preview: boolean;
   csv: boolean;
-  json: boolean;
 }): Promise<void> {
   const parser = new NoteParser();
   console.log(`Scanning directory "${dir}"...`);
@@ -34,20 +32,14 @@ export async function exportCmd({
   const { notes } = parser;
   console.log(`Parsed ${notes.length} note(s).`);
   if (notes.length > 0) {
-    if (!(csv || json)) {
-      const path = withExt(out, `.${exportAnki.ext}`);
-      await writeFile(path, await exportAnki(notes));
-      console.log(`Exported notes to "${path}".`);
-    }
     if (csv) {
       const path = withExt(out, `.${exportCsv.ext}`);
       await writeFile(path, await exportCsv(notes));
       console.log(`Exported notes to "${path}" in CSV format.`);
-    }
-    if (json) {
-      const path = withExt(out, `.${exportJson.ext}`);
-      await writeFile(path, await exportJson(notes));
-      console.log(`Exported notes to "${path}" in JSON format.`);
+    } else {
+      const path = withExt(out, `.${exportAnki.ext}`);
+      await writeFile(path, await exportAnki(notes));
+      console.log(`Exported notes to "${path}".`);
     }
     if (preview) {
       const path = withExt(out, ".html");

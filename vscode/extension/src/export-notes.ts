@@ -1,10 +1,10 @@
-import { exportAnki, exportCsv, exportJson, NoteParser } from "@notatki/core";
+import { exportAnki, exportCsv, NoteParser } from "@notatki/core";
 import vscode from "vscode";
 import { Command } from "./command.js";
 import { allSearchPath, cmdExportNotes, excludeSearchPath, modelExt, noteExt } from "./constants.js";
 import { type ErrorChecker } from "./errors.js";
 
-type Format = "anki" | "csv" | "json";
+type Format = "anki" | "csv";
 
 export class ExportCommand extends Command {
   readonly #format: Format;
@@ -61,10 +61,6 @@ export class ExportCommand extends Command {
           case "csv":
             out = vscode.Uri.joinPath(ws.uri, `notes.${exportCsv.ext}`);
             data = Buffer.from(await exportCsv(notes));
-            break;
-          case "json":
-            out = vscode.Uri.joinPath(ws.uri, `notes.${exportJson.ext}`);
-            data = Buffer.from(await exportJson(notes));
             break;
         }
         await vscode.workspace.fs.writeFile(out, data);

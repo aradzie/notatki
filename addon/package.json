@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "@notatki/addon",
+  "version": "0.0.0",
+  "scripts": {
+    "postinstall": "uv sync",
+    "test": "uv run pytest",
+    "build": "./build.sh"
+  }
+}

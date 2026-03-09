@@ -19,17 +19,16 @@
   "license": "MIT",
   "type": "module",
   "workspaces": [
+    "addon",
     "scripts",
     "packages/notatki-parser",
     "packages/notatki-format",
     "packages/notatki-core",
     "packages/notatki-preview",
-    "packages/notatki-sync",
     "packages/notatki-cli",
     "vscode/protocol",
     "vscode/webview",
-    "vscode/extension",
-    "examples"
+    "vscode/extension"
   ],
   "dependencies": {
     "rich-assert": "^0.0.3"

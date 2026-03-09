@@ -1,6 +1,5 @@
 export * from "./export/anki.js";
 export * from "./export/csv.js";
-export * from "./export/json.js";
 export * from "./insert-note-id.js";
 export * from "./model.js";
 export * from "./nodes.js";

@@ -1,15 +1,14 @@
 def initialize_addon():
-  import os
   import sys
+  from pathlib import Path
 
-  sys.path.append(os.path.join(os.path.dirname(__file__), ".venv", "lib", "python3.12", "site-packages"))
+  sys.path.insert(0, str(Path(__file__).parent / "vendor.zip"))
 
-  from aqt import gui_hooks
+  from aqt import mw, gui_hooks
+  from .notatki.import_directory import init_import
+  from .notatki.export_notes import exporters_hook
 
-  from .notatki.export_json import exporters_hook
-  from .notatki.import_json import init_importer
-
-  init_importer()
+  if mw: init_import(mw)
   gui_hooks.exporters_list_did_initialize.append(exporters_hook)
 
 
