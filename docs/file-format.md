@@ -52,7 +52,6 @@ A `.model` file defines one or more Anki note types.
 Each model can declare:
 
 - a name
-- a numeric id
 - an optional `cloze` flag
 - a list of fields
 - a list of cards
@@ -69,12 +68,6 @@ model <model name>
 The model name is read as normal text on that line.
 Repeated internal whitespace is normalized to single spaces.
 
-The next required line is the numeric id:
-
-```text
-id 12345
-```
-
 After that, the model may contain:
 
 - zero or one `cloze` line
@@ -85,7 +78,6 @@ After that, the model may contain:
 The general order is fixed:
 
 1. `model`
-2. `id`
 3. optional `cloze`
 4. `field` entries
 5. `card` entries
@@ -171,8 +163,6 @@ Like card bodies, the CSS is captured as multiline text until `~~~`.
 
 ```text
 model Basic Math
-
-id 7702450
 
 field Front
 field Back

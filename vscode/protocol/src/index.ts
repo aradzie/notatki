@@ -38,7 +38,6 @@ export type ReviveState = {
 
 type Model = {
   readonly name: string;
-  readonly id: number;
   readonly cloze: boolean;
   readonly fields: readonly ModelField[];
   readonly cards: readonly ModelCard[];

@@ -22,16 +22,10 @@ export type FieldNode = {
 
 export type ModelNode = {
   name: Token;
-  id: ModelIdNode;
   cloze: Token;
   fields: ModelFieldNode[];
   cards: ModelCardNode[];
   styles: CardStylesNode | null;
-} & Node;
-
-export type ModelIdNode = {
-  id: Token;
-  value: number;
 } & Node;
 
 export type ModelFieldNode = {

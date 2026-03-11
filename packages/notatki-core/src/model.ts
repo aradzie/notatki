@@ -1,6 +1,5 @@
 export type Model = {
   readonly name: string;
-  readonly id: number;
   readonly cloze: boolean;
   readonly fields: readonly ModelField[];
   readonly cards: readonly ModelCard[];
@@ -21,7 +20,6 @@ export type ModelCard = {
 export class ModelMap implements Iterable<Model> {
   static readonly basic = {
     name: "Basic",
-    id: 1607392319,
     cloze: false,
     fields: [
       { name: "Front", required: true },
@@ -39,7 +37,6 @@ export class ModelMap implements Iterable<Model> {
 
   static readonly basicAndReversedCard = {
     name: "Basic (and reversed card)",
-    id: 1607392320,
     cloze: false,
     fields: [
       { name: "Front", required: true },
@@ -62,7 +59,6 @@ export class ModelMap implements Iterable<Model> {
 
   static readonly basicOptionalReversedCard = {
     name: "Basic (optional reversed card)",
-    id: 1607392321,
     cloze: false,
     fields: [
       { name: "Front", required: true },
@@ -86,7 +82,6 @@ export class ModelMap implements Iterable<Model> {
 
   static readonly basicTypeInAnswer = {
     name: "Basic (type in the answer)",
-    id: 1607392322,
     cloze: false,
     fields: [
       { name: "Front", required: true },
@@ -104,7 +99,6 @@ export class ModelMap implements Iterable<Model> {
 
   static readonly cloze = {
     name: "Cloze",
-    id: 1607392323,
     cloze: true,
     fields: [
       { name: "Text", required: true },

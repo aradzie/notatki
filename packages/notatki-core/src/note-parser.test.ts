@@ -11,7 +11,6 @@ test("parse models", () => {
     "example.model",
     `
 model Equation
-id 123
 field Front
 field Back
 field Extra?
@@ -37,7 +36,6 @@ styles
       { name: "Cloze" },
       {
         name: "Equation",
-        id: 123,
         fields: [
           { name: "Front", required: true },
           { name: "Back", required: true },
@@ -59,7 +57,7 @@ test("model parsing error: syntax", () => {
 test("model parsing error: duplicate model", () => {
   const parser = new NoteParser();
 
-  parser.parseModels("example.model", `model One\nid 1\nmodel One\nid 2\n`);
+  parser.parseModels("example.model", `model One\nmodel One\n`);
 
   like([...parser.errors], [{ message: 'Duplicate model: "One"' }]);
 });
@@ -67,7 +65,7 @@ test("model parsing error: duplicate model", () => {
 test("model parsing error: duplicate field", () => {
   const parser = new NoteParser();
 
-  parser.parseModels("example.model", `model One\nid 1\nfield Front\nfield Front\n`);
+  parser.parseModels("example.model", `model One\nfield Front\nfield Front\n`);
 
   like([...parser.errors], [{ message: 'Duplicate field: "Front"' }]);
 });

@@ -13,14 +13,6 @@
     },
     {
       "name": "meta.tag.anki-models",
-      "match": "^(id)[ \\t]+(.*?)[ \\t]*$",
-      "captures": {
-        "1": { "name": "keyword.control.anki-models" },
-        "2": { "name": "string.unquoted.value.anki-models" }
-      }
-    },
-    {
-      "name": "meta.tag.anki-models",
       "match": "^(cloze)[ \\t]*$",
       "captures": {
         "1": { "name": "keyword.control.anki-models" }

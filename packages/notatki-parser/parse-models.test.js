@@ -16,7 +16,6 @@ test("parse models", () => {
   like(
     parseModelList(`
 model Model 1
-id 123
 field Front
 field Back
 field Back Extra?
@@ -35,12 +34,6 @@ styles
       {
         name: {
           text: "Model 1",
-        },
-        id: {
-          id: {
-            text: "123",
-          },
-          value: 123,
         },
         fields: [
           {

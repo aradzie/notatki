@@ -49,7 +49,6 @@ class Checker:
 
     for model in INTERNAL_MODELS:
       self._register_model_info(model)
-      self._register_id(model.id, ParseError(line=0, message=f'Internal model "{model.name}"'))
 
     for model_nodes in models:
       self._check_model(model_nodes)
@@ -59,13 +58,6 @@ class Checker:
       self._check_note(note_nodes, state)
 
   def _check_model(self, model_nodes: ModelNodes):
-    if model_nodes.name is None:
-      self._error(model_nodes, 0, "Model is missing a name.")
-      return
-    if model_nodes.id is None:
-      self._error(model_nodes.name, model_nodes.name.line, f'Model "{model_nodes.name.value}" is missing an id.')
-      return
-
     name = model_nodes.name.value
     name_key = name.lower()
     if name_key in self._model_by_name:
@@ -102,17 +94,10 @@ class Checker:
         back=card_node.back.text if card_node.back is not None else "",
       ))
 
-    if not self._register_id(
-      model_nodes.id.value,
-      ParseError(path=model_nodes.id.path, line=model_nodes.id.line, message=f'Duplicate ID: "{model_nodes.id.value}"'),
-    ):
-      had_error = True
-
     if had_error:
       return
 
     jmodel = JModel(
-      id=model_nodes.id.value,
       name=name,
       cloze=model_nodes.cloze is not None and model_nodes.cloze.value,
       fields=jfields,
@@ -228,10 +213,7 @@ class Checker:
       required_fields=required_fields,
     )
 
-  def _register_id(self, value: int | str, error: ParseError) -> bool:
-    key = str(value)
-    if not key:
-      return False
+  def _register_id(self, key: str, error: ParseError) -> bool:
     if key in self._ids:
       first = self._ids[key]
       if all(existing.line != first.line or existing.message != first.message for existing in self.errors):

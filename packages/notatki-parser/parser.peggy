@@ -54,16 +54,11 @@ ModelList =
 
 Model =
   "model" Whitespace name:NormalText _ Newline
-  id:( ( _ Newline )* @ModelId _ Newline )
   cloze:( ( _ Newline )* @ModelCloze _ Newline )?
   fields:( ( _ Newline )* @ModelField _ Newline )*
   cards:( ( _ Newline )* @ModelCard )*
   styles:( ( _ Newline )* @ModelStyles _ Newline )?
-  { return { name, id, cloze, fields, cards, styles, loc: location() } }
-
-ModelId =
-  "id" Whitespace id:( text:$[0-9]+ { return { text, loc: location() }; } )
-  { return { id, value: Number.parseInt(id.text), loc: location() }; }
+  { return { name, cloze, fields, cards, styles, loc: location() } }
 
 ModelCloze =
   text:"cloze"

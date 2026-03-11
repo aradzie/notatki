@@ -18,7 +18,6 @@ test("card data", () => {
   };
   const model1: Model = {
     name: "Type 1",
-    id: 1,
     cloze: false,
     fields: [
       { name: "Front", required: true },

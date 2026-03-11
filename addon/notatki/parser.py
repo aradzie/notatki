@@ -8,7 +8,6 @@ from .nodes import (
   ModelCardSideNode,
   ModelClozeNode,
   ModelFieldNode,
-  ModelIdNode,
   ModelNameNode,
   ModelNodes,
   ModelStyleNode,
@@ -133,7 +132,6 @@ class NoteParser:
 
 class ModelParser:
   _MODEL_RE = re.compile(r"^model[ \t]+(?P<name>.+?)[ \t]*$")
-  _ID_RE = re.compile(r"^id[ \t]+(?P<id>[0-9]+)[ \t]*$")
   _CLOZE_RE = re.compile(r"^cloze[ \t]*$")
   _FIELD_RE = re.compile(rf"^field[ \t]+(?P<name>{_field_name_pattern()})(?P<optional>\?)?[ \t]*$")
   _CARD_RE = re.compile(r"^card[ \t]+(?P<name>.+?)[ \t]*$")
@@ -155,7 +153,6 @@ class ModelParser:
     self._handlers: list[tuple[re.Pattern[str], Callable[[re.Match[str], str], bool]]] = [
       (self._BLANK_RE, self._handle_blank),
       (self._MODEL_RE, self._handle_model),
-      (self._ID_RE, self._handle_id),
       (self._CLOZE_RE, self._handle_cloze),
       (self._FIELD_RE, self._handle_field),
       (self._CARD_RE, self._handle_card),
@@ -207,16 +204,6 @@ class ModelParser:
       name=ModelNameNode(path=self.path, line=self.line, value=_collapse_ws(match.group("name"))),
     )
     self._current_card = None
-    return True
-
-  def _handle_id(self, match: re.Match[str], text: str) -> bool:
-    if self._current_model is None:
-      self._error(self.line, "Model id found before a model header.")
-      return True
-    if self._current_model.id is not None:
-      self._error(self.line, f'Model "{self._model_name()}" already has an id.')
-      return True
-    self._current_model.id = ModelIdNode(path=self.path, line=self.line, value=int(match.group("id")))
     return True
 
   def _handle_cloze(self, match: re.Match[str], text: str) -> bool:
@@ -323,8 +310,6 @@ class ModelParser:
   def _finish_model(self):
     if self._current_model is None:
       return
-    if self._current_model.id is None:
-      self._error(self.line, f'Model "{self._model_name()}" is missing an id.')
     if self._current_card is not None:
       if self._current_card.front is None:
         self._error(self.line, f'Card "{self._current_card.name}" is missing a front block.')

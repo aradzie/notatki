@@ -104,7 +104,6 @@ def test_model_parser_parses_complete_model_definition():
   path = Path("models/basic.model")
   parser = parse_model(
     "model   Basic   Card  \n",
-    "id 123\n",
     "field Front\n",
     "field Back?\n",
     "card Card 1\n",
@@ -126,7 +125,6 @@ def test_model_parser_parses_complete_model_definition():
   model = parser.models[0]
   assert model.path == path
   assert model.name.value == "Basic Card"
-  assert model.id.value == 123
   assert [(field.name, field.required) for field in model.fields] == [
     ("Front", True),
     ("Back", False),
@@ -141,7 +139,6 @@ def test_model_parser_parses_complete_model_definition():
 def test_model_parser_reports_ordering_and_duplicate_errors():
   parser = parse_model(
     "model Basic\n",
-    "id 100\n",
     "card Card 1\n",
     "back\n",
     "front\n",
@@ -170,7 +167,6 @@ def test_model_parser_reports_unterminated_multiline_and_missing_id():
 
   assert [error.message for error in parser.errors] == [
     "Unterminated multiline block. Expected a closing '~~~' line.",
-    'Model "Basic" is missing an id.',
     'Card "Card 1" is missing a back block.',
   ]
   assert parser.models[0].cards[0].front.text == "{{Front}}"

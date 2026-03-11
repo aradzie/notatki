@@ -8,8 +8,6 @@ def print_models(models: list[JModel]) -> str:
       parts.append("")
 
     parts.append(f"model {model.name}")
-    parts.append("")
-    parts.append(f"id {model.id}")
 
     if model.cloze:
       parts.append("")

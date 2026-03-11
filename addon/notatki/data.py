@@ -17,7 +17,6 @@ class JModelCard:
 
 @dataclass
 class JModel:
-  id: int
   name: str
   cloze: bool
   fields: list[JModelField]
@@ -41,7 +40,6 @@ class JModel:
   @classmethod
   def from_model(cls, model: NotetypeDict) -> 'JModel':
     return JModel(
-      id=model["id"],
       name=model["name"],
       cloze=model["type"] == 1,
       fields=[

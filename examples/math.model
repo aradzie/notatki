@@ -1,7 +1,5 @@
 model Basic Math
 
-id 7702450
-
 field Front
 field Back
 field Related?
@@ -55,8 +53,6 @@ styles
 ~~~
 
 model Basic Math (and reversed card)
-
-id 7702451
 
 field Front
 field Back

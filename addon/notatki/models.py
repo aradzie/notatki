@@ -6,7 +6,6 @@ from .data import (
 
 INTERNAL_MODELS = [
   JModel(
-    id=1607392319,
     name="Basic",
     cloze=False,
     fields=[
@@ -23,7 +22,6 @@ INTERNAL_MODELS = [
     styles="",
   ),
   JModel(
-    id=1607392320,
     name="Basic (and reversed card)",
     cloze=False,
     fields=[
@@ -45,7 +43,6 @@ INTERNAL_MODELS = [
     styles="",
   ),
   JModel(
-    id=1607392321,
     name="Basic (optional reversed card)",
     cloze=False,
     fields=[
@@ -68,7 +65,6 @@ INTERNAL_MODELS = [
     styles="",
   ),
   JModel(
-    id=1607392322,
     name="Basic (type in the answer)",
     cloze=False,
     fields=[
@@ -85,7 +81,6 @@ INTERNAL_MODELS = [
     styles="",
   ),
   JModel(
-    id=1607392323,
     name="Cloze",
     cloze=True,
     fields=[

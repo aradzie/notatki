@@ -3,11 +3,9 @@ import { Output } from "./output.js";
 
 export function printModelNodes(nodes: Iterable<ModelNode>): string {
   const out = new Output();
-  for (const { name, id, cloze, fields, cards, styles } of nodes) {
+  for (const { name, cloze, fields, cards, styles } of nodes) {
     out.separate();
     out.print(`model ${name.text}`);
-    out.separate();
-    out.print(`id ${id.value}`);
     if (cloze != null) {
       out.separate();
       out.print("cloze");

@@ -49,11 +49,6 @@ class ModelNameNode(Node):
 
 
 @dataclass(slots=True)
-class ModelIdNode(Node):
-  value: int = 0
-
-
-@dataclass(slots=True)
 class ModelClozeNode(Node):
   value: bool = True
 
@@ -84,7 +79,6 @@ class ModelStyleNode(Node):
 @dataclass(slots=True)
 class ModelNodes(Location):
   name: ModelNameNode | None = None
-  id: ModelIdNode | None = None
   cloze: ModelClozeNode | None = None
   fields: list[ModelFieldNode] = field(default_factory=list)
   cards: list[ModelCardNode] = field(default_factory=list)
