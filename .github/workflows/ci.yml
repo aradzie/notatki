@@ -12,6 +12,13 @@ jobs:
         with:
           node-version: "24.x"
           cache: "npm"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "addon/uv.lock"
       - name: CI
         run: |
           npm ci

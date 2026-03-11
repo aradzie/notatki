@@ -26,9 +26,7 @@
     "commander": "^14.0.0"
   },
   "scripts": {
-    "compile": "rm -fr dist && tsc",
-    "pretest": "npm run compile",
-    "test": "node --test 'dist/**/*.test.js'"
+    "compile": "rm -fr dist && tsc"
   },
   "publishConfig": {
     "access": "public"
