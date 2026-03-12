@@ -46,7 +46,7 @@ def init_import(mw: AnkiQt):
         success=on_success,
       ).with_progress().run_in_background()
 
-  action = QAction("Import Notatki...", mw)
+  action = QAction("Import Models and Notes...", mw)
   action.triggered.connect(import_dir)
   mw.form.menuCol.insertActions(mw.form.menuCol.actions()[4], [action])
 

@@ -145,7 +145,7 @@ git commit
 3. Import into Anki using the addon.
 
 ```
-File → Import Notatki...
+File → Import Models and Notes...
 ```
 
 4. Select the directory with your notes.
