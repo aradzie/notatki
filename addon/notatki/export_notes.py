@@ -1,7 +1,10 @@
+from collections.abc import Sequence
 from pathlib import Path
 
-from anki.collection import Collection
-from anki.notes import Note
+from anki.cards import CardId
+from anki.collection import CardIdsLimit, Collection, DeckIdLimit, ExportLimit, NoteIdsLimit
+from anki.notes import Note, NoteId
+from anki.utils import ids2str
 from aqt import AnkiQt, gui_hooks
 from aqt.import_export.exporting import ExportOptions, Exporter
 from aqt.operations import QueryOp
@@ -35,7 +38,7 @@ class NotesExporter(Exporter):
 
   def export_notes(self, col: Collection, options: ExportOptions):
     jnotes = []
-    for note_id in col.find_notes(""):
+    for note_id in self.note_ids_for_export(col, options.limit):
       note = col.get_note(note_id)
       fields = {name: html_to_markdown(value) for name, value in note.items() if value}
       if fields:
@@ -48,6 +51,25 @@ class NotesExporter(Exporter):
         ))
     text = print_notes(jnotes)
     Path(options.out_path).write_text(text, encoding="utf-8")
+
+  def note_ids_for_export(self, col: Collection, limit: ExportLimit) -> Sequence[NoteId]:
+    match limit:
+      case None:
+        return col.find_notes("")
+      case NoteIdsLimit(note_ids=note_ids):
+        return note_ids
+      case CardIdsLimit(card_ids=card_ids):
+        return self.note_ids_for_card_ids(col, card_ids)
+      case DeckIdLimit(deck_id=deck_id):
+        return self.note_ids_for_card_ids(col, col.decks.cids(deck_id, children=True))
+    return ()
+
+  def note_ids_for_card_ids(self, col: Collection, card_ids: Sequence[CardId]) -> Sequence[NoteId]:
+    if card_ids:
+      return col.db.list(
+        f"select distinct nid from cards where id in {ids2str(card_ids)} order by nid"
+      )
+    return ()
 
   def deck_name(self, col: Collection, note: Note) -> str:
     for card in note.cards():
