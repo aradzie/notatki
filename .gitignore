@@ -5,6 +5,7 @@ node_modules/
 build/
 dist/
 tmp/
+__pycache__/
 
 *.ankiaddon
 *.vsix
