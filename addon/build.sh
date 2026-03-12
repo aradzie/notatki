@@ -7,6 +7,7 @@ uv export --no-dev --format requirements-txt > requirements.txt
 uv pip install --target vendor -r requirements.txt
 
 find vendor -name "*.dist-info" -type d -exec rm -rf {} +
+find vendor -name "bin" -type d -exec rm -rf {} +
 find vendor -name "tests" -type d -exec rm -rf {} +
 find vendor -name "__pycache__" -type d -exec rm -rf {} +
 

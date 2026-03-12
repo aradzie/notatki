@@ -5,6 +5,7 @@ description = "Notatki text notes importer addon for Anki"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+  "markdownify>=1.2.2",
   "mistune>=3.2.0",
 ]
 

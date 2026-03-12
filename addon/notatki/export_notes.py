@@ -6,6 +6,7 @@ from aqt.operations import QueryOp
 from aqt.utils import tooltip, tr
 
 from .data import JNote, JCollection, JModel
+from .format_field import html_to_markdown
 from .printer import print_notes
 
 
@@ -38,13 +39,15 @@ class NotesExporter(Exporter):
       jmodels.append(JModel.from_model(model))
     for note_id in col.find_notes(""):
       note = col.get_note(note_id)
-      jnotes.append(JNote(
-        guid=note.guid,
-        type=note.note_type()["name"],
-        deck=self.deck_name(col, note),
-        tags=list(note.tags),
-        fields=dict(note.items()),
-      ))
+      fields = {name: html_to_markdown(value) for name, value in note.items() if value}
+      if len(fields):
+        jnotes.append(JNote(
+          guid=note.guid,
+          type=note.note_type()["name"],
+          deck=self.deck_name(col, note),
+          tags=list(note.tags),
+          fields=fields,
+        ))
     jcol = JCollection(models=jmodels, notes=jnotes)
     text = print_notes(jcol.notes)
     with open(options.out_path, "w", encoding="utf-8") as file:
