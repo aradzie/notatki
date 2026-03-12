@@ -1,4 +1,4 @@
-def initialize_addon():
+def initialize_addon() -> None:
   import sys
   from pathlib import Path
 
@@ -9,7 +9,8 @@ def initialize_addon():
   from .notatki.import_file import init_import_file
   from .notatki.export_notes import exporters_hook
 
-  if mw: init_import_directory(mw)
+  if mw:
+    init_import_directory(mw)
   init_import_file()
   gui_hooks.exporters_list_did_initialize.append(exporters_hook)
 

@@ -1,73 +1,90 @@
 from dataclasses import dataclass, field
 
-from anki.models import NotetypeDict, ModelManager
+
+@dataclass(slots=True)
+class Location:
+  path: str = "<unknown>"
+  line: int = 0
 
 
-@dataclass
-class JModelField:
-  name: str
+@dataclass(slots=True)
+class ParseError(Location):
+  message: str = ""
+
+  def __str__(self) -> str:
+    if self.line:
+      return f"{self.path}:{self.line} {self.message}"
+    else:
+      return f"{self.path} {self.message}"
 
 
-@dataclass
-class JModelCard:
-  name: str
-  front: str
-  back: str
+@dataclass(slots=True)
+class PropertyNode(Location):
+  name: str = ""
+  value: str = ""
 
 
-@dataclass
-class JModel:
-  name: str
-  cloze: bool
-  fields: list[JModelField]
-  cards: list[JModelCard]
-  styles: str
-
-  def to_model(self, models: ModelManager) -> NotetypeDict:
-    model = models.new(self.name)
-    model["type"] = 1 if self.cloze else 0
-    for jfield in self.fields:
-      field = models.new_field(jfield.name)
-      models.add_field(model, field)
-    for jcard in self.cards:
-      template = models.new_template(jcard.name)
-      template["qfmt"] = jcard.front
-      template["afmt"] = jcard.back
-      models.add_template(model, template)
-    model["css"] = self.styles
-    return model
-
-  @classmethod
-  def from_model(cls, model: NotetypeDict) -> 'JModel':
-    return JModel(
-      name=model["name"],
-      cloze=model["type"] == 1,
-      fields=[
-        JModelField(
-          name=v["name"],
-        ) for v in model["flds"]
-      ],
-      cards=[
-        JModelCard(
-          name=v["name"],
-          front=v["qfmt"],
-          back=v["afmt"]
-        ) for v in model["tmpls"]
-      ],
-      styles=model["css"],
-    )
+@dataclass(slots=True)
+class FieldNode(Location):
+  name: str = ""
+  value: str = ""
 
 
-@dataclass
-class JNote:
-  guid: str
-  type: str
-  deck: str
-  tags: list[str]
-  fields: dict[str, str]
+@dataclass(slots=True)
+class NoteNodes(Location):
+  type: PropertyNode | None = None
+  deck: PropertyNode | None = None
+  tags: PropertyNode | None = None
+  guid: FieldNode | None = None
+  fields: list[FieldNode] = field(default_factory=list)
+  end: Location = field(default_factory=Location)
 
 
-@dataclass
-class JCollection:
-  models: list[JModel] = field(default_factory=list)
-  notes: list[JNote] = field(default_factory=list)
+@dataclass(slots=True)
+class NoteState:
+  type: str = "Basic"
+  deck: str = "Default"
+  tags: str = ""
+
+  def process_notes(self, notes: list[NoteNodes]) -> None:
+    for note in notes:
+      self.get_from(note)
+      self.set_to(note)
+
+  def get_from(self, note_nodes: NoteNodes) -> None:
+    if note_nodes.type is not None:
+      self.type = note_nodes.type.value
+    if note_nodes.deck is not None:
+      self.deck = note_nodes.deck.value
+    if note_nodes.tags is not None:
+      self.tags = note_nodes.tags.value
+
+  def set_to(self, note_nodes: NoteNodes) -> None:
+    if note_nodes.type is None:
+      note_nodes.type = PropertyNode(name="type", value=self.type)
+    if note_nodes.deck is None:
+      note_nodes.deck = PropertyNode(name="deck", value=self.deck)
+    if note_nodes.tags is None:
+      note_nodes.tags = PropertyNode(name="tags", value=self.tags)
+
+
+@dataclass(slots=True)
+class ModelFieldNode(Location):
+  name: str = ""
+  required: bool = True
+
+
+@dataclass(slots=True)
+class ModelCardNode(Location):
+  name: str = ""
+  front: str = ""
+  back: str = ""
+
+
+@dataclass(slots=True)
+class ModelNodes(Location):
+  name: str = ""
+  cloze: bool = False
+  fields: list[ModelFieldNode] = field(default_factory=list)
+  cards: list[ModelCardNode] = field(default_factory=list)
+  styles: str = ""

@@ -1,9 +1,17 @@
-from pathlib import Path
-
+from .data import (
+  NoteNodes,
+  ParseError,
+  PropertyNode,
+  FieldNode,
+  Location,
+  ModelCardNode,
+  ModelFieldNode,
+  ModelNodes,
+)
 from .parser import ModelParser, NoteParser
 
 
-def parse_note(*lines: str, path: Path | None = None) -> NoteParser:
+def parse_note(*lines: str, path: str) -> NoteParser:
   parser = NoteParser(path=path)
   for line in lines:
     parser.push(line)
@@ -11,162 +19,333 @@ def parse_note(*lines: str, path: Path | None = None) -> NoteParser:
   return parser
 
 
-def parse_model(*lines: str, path: Path | None = None) -> ModelParser:
-  parser = ModelParser(path=path or Path("example.model"))
+def parse_model(*lines: str, path: str) -> ModelParser:
+  parser = ModelParser(path=path)
   for line in lines:
     parser.push(line)
   parser.finish()
   return parser
 
 
-def test_note_parser_parses_empty_file():
-  parser = parse_note()
+def test_note_parser_parses_empty_file() -> None:
+  parser = parse_note(path="deck/sample.note")
 
   assert parser.errors == []
   assert parser.notes == []
 
 
-def test_model_parser_parses_empty_file():
-  parser = parse_model()
+def test_model_parser_parses_empty_file() -> None:
+  parser = parse_model(path="deck/sample.model")
 
   assert parser.errors == []
   assert parser.models == []
 
 
-def test_note_parser_parses_note_with_only_properties():
+def test_note_parser_parses_properties_and_fields() -> None:
   parser = parse_note(
-    "!deck: A B\n",
-    "!tags: A B\n",
+    "!type:  Basic ",
+    "!deck:  Default  Deck ",
+    "!tags:  One   Two  ",
+    "!ID:   123  ",
+    "!Front:   Question  ",
+    "  continued text  ",
+    "!Back:  Answer ",
+    "~~~",
+    path="deck/sample.note",
   )
 
   assert parser.errors == []
-  assert parser.notes == []
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/sample.note",
+      line=4,
+      type=PropertyNode(path="deck/sample.note", line=1, name="type", value="Basic"),
+      deck=PropertyNode(path="deck/sample.note", line=2, name="deck", value="Default Deck"),
+      tags=PropertyNode(path="deck/sample.note", line=3, name="tags", value="One Two"),
+      guid=FieldNode(path="deck/sample.note", line=4, name="id", value="123"),
+      fields=[
+        FieldNode(path="deck/sample.note", line=5, name="front", value="Question\n  continued text"),
+        FieldNode(path="deck/sample.note", line=7, name="back", value="Answer"),
+      ],
+      end=Location(path="deck/sample.note", line=8),
+    ),
+  ]
 
 
-def test_note_parser_parses_properties_and_multiline_fields():
-  path = Path("deck/sample.note")
+def test_note_parser_reports_duplicate_property() -> None:
   parser = parse_note(
-    "!type: Basic\n",
-    "!deck: Default Deck\n",
-    "!tags: one   two\n",
-    "!Front: Question\n",
-    "  continued text  \n",
-    "!Back: Answer\n",
-    "~~~\n",
-    path=path,
+    "!type: Basic",
+    "!TYPE: Cloze",
+    "!id: 123",
+    "!Front: Question",
+    "~~~",
+    path="deck/duplicate-property.note",
   )
 
-  assert parser.errors == []
-  assert len(parser.notes) == 1
-
-  note = parser.notes[0]
-  assert [(prop.name, prop.value, prop.line, prop.path) for prop in note.properties] == [
-    ("type", "Basic", 1, path),
-    ("deck", "Default Deck", 2, path),
-    ("tags", "one two", 3, path),
+  assert parser.errors == [
+    ParseError(
+      path="deck/duplicate-property.note",
+      line=2,
+      message="Duplicate property 'type'.",
+    ),
   ]
-  assert [(field.name, field.value, field.line, field.path) for field in note.fields] == [
-    ("Front", "Question\n  continued text", 4, path),
-    ("Back", "Answer", 6, path),
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/duplicate-property.note",
+      line=3,
+      type=PropertyNode(
+        path="deck/duplicate-property.note",
+        line=1,
+        name="type",
+        value="Basic",
+      ),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value=""),
+      guid=FieldNode(path="deck/duplicate-property.note", line=3, name="id", value="123"),
+      fields=[
+        FieldNode(path="deck/duplicate-property.note", line=4, name="front", value="Question"),
+      ],
+      end=Location(path="deck/duplicate-property.note", line=5),
+    ),
   ]
 
 
-def test_note_parser_treats_property_names_as_fields_after_first_field():
+def test_note_parser_reports_duplicate_guid_field() -> None:
   parser = parse_note(
-    "!Front: Question\n",
-    "!deck: Still a field\n",
-    "~~~\n",
+    "!id: 123",
+    "!ID: 456",
+    "!Front: Question",
+    "~~~",
+    path="deck/duplicate-field.note",
   )
 
-  assert parser.errors == []
-  note = parser.notes[0]
-  assert note.properties == []
-  assert [(field.name, field.value) for field in note.fields] == [
-    ("Front", "Question"),
-    ("deck", "Still a field"),
+  assert parser.errors == [
+    ParseError(
+      path="deck/duplicate-field.note",
+      line=2,
+      message="Duplicate field 'id'.",
+    ),
+  ]
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/duplicate-field.note",
+      line=1,
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value=""),
+      guid=FieldNode(path="deck/duplicate-field.note", line=1, name="id", value="123"),
+      fields=[
+        FieldNode(path="deck/duplicate-field.note", line=3, name="front", value="Question"),
+      ],
+      end=Location(path="deck/duplicate-field.note", line=4),
+    ),
   ]
 
 
-def test_note_parser_reports_unexpected_and_unterminated_lines():
+def test_note_parser_reports_duplicate_other_field() -> None:
   parser = parse_note(
-    "plain text\n",
-    "!Front: Question\n",
+    "!id: 123",
+    "!Front: Question",
+    "!FRONT: Another question",
+    "~~~",
+    path="deck/duplicate-field.note",
   )
 
-  assert [error.message for error in parser.errors] == [
-    'Unexpected note line: "plain text"',
-    "Unterminated note. Expected a closing '~~~' line.",
+  assert parser.errors == [
+    ParseError(
+      path="deck/duplicate-field.note",
+      line=3,
+      message="Duplicate field 'front'.",
+    ),
   ]
-  assert [error.line for error in parser.errors] == [1, 3]
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/duplicate-field.note",
+      line=1,
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value=""),
+      guid=FieldNode(path="deck/duplicate-field.note", line=1, name="id", value="123"),
+      fields=[
+        FieldNode(path="deck/duplicate-field.note", line=2, name="front", value="Question"),
+      ],
+      end=Location(path="deck/duplicate-field.note", line=4),
+    ),
+  ]
 
 
-def test_model_parser_parses_complete_model_definition():
-  path = Path("models/basic.model")
+def test_note_parser_continues_parsing_notes_after_error() -> None:
+  parser = parse_note(
+    "!id: 123",
+    "!Front: Question",
+    "!Front: Duplicate",
+    "~~~",
+    "!id: 456",
+    "!Front: Next question",
+    "~~~",
+    path="deck/recovery.note",
+  )
+
+  assert parser.errors == [
+    ParseError(
+      path="deck/recovery.note",
+      line=3,
+      message="Duplicate field 'front'.",
+    ),
+  ]
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/recovery.note",
+      line=1,
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value=""),
+      guid=FieldNode(path="deck/recovery.note", line=1, name="id", value="123"),
+      fields=[
+        FieldNode(path="deck/recovery.note", line=2, name="front", value="Question"),
+      ],
+      end=Location(path="deck/recovery.note", line=4),
+    ),
+    NoteNodes(
+      path="deck/recovery.note",
+      line=5,
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value=""),
+      guid=FieldNode(path="deck/recovery.note", line=5, name="id", value="456"),
+      fields=[
+        FieldNode(path="deck/recovery.note", line=6, name="front", value="Next question"),
+      ],
+      end=Location(path="deck/recovery.note", line=7),
+    ),
+  ]
+
+
+def test_model_parser_parses_complete_model_definition() -> None:
   parser = parse_model(
-    "model   Basic   Card  \n",
-    "field Front\n",
-    "field Back?\n",
-    "card Card 1\n",
-    "front\n",
-    "{{Front}}\n",
-    "~~~\n",
-    "back\n",
-    "{{Back}}\n",
-    "~~~\n",
-    "styles\n",
-    ".card { color: red; }\n",
-    "~~~\n",
-    path=path,
+    "model   Basic   Card  ",
+    "field   Front  ",
+    "field   Back?  ",
+    "card   Card   1  ",
+    "front",
+    "{{Front}}",
+    "~~~",
+    "back",
+    "{{Back}}",
+    "~~~",
+    "styles",
+    ".card { color: red; }",
+    "~~~",
+    path="models/basic.model",
   )
 
   assert parser.errors == []
-  assert len(parser.models) == 1
-
-  model = parser.models[0]
-  assert model.path == path
-  assert model.name.value == "Basic Card"
-  assert [(field.name, field.required) for field in model.fields] == [
-    ("Front", True),
-    ("Back", False),
+  assert parser.models == [
+    ModelNodes(
+      path="models/basic.model",
+      line=1,
+      name="Basic Card",
+      cloze=False,
+      fields=[
+        ModelFieldNode(
+          path="models/basic.model",
+          line=2,
+          name="Front",
+          required=True,
+        ),
+        ModelFieldNode(
+          path="models/basic.model",
+          line=3,
+          name="Back",
+          required=False,
+        ),
+      ],
+      cards=[
+        ModelCardNode(
+          path="models/basic.model",
+          line=4,
+          name="Card 1",
+          front="{{Front}}",
+          back="{{Back}}",
+        ),
+      ],
+      styles=".card { color: red; }",
+    ),
   ]
-  assert len(model.cards) == 1
-  assert model.cards[0].name == "Card 1"
-  assert model.cards[0].front.text == "{{Front}}"
-  assert model.cards[0].back.text == "{{Back}}"
-  assert model.styles.style == ".card { color: red; }"
 
 
-def test_model_parser_reports_ordering_and_duplicate_errors():
+def test_model_parser_parses_multiple_models() -> None:
   parser = parse_model(
-    "model Basic\n",
-    "card Card 1\n",
-    "back\n",
-    "front\n",
-    "first\n",
-    "~~~\n",
-    "front\n",
-    "styles\n",
-    "~~~\n",
+    "model Basic",
+    "field Front",
+    "card Card 1",
+    "front",
+    "{{Front}}",
+    "~~~",
+    "back",
+    "{{Back}}",
+    "~~~",
+    "model Cloze",
+    "cloze",
+    "field Text",
+    "card Card 1",
+    "front",
+    "{{cloze:Text}}",
+    "~~~",
+    "back",
+    "{{cloze:Text}}<br>{{Back Extra}}",
+    "~~~",
+    path="models/multiple.model",
   )
 
-  assert [error.message for error in parser.errors] == [
-    'Card "Card 1" must define front before back.',
-    'Card "Card 1" already has a front block.',
-    'Card "Card 1" is missing a back block.',
+  assert parser.errors == []
+  assert parser.models == [
+    ModelNodes(
+      path="models/multiple.model",
+      line=1,
+      name="Basic",
+      cloze=False,
+      fields=[
+        ModelFieldNode(
+          path="models/multiple.model",
+          line=2,
+          name="Front",
+          required=True,
+        ),
+      ],
+      cards=[
+        ModelCardNode(
+          path="models/multiple.model",
+          line=3,
+          name="Card 1",
+          front="{{Front}}",
+          back="{{Back}}",
+        ),
+      ],
+      styles="",
+    ),
+    ModelNodes(
+      path="models/multiple.model",
+      line=10,
+      name="Cloze",
+      cloze=True,
+      fields=[
+        ModelFieldNode(
+          path="models/multiple.model",
+          line=12,
+          name="Text",
+          required=True,
+        ),
+      ],
+      cards=[
+        ModelCardNode(
+          path="models/multiple.model",
+          line=13,
+          name="Card 1",
+          front="{{cloze:Text}}",
+          back="{{cloze:Text}}<br>{{Back Extra}}",
+        ),
+      ],
+      styles="",
+    ),
   ]
-
-
-def test_model_parser_reports_unterminated_multiline_and_missing_id():
-  parser = parse_model(
-    "model Basic\n",
-    "field Front\n",
-    "card Card 1\n",
-    "front\n",
-    "{{Front}}\n",
-  )
-
-  assert [error.message for error in parser.errors] == [
-    "Unterminated multiline block. Expected a closing '~~~' line.",
-    'Card "Card 1" is missing a back block.',
-  ]
-  assert parser.models[0].cards[0].front.text == "{{Front}}"

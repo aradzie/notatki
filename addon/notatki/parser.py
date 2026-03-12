@@ -1,18 +1,14 @@
 import re
-from pathlib import Path
-from typing import Callable
+from enum import StrEnum, auto
 
-from .nodes import (
+from .data import (
   FieldNode,
   ModelCardNode,
-  ModelCardSideNode,
-  ModelClozeNode,
   ModelFieldNode,
-  ModelNameNode,
   ModelNodes,
-  ModelStyleNode,
-  Node,
+  Location,
   NoteNodes,
+  NoteState,
   ParseError,
   PropertyNode,
 )
@@ -22,14 +18,6 @@ def _collapse_ws(text: str) -> str:
   return " ".join(text.split())
 
 
-def _rstrip_line(line: str) -> str:
-  return line.rstrip("\r\n")
-
-
-def _trim_line_text(text: str) -> str:
-  return text.rstrip(" \t")
-
-
 def _field_name_pattern() -> str:
   return r"[-_A-Za-z0-9]+(?:[ \t]+[-_A-Za-z0-9]+)*"
 
@@ -37,97 +25,145 @@ def _field_name_pattern() -> str:
 class NoteParser:
   _FIELD_RE = re.compile(rf"^!(?P<name>{_field_name_pattern()}):(?P<value>.*)$")
   _END_RE = re.compile(r"^~~~[ \t]*$")
-  _BLANK_RE = re.compile(r"^[ \t]*$")
-  _PROPERTY_NAMES = {"type", "deck", "tags"}
 
-  def __init__(self, path: Path | None = None):
-    self.path = path
-    self.line = 1
+  def __init__(self, path: str) -> None:
     self.errors: list[ParseError] = []
     self.notes: list[NoteNodes] = []
-    self._current_note: NoteNodes | None = None
+    self._path = path
+    self._line = 1
+    self._note_location: Location | None = None
     self._current_field: FieldNode | None = None
-    self._current_field_lines: list[str] | None = None
-    self._handlers: list[tuple[re.Pattern[str], Callable[[re.Match[str], str], bool]]] = [
-      (self._BLANK_RE, self._handle_blank),
-      (self._END_RE, self._handle_end),
-      (self._FIELD_RE, self._handle_field_like),
-    ]
+    self._type: PropertyNode | None = None
+    self._deck: PropertyNode | None = None
+    self._tags: PropertyNode | None = None
+    self._guid: FieldNode | None = None
+    self._fields: list[FieldNode] = []
 
-  def push(self, line: str):
-    current_line = self.line
-    text = _rstrip_line(line)
-
-    if self._current_field is not None and not self._matches_structural(text):
-      self._current_field_lines.append(_trim_line_text(text))
-      self.line += 1
-      return
-
-    for pattern, handler in self._handlers:
-      match = pattern.match(text)
-      if match is None:
-        continue
-      handled = handler(match, text)
-      self.line += 1
-      if handled:
-        return
-      break
+  def push(self, line: str) -> None:
+    line = line.rstrip()
+    if m := self._FIELD_RE.match(line):
+      self._handle_field_like(m)
+    elif self._END_RE.match(line):
+      self._handle_end()
     else:
-      self._error(current_line, f'Unexpected note line: "{text}"')
-      self.line += 1
+      self._handle_text(line)
+    self._line += 1
 
-  def finish(self):
-    self._finish_current_field()
-    if self._current_note is not None and self._current_note.fields:
-      self._error(self.line, "Unterminated note. Expected a closing '~~~' line.")
+  def finish(self) -> None:
+    if (
+      self._type is not None
+      or self._deck is not None
+      or self._tags is not None
+      or self._guid is not None
+      or len(self._fields)
+    ):
+      self._error("Unterminated note. Expected a closing '~~~' line.")
+    NoteState().process_notes(self.notes)
 
-  def _matches_structural(self, text: str) -> bool:
-    return self._END_RE.match(text) is not None or self._FIELD_RE.match(text) is not None
+  def _handle_text(self, line: str) -> None:
+    if self._current_field is not None:
+      if self._current_field.value:
+        self._current_field.value += "\n" + line
+      else:
+        self._current_field.value = line
+    elif line:
+      self._error("Unexpected text outside a multiline field.")
 
-  def _handle_blank(self, match: re.Match[str], text: str) -> bool:
-    return True
-
-  def _handle_end(self, match: re.Match[str], text: str) -> bool:
-    self._finish_current_field()
-    if self._current_note is not None and self._current_note.fields:
-      self.notes.append(self._current_note)
-    self._current_note = None
-    return True
-
-  def _handle_field_like(self, match: re.Match[str], text: str) -> bool:
-    name = _collapse_ws(match.group("name"))
-    value = match.group("value").lstrip(" \t")
-    if self._current_note is None:
-      self._current_note = NoteNodes(path=self.path)
-
-    # Property names are only special before the first regular field in a note.
-    if not self._current_note.fields and name.lower() in self._PROPERTY_NAMES:
-      self._finish_current_field()
-      node = PropertyNode(
-        path=self.path,
-        line=self.line,
-        name=name.lower(),
-        value=_collapse_ws(value),
-      )
-      self._current_note.properties.append(node)
-      return True
-
-    self._finish_current_field()
-    node = FieldNode(path=self.path, line=self.line, name=name, value="")
-    self._current_note.fields.append(node)
-    self._current_field = node
-    self._current_field_lines = [_trim_line_text(value)]
-    return True
-
-  def _finish_current_field(self):
-    if self._current_field is None or self._current_field_lines is None:
-      return
-    self._current_field.value = "\n".join(self._current_field_lines).strip()
+  def _handle_end(self) -> None:
     self._current_field = None
-    self._current_field_lines = None
+    self.notes.append(
+      NoteNodes(
+        path=self._note_location.path,
+        line=self._note_location.line,
+        type=self._type,
+        deck=self._deck,
+        tags=self._tags,
+        guid=self._guid,
+        fields=self._fields,
+        end=Location(path=self._path, line=self._line)
+      ),
+    )
+    self._note_location = None
+    self._current_field = None
+    self._type = None
+    self._deck = None
+    self._tags = None
+    self._guid = None
+    self._fields = []
 
-  def _error(self, line: int, message: str):
-    self.errors.append(ParseError(path=self.path, line=line, message=message))
+  def _handle_field_like(self, match: re.Match[str]) -> None:
+    self._current_field = None
+    name = _collapse_ws(match.group("name")).lower()
+    value = match.group("value")
+    match name:
+      case "type":
+        if self._type is not None:
+          self._error(f"Duplicate property '{name}'.")
+          return
+        if len(self._fields):
+          self._error(f"Unexpected property '{name}'.")
+          return
+        self._type = PropertyNode(
+          path=self._path,
+          line=self._line,
+          name=name,
+          value=_collapse_ws(value),
+        )
+      case "deck":
+        if self._deck is not None:
+          self._error(f"Duplicate property '{name}'.")
+          return
+        if len(self._fields):
+          self._error(f"Unexpected property '{name}'.")
+          return
+        self._deck = PropertyNode(
+          path=self._path,
+          line=self._line,
+          name=name,
+          value=_collapse_ws(value),
+        )
+      case "tags":
+        if self._tags is not None:
+          self._error(f"Duplicate property '{name}'.")
+          return
+        if len(self._fields):
+          self._error(f"Unexpected property '{name}'.")
+          return
+        self._tags = PropertyNode(
+          path=self._path,
+          line=self._line,
+          name=name,
+          value=_collapse_ws(value),
+        )
+      case "id":
+        field = FieldNode(
+          path=self._path,
+          line=self._line,
+          name=name,
+          value=value.strip(),
+        )
+        self._current_field = field
+        if self._guid is not None:
+          self._error(f"Duplicate field '{name}'.")
+          return
+        self._guid = field  # First definition wins.
+        self._note_location = self._note_location or self._guid
+      case _:
+        field = FieldNode(
+          path=self._path,
+          line=self._line,
+          name=name,
+          value=value.strip(),
+        )
+        self._current_field = field
+        if any(field.name == name for field in self._fields):
+          self._error(f"Duplicate field '{name}'.")
+          return
+        self._fields.append(field)  # First definition wins.
+        self._note_location = self._note_location or self._fields
+
+  def _error(self, message: str) -> None:
+    self.errors.append(ParseError(path=self._path, line=self._line, message=message))
 
 
 class ModelParser:
@@ -139,190 +175,226 @@ class ModelParser:
   _BACK_RE = re.compile(r"^back[ \t]*$")
   _STYLES_RE = re.compile(r"^styles[ \t]*$")
   _END_RE = re.compile(r"^~~~[ \t]*$")
-  _BLANK_RE = re.compile(r"^[ \t]*$")
 
-  def __init__(self, path: Path):
-    self.path = path
-    self.line = 1
+  class _State(StrEnum):
+    EXPECT_MODEL = auto()
+    EXPECT_CLOZE_OR_FIELD = auto()
+    EXPECT_FIELD_OR_CARD = auto()
+    EXPECT_FRONT = auto()
+    EXPECT_FRONT_END = auto()
+    EXPECT_BACK = auto()
+    EXPECT_BACK_END = auto()
+    EXPECT_CARD_OR_STYLES = auto()
+    EXPECT_STYLES_END = auto()
+
+  def __init__(self, path: str) -> None:
     self.errors: list[ParseError] = []
     self.models: list[ModelNodes] = []
-    self._current_model: ModelNodes | None = None
-    self._current_card: ModelCardNode | None = None
-    self._multiline_target: tuple[Node, str] | None = None
+    self._path = path
+    self._line = 1
+    self._state = self._State.EXPECT_MODEL
+    self._model_line: int | None = None
+    self._model_name: str | None = None
+    self._model_cloze = False
+    self._model_fields: list[ModelFieldNode] = []
+    self._model_cards: list[ModelCardNode] = []
+    self._model_styles = ""
+    self._card_line: int | None = None
+    self._card_name: str | None = None
+    self._card_front: str | None = None
+    self._card_back: str | None = None
     self._multiline_lines: list[str] | None = None
-    self._handlers: list[tuple[re.Pattern[str], Callable[[re.Match[str], str], bool]]] = [
-      (self._BLANK_RE, self._handle_blank),
-      (self._MODEL_RE, self._handle_model),
-      (self._CLOZE_RE, self._handle_cloze),
-      (self._FIELD_RE, self._handle_field),
-      (self._CARD_RE, self._handle_card),
-      (self._FRONT_RE, self._handle_front),
-      (self._BACK_RE, self._handle_back),
-      (self._STYLES_RE, self._handle_styles),
-      (self._END_RE, self._handle_end),
-    ]
 
-  def push(self, line: str):
-    current_line = self.line
-    text = _rstrip_line(line)
+  def push(self, line: str) -> None:
+    line = line.rstrip()
 
-    if self._multiline_target is not None:
-      if self._END_RE.match(text):
+    if self._state in {
+      self._State.EXPECT_FRONT_END,
+      self._State.EXPECT_BACK_END,
+      self._State.EXPECT_STYLES_END,
+    }:
+      if self._END_RE.match(line):
         self._finish_multiline()
-        self.line += 1
-        return
-      self._multiline_lines.append(_trim_line_text(text))
-      self.line += 1
+      else:
+        self._multiline_lines.append(line)
+      self._line += 1
       return
 
-    for pattern, handler in self._handlers:
-      match = pattern.match(text)
-      if match is None:
-        continue
-      handled = handler(match, text)
-      self.line += 1
-      if handled:
-        return
-      break
+    if line == "":
+      pass  # Skip an empty line.
+    elif match := self._MODEL_RE.match(line):
+      self._handle_model(match)
+    elif self._CLOZE_RE.match(line):
+      self._handle_cloze()
+    elif match := self._FIELD_RE.match(line):
+      self._handle_field(match)
+    elif match := self._CARD_RE.match(line):
+      self._handle_card(match)
+    elif self._FRONT_RE.match(line):
+      self._handle_front()
+    elif self._BACK_RE.match(line):
+      self._handle_back()
+    elif self._STYLES_RE.match(line):
+      self._handle_styles()
+    elif self._END_RE.match(line):
+      self._handle_end()
     else:
-      self._error(current_line, f'Unexpected model line: "{text}"')
-      self.line += 1
+      self._error("Unexpected text outside a multiline block.")
+    self._line += 1
 
-  def finish(self):
-    if self._multiline_target is not None:
-      self._error(self.line, "Unterminated multiline block. Expected a closing '~~~' line.")
+  def finish(self) -> None:
+    if self._state in {
+      self._State.EXPECT_FRONT_END,
+      self._State.EXPECT_BACK_END,
+      self._State.EXPECT_STYLES_END,
+    }:
+      self._error("Unterminated multiline block. Expected a closing '~~~' line.")
       self._finish_multiline()
     self._finish_model()
 
-  def _handle_blank(self, match: re.Match[str], text: str) -> bool:
-    return True
-
-  def _handle_model(self, match: re.Match[str], text: str) -> bool:
+  def _handle_model(self, match: re.Match[str]) -> None:
     self._finish_model()
-    self._current_model = ModelNodes(
-      path=self.path,
-      name=ModelNameNode(path=self.path, line=self.line, value=_collapse_ws(match.group("name"))),
+    self._model_line = self._line
+    self._model_name = _collapse_ws(match.group("name"))
+    self._model_cloze = False
+    self._model_fields = []
+    self._model_cards = []
+    self._model_styles = ""
+    self._card_line = None
+    self._card_name = None
+    self._card_front = None
+    self._card_back = None
+    self._state = self._State.EXPECT_CLOZE_OR_FIELD
+
+  def _handle_cloze(self) -> None:
+    if self._state is not self._State.EXPECT_CLOZE_OR_FIELD:
+      self._error("Unexpected close flag.")
+      return
+    self._model_cloze = True
+    self._state = self._State.EXPECT_FIELD_OR_CARD
+
+  def _handle_field(self, match: re.Match[str]) -> None:
+    if self._state not in {
+      self._State.EXPECT_CLOZE_OR_FIELD,
+      self._State.EXPECT_FIELD_OR_CARD,
+    }:
+      self._error("Unexpected field.")
+      return
+    self._model_fields.append(
+      ModelFieldNode(
+        path=self._path,
+        line=self._line,
+        name=_collapse_ws(match.group("name")),
+        required=match.group("optional") is None,
+      ),
     )
-    self._current_card = None
-    return True
+    self._state = self._State.EXPECT_FIELD_OR_CARD
 
-  def _handle_cloze(self, match: re.Match[str], text: str) -> bool:
-    if self._current_model is None:
-      self._error(self.line, "Cloze flag found before a model header.")
-      return True
-    if self._current_model.cloze is not None:
-      self._error(self.line, f'Model "{self._model_name()}" already has a cloze flag.')
-      return True
-    if self._current_model.fields or self._current_model.cards or self._current_model.styles is not None:
-      self._error(self.line, "Cloze flag must appear before fields, cards, and styles.")
-      return True
-    self._current_model.cloze = ModelClozeNode(path=self.path, line=self.line, value=True)
-    return True
+  def _handle_card(self, match: re.Match[str]) -> None:
+    if self._state not in {
+      self._State.EXPECT_FIELD_OR_CARD,
+      self._state.EXPECT_CARD_OR_STYLES,
+    }:
+      self._error("Unexpected card.")
+      return
+    self._finish_card()
+    self._card_line = self._line
+    self._card_name = _collapse_ws(match.group("name"))
+    self._card_front = None
+    self._card_back = None
+    self._state = self._State.EXPECT_FRONT
 
-  def _handle_field(self, match: re.Match[str], text: str) -> bool:
-    if self._current_model is None:
-      self._error(self.line, "Field found before a model header.")
-      return True
-    if self._current_model.cards or self._current_model.styles is not None:
-      self._error(self.line, "Fields must appear before cards and styles.")
-      return True
-    node = ModelFieldNode(
-      path=self.path,
-      line=self.line,
-      name=_collapse_ws(match.group("name")),
-      required=match.group("optional") is None,
-    )
-    self._current_model.fields.append(node)
-    return True
+  def _handle_front(self) -> None:
+    if self._state is not self._State.EXPECT_FRONT:
+      self._error("Unexpected card front.")
+      return
+    self._card_front = ""
+    self._start_multiline()
+    self._state = self._State.EXPECT_FRONT_END
 
-  def _handle_card(self, match: re.Match[str], text: str) -> bool:
-    if self._current_model is None:
-      self._error(self.line, "Card found before a model header.")
-      return True
-    if self._current_model.styles is not None:
-      self._error(self.line, "Cards must appear before styles.")
-      return True
-    if self._current_card is not None and self._current_card.back is None:
-      self._error(self.line, f'Card "{self._current_card.name}" is missing a back block.')
-    self._current_card = ModelCardNode(
-      path=self.path,
-      line=self.line,
-      name=_collapse_ws(match.group("name")),
-    )
-    self._current_model.cards.append(self._current_card)
-    return True
+  def _handle_back(self) -> None:
+    if self._state is not self._State.EXPECT_BACK:
+      self._error("Unexpected card back.")
+      return
+    self._card_back = ""
+    self._start_multiline()
+    self._state = self._State.EXPECT_BACK_END
 
-  def _handle_front(self, match: re.Match[str], text: str) -> bool:
-    if self._current_card is None:
-      self._error(self.line, "Front block found before a card header.")
-      return True
-    if self._current_card.front is not None:
-      self._error(self.line, f'Card "{self._current_card.name}" already has a front block.')
-      return True
-    node = ModelCardSideNode(path=self.path, line=self.line)
-    self._current_card.front = node
-    self._start_multiline(node, "text")
-    return True
+  def _handle_styles(self) -> None:
+    if self._state is not self._state.EXPECT_CARD_OR_STYLES:
+      self._error("Unexpected styles.")
+      return
+    self._finish_card()
+    self._model_styles = ""
+    self._start_multiline()
+    self._state = self._State.EXPECT_STYLES_END
 
-  def _handle_back(self, match: re.Match[str], text: str) -> bool:
-    if self._current_card is None:
-      self._error(self.line, "Back block found before a card header.")
-      return True
-    if self._current_card.front is None:
-      self._error(self.line, f'Card "{self._current_card.name}" must define front before back.')
-      return True
-    if self._current_card.back is not None:
-      self._error(self.line, f'Card "{self._current_card.name}" already has a back block.')
-      return True
-    node = ModelCardSideNode(path=self.path, line=self.line)
-    self._current_card.back = node
-    self._start_multiline(node, "text")
-    return True
+  def _handle_end(self) -> None:
+    self._error("Unexpected '~~~' outside a multiline block.")
 
-  def _handle_styles(self, match: re.Match[str], text: str) -> bool:
-    if self._current_model is None:
-      self._error(self.line, "Styles block found before a model header.")
-      return True
-    if self._current_model.styles is not None:
-      self._error(self.line, f'Model "{self._model_name()}" already has a styles block.')
-      return True
-    node = ModelStyleNode(path=self.path, line=self.line)
-    self._current_model.styles = node
-    self._start_multiline(node, "style")
-    return True
-
-  def _handle_end(self, match: re.Match[str], text: str) -> bool:
-    self._error(self.line, "Unexpected '~~~' outside a multiline block.")
-    return True
-
-  def _start_multiline(self, node: Node, attr: str):
-    self._multiline_target = (node, attr)
+  def _start_multiline(self) -> None:
     self._multiline_lines = []
 
-  def _finish_multiline(self):
-    if self._multiline_target is None or self._multiline_lines is None:
+  def _finish_multiline(self) -> None:
+    if self._multiline_lines is None:
       return
-    node, attr = self._multiline_target
-    setattr(node, attr, "\n".join(self._multiline_lines).strip())
-    self._multiline_target = None
+    value = "\n".join(self._multiline_lines).strip()
     self._multiline_lines = None
+    match self._state:
+      case self._State.EXPECT_FRONT_END:
+        self._card_front = value
+        self._state = self._State.EXPECT_BACK
+      case self._State.EXPECT_BACK_END:
+        self._card_back = value
+        self._state = self._State.EXPECT_CARD_OR_STYLES
+      case self._State.EXPECT_STYLES_END:
+        self._model_styles = value
+        self._finish_model()
 
-  def _finish_model(self):
-    if self._current_model is None:
+  def _finish_model(self) -> None:
+    if self._model_name is None:
       return
-    if self._current_card is not None:
-      if self._current_card.front is None:
-        self._error(self.line, f'Card "{self._current_card.name}" is missing a front block.')
-      if self._current_card.back is None:
-        self._error(self.line, f'Card "{self._current_card.name}" is missing a back block.')
-    self.models.append(self._current_model)
-    self._current_model = None
-    self._current_card = None
+    self._finish_card()
+    self.models.append(
+      ModelNodes(
+        path=self._path,
+        line=self._model_line,
+        name=self._model_name,
+        cloze=self._model_cloze,
+        fields=self._model_fields,
+        cards=self._model_cards,
+        styles=self._model_styles,
+      )
+    )
+    self._model_line = None
+    self._model_name = None
+    self._model_cloze = False
+    self._model_fields = []
+    self._model_cards = []
+    self._model_styles = ""
+    self._card_line = None
+    self._card_name = None
+    self._card_front = None
+    self._card_back = None
+    self._state = self._State.EXPECT_MODEL
 
-  def _error(self, line: int, message: str):
-    self.errors.append(ParseError(path=self.path, line=line, message=message))
+  def _finish_card(self) -> None:
+    if self._card_name is None:
+      return
+    self._model_cards.append(
+      ModelCardNode(
+        path=self._path,
+        line=self._card_line,
+        name=self._card_name,
+        front=self._card_front or "",
+        back=self._card_back or "",
+      )
+    )
+    self._card_line = None
+    self._card_name = None
+    self._card_front = None
+    self._card_back = None
+    self._state = self._State.EXPECT_CARD_OR_STYLES
 
-  def _model_name(self) -> str:
-    if self._current_model is None or self._current_model.name is None:
-      return "<unknown>"
-    return self._current_model.name.value
+  def _error(self, message: str) -> None:
+    self.errors.append(ParseError(path=self._path, line=self._line, message=message))

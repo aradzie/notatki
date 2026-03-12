@@ -7,18 +7,18 @@ from aqt.operations import QueryOp
 from .import_state import ImportState
 
 
-def init_import_directory(mw: AnkiQt):
+def init_import_directory(mw: AnkiQt) -> None:
   def start_import(col: Collection, path: str) -> ImportState:
     mw.create_backup_now()
     state = ImportState.from_directory(col, Path(path))
     state.start()
     return state
 
-  def on_success(state: ImportState):
+  def on_success(state: ImportState) -> None:
     state.report()
     mw.reset()
 
-  def import_dir():
+  def import_dir() -> None:
     path = QFileDialog.getExistingDirectory(
       caption="Notes Directory",
       options=QFileDialog.Option.ShowDirsOnly,
