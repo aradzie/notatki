@@ -40,12 +40,11 @@ def init_import(mw: AnkiQt):
       options=QFileDialog.Option.ShowDirsOnly,
     )
     if path:
-      op = QueryOp(
+      QueryOp(
         parent=mw,
         op=lambda col: start_import(col, Path(path)),
         success=on_success,
-      )
-      op.with_progress().run_in_background()
+      ).with_progress().run_in_background()
 
   action = QAction("Import Notatki...", mw)
   action.triggered.connect(import_dir)
@@ -91,19 +90,19 @@ class State:
     jcol = JCollection()
 
     self._find_files()
-    if len(self.errors):
+    if self.errors:
       return
 
     self._parse_files(jcol)
-    if len(self.errors):
+    if self.errors:
       return
 
     self._sync_models(jcol)
-    if len(self.errors):
+    if self.errors:
       return
 
     self._sync_notes(jcol)
-    if len(self.errors):
+    if self.errors:
       return
 
   def _find_files(self):
@@ -144,12 +143,12 @@ class State:
       parser = NoteParser(path)
       self._parse_file(path, parser)
       notes.extend(parser.notes)
-    if len(self.errors):
+    if self.errors:
       return
     checker = Checker()
     checker.check(models, notes)
     self.errors.extend(checker.errors)
-    if len(self.errors):
+    if self.errors:
       return
     jcol.models.extend(checker.models)
     jcol.notes.extend(checker.notes)
