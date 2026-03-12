@@ -2,7 +2,7 @@
   "private": true,
   "name": "notatki",
   "displayName": "Notatki",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "aradzie",
   "description": "Write Anki notes in text files using a simple, human-readable format.",
   "keywords": [
