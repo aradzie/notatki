@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from anki.collection import Collection
 from anki.notes import Note
@@ -502,3 +504,25 @@ def test_import_state_create_models_and_nodes(col):
   assert state.updated_notes == [n1]
   assert state.added_models == []
   assert state.added_notes == []
+
+
+def test_import_state_imports_examples_directory(col):
+  # Act
+
+  examples_dir = Path(__file__).resolve().parents[2] / "examples"
+  state = ImportState.from_directory(col, examples_dir)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.updated_models == []
+  assert state.updated_notes == []
+  assert [model.name for model in state.added_models] == [
+    "Basic Math",
+    "Basic Math (and reversed card)",
+  ]
+  assert len(state.added_notes) == 8
+  assert col.models.by_name("Basic Math") is not None
+  assert col.models.by_name("Basic Math (and reversed card)") is not None
+  assert len(col.find_notes("*")) == 8
