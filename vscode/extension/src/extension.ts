@@ -1,7 +1,8 @@
 import vscode from "vscode";
 import { Completer, Completions } from "./completions.js";
 import { ErrorChecker } from "./errors.js";
-import { ExportCommand } from "./export-notes.js";
+import { ExportNotesCommand } from "./export-notes.js";
+import { ExportPreviewCommand } from "./export-preview.js";
 import { ModelsFormatter, NotesFormatter } from "./format.js";
 import { ModelManager } from "./models.js";
 import { InsertIdCommand, insertIdOnSave } from "./note-id.js";
@@ -17,7 +18,8 @@ export async function activate(context: vscode.ExtensionContext) {
   new NotesFormatter(context);
   new ModelsFormatter(context);
   new PreviewManager(context, models);
-  new ExportCommand("csv", errors, log).attach(context);
+  new ExportNotesCommand("csv", errors, log).attach(context);
+  new ExportPreviewCommand(errors, log).attach(context);
   new InsertIdCommand().attach(context);
   context.subscriptions.push(vscode.workspace.onWillSaveTextDocument(insertIdOnSave));
 }

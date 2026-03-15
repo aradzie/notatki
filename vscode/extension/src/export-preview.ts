@@ -1,20 +1,16 @@
-import { exportAnki, exportCsv } from "@notatki/core";
+import { generatePreview } from "@notatki/preview";
 import vscode from "vscode";
 import { Command } from "./command.js";
-import { cmdExportCsv } from "./constants.js";
+import { cmdExportPreview } from "./constants.js";
 import { type ErrorChecker } from "./errors.js";
 import { parseNoteFiles } from "./util.js";
 
-type Format = "apkg" | "csv";
-
-export class ExportNotesCommand extends Command {
-  readonly #format: Format;
+export class ExportPreviewCommand extends Command {
   readonly #errors: ErrorChecker;
   readonly #log: vscode.LogOutputChannel;
 
-  constructor(format: Format, errors: ErrorChecker, log: vscode.LogOutputChannel) {
-    super(cmdExportCsv);
-    this.#format = format;
+  constructor(errors: ErrorChecker, log: vscode.LogOutputChannel) {
+    super(cmdExportPreview);
     this.#errors = errors;
     this.#log = log;
   }
@@ -41,21 +37,11 @@ export class ExportNotesCommand extends Command {
     } else {
       this.#errors.clearAllErrors();
       if (notes.length > 0) {
-        let out: vscode.Uri;
-        let data: Buffer;
-        switch (this.#format) {
-          case "apkg":
-            out = vscode.Uri.joinPath(ws.uri, `notes.${exportAnki.ext}`);
-            data = Buffer.from(await exportAnki(notes));
-            break;
-          case "csv":
-            out = vscode.Uri.joinPath(ws.uri, `notes.${exportCsv.ext}`);
-            data = Buffer.from(await exportCsv(notes));
-            break;
-        }
+        const out = vscode.Uri.joinPath(ws.uri, `notes.html`);
+        const data = Buffer.from(generatePreview(notes));
         await vscode.workspace.fs.writeFile(out, data);
-        vscode.window.showInformationMessage(`Exported ${notes.length} note(s) to "${out.fsPath}".`);
-        this.#log.info(`Exported ${notes.length} note(s) to ${out.fsPath}`);
+        vscode.window.showInformationMessage(`Exported ${notes.length} note preview(s) to "${out.fsPath}".`);
+        this.#log.info(`Exported ${notes.length} note preview(s) to ${out.fsPath}`);
       } else {
         vscode.window.showWarningMessage(`No notes found in "${ws.uri.fsPath}".`);
         this.#log.warn(`No notes found in ${ws.uri.fsPath}`);

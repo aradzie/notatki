@@ -15,3 +15,7 @@ __pycache__/
 *.log
 *.tmp
 *~
+
+/notes.html
+/notes.csv
+/notes.txt

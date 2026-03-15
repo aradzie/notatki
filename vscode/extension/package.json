@@ -2,7 +2,7 @@
   "private": true,
   "name": "notatki",
   "displayName": "Notatki",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "aradzie",
   "description": "Write Anki notes in text files using a simple, human-readable format.",
   "keywords": [
@@ -73,27 +73,37 @@
     "commands": [
       {
         "command": "anki-notes.showPreview",
-        "title": "Anki Notes: Show Preview",
+        "title": "Show Preview",
         "category": "Anki Notes"
       },
       {
         "command": "anki-notes.showPreviewToTheSide",
-        "title": "Anki Notes: Show Preview to the Side",
+        "title": "Show Preview to the Side",
         "category": "Anki Notes"
       },
       {
         "command": "anki-notes.showLockedPreviewToTheSide",
-        "title": "Anki Notes: Show Locked Preview to the Side",
+        "title": "Show Locked Preview to the Side",
         "category": "Anki Notes"
       },
       {
         "command": "anki-notes.insertId",
-        "title": "Anki Notes: Insert Uinique Note Identifiers",
+        "title": "Insert Unique Note Identifiers",
         "category": "Anki Notes"
       },
       {
-        "command": "anki-notes.exportNotes",
-        "title": "Anki Notes: Export Compiled Notes",
+        "command": "anki-notes.exportApkg",
+        "title": "Export Compiled Notes (*.apkg)",
+        "category": "Anki Notes"
+      },
+      {
+        "command": "anki-notes.exportCsv",
+        "title": "Export Compiled Notes (*.csv)",
+        "category": "Anki Notes"
+      },
+      {
+        "command": "anki-notes.exportPreview",
+        "title": "Export Preview",
         "category": "Anki Notes"
       }
     ],
