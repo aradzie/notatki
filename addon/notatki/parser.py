@@ -70,11 +70,11 @@ class NoteParser:
       self._error("Unexpected text outside a multiline field.")
 
   def _handle_end(self) -> None:
-    self._current_field = None
+    note_location = self._note_location or Location(path=self._path, line=self._line)
     self.notes.append(
       NoteNodes(
-        path=self._note_location.path,
-        line=self._note_location.line,
+        path=note_location.path,
+        line=note_location.line,
         type=self._type,
         deck=self._deck,
         tags=self._tags,
@@ -135,19 +135,6 @@ class NoteParser:
           name=name,
           value=_collapse_ws(value),
         )
-      case "id":
-        field = FieldNode(
-          path=self._path,
-          line=self._line,
-          name=name,
-          value=value.strip(),
-        )
-        self._current_field = field
-        if self._guid is not None:
-          self._error(f"Duplicate field '{name}'.")
-          return
-        self._guid = field  # First definition wins.
-        self._note_location = self._note_location or self._guid
       case _:
         field = FieldNode(
           path=self._path,
@@ -155,12 +142,9 @@ class NoteParser:
           name=name,
           value=value.strip(),
         )
+        self._note_location = self._note_location or field
         self._current_field = field
-        if any(field.name == name for field in self._fields):
-          self._error(f"Duplicate field '{name}'.")
-          return
-        self._fields.append(field)  # First definition wins.
-        self._note_location = self._note_location or self._fields
+        self._fields.append(field)
 
   def _error(self, message: str) -> None:
     self.errors.append(ParseError(path=self._path, line=self._line, message=message))

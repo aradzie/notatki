@@ -6,10 +6,10 @@ from anki.notes import Note
 
 from .data import (
   FieldNode,
+  Location,
   ModelCardNode,
   ModelFieldNode,
   ModelNodes,
-  Location,
   NoteNodes,
   ParseError,
   PropertyNode,
@@ -97,8 +97,8 @@ def test_import_state_note_without_guid_reports_error(col):
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
     guid=None,
     fields=[
-      FieldNode(path="a.note", line=4, name="front", value="question"),
-      FieldNode(path="a.note", line=5, name="back", value="answer"),
+      FieldNode(path="a.note", line=4, name="Front", value="question"),
+      FieldNode(path="a.note", line=5, name="Back", value="answer"),
     ],
     end=Location(path="a.note", line=6),
   )
@@ -125,10 +125,11 @@ def test_import_state_note_with_empty_guid_reports_error(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="Basic"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="a.note", line=4, value=""),
+    guid=None,
     fields=[
-      FieldNode(path="a.note", line=5, name="front", value="question"),
-      FieldNode(path="a.note", line=6, name="back", value="answer"),
+      FieldNode(path="a.note", line=4, name="Id", value=""),
+      FieldNode(path="a.note", line=5, name="Front", value="question"),
+      FieldNode(path="a.note", line=6, name="Back", value="answer"),
     ],
     end=Location(path="a.note", line=7),
   )
@@ -142,7 +143,7 @@ def test_import_state_note_with_empty_guid_reports_error(col):
   # Assert
 
   assert state.errors == [
-    ParseError(path="a.note", line=7, message="Note must have an id field."),
+    ParseError(path="a.note", line=4, message="Note must have a non-emtpy id value."),
   ]
   assert state.updated_notes == []
   assert state.added_notes == []
@@ -155,8 +156,10 @@ def test_import_state_note_without_fields_reports_error(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="Basic"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="a.note", line=4, name="id", value="111"),
-    fields=[],
+    guid=None,
+    fields=[
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+    ],
     end=Location(path="a.note", line=5),
   )
 
@@ -182,16 +185,22 @@ def test_import_state_duplicate_note_guid_reports_error(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="Basic"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="a.note", line=4, name="id", value="111"),
-    fields=[FieldNode(path="a.note", line=5, name="front", value="question")],
+    guid=None,
+    fields=[
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+      FieldNode(path="a.note", line=5, name="Front", value="question"),
+    ],
     end=Location(path="a.note", line=6),
   )
   n2 = NoteNodes(
     type=PropertyNode(path="b.note", line=1, name="type", value="Basic"),
     deck=PropertyNode(path="b.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="b.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="b.note", line=4, name="id", value="111"),
-    fields=[FieldNode(path="b.note", line=5, name="front", value="question")],
+    guid=None,
+    fields=[
+      FieldNode(path="b.note", line=4, name="Id", value="111"),
+      FieldNode(path="b.note", line=5, name="Front", value="question"),
+    ],
     end=Location(path="b.note", line=6),
   )
 
@@ -221,9 +230,10 @@ def test_import_state_note_with_unknown_field_reports_error(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="Basic"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="a.note", line=4, name="id", value="111"),
+    guid=None,
     fields=[
-      FieldNode(path="a.note", line=5, name="front", value="question"),
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+      FieldNode(path="a.note", line=5, name="Front", value="question"),
       FieldNode(path="a.note", line=6, name="extra", value="unexpected"),
     ],
     end=Location(path="a.note", line=7),
@@ -272,10 +282,11 @@ def test_import_state_note_with_unknown_model_name_is_ignored(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="Missing Type"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="a.note", line=4, name="id", value="111"),
+    guid=None,
     fields=[
-      FieldNode(path="a.note", line=5, name="front", value="question"),
-      FieldNode(path="a.note", line=6, name="back", value="answer"),
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+      FieldNode(path="a.note", line=5, name="Front", value="question"),
+      FieldNode(path="a.note", line=6, name="Back", value="answer"),
     ],
     end=Location(path="a.note", line=7),
   )
@@ -314,10 +325,11 @@ def test_import_state_update_note_cannot_change_type(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="Basic (and reversed card)"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="a.note", line=4, name="id", value="111"),
+    guid=None,
     fields=[
-      FieldNode(path="a.note", line=5, name="front", value="question"),
-      FieldNode(path="a.note", line=6, name="back", value="answer"),
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+      FieldNode(path="a.note", line=5, name="Front", value="question"),
+      FieldNode(path="a.note", line=6, name="Back", value="answer"),
     ],
     end=Location(path="a.note", line=7),
   )
@@ -408,8 +420,9 @@ def test_import_state_updates_existing_note(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="BASIC"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="New Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="X Y Z"),
-    guid=FieldNode(path="a.note", line=4, name="id", value="111"),
+    guid=None,
     fields=[
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
       FieldNode(path="a.note", line=5, name="FRONT", value="new question"),
       FieldNode(path="a.note", line=6, name="BACK", value="new answer"),
     ],
@@ -467,10 +480,11 @@ def test_import_state_create_models_and_nodes(col):
     type=PropertyNode(path="a.note", line=1, name="type", value="My Type"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
     tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
-    guid=FieldNode(path="a.note", line=4, name="id", value="111"),
+    guid=None,
     fields=[
-      FieldNode(path="a.note", line=5, name="front", value="question"),
-      FieldNode(path="a.note", line=6, name="back", value="answer"),
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+      FieldNode(path="a.note", line=5, name="Front", value="question"),
+      FieldNode(path="a.note", line=6, name="Back", value="answer"),
     ],
     end=Location(path="a.note", line=7),
   )

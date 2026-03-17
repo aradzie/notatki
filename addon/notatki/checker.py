@@ -1,6 +1,11 @@
 from collections import defaultdict
 
-from .data import ModelNodes, NoteNodes, ParseError
+from .data import (
+  FieldNode,
+  ModelNodes,
+  NoteNodes,
+  ParseError,
+)
 
 
 class Checker:
@@ -55,7 +60,29 @@ class Checker:
     notes_by_guid: defaultdict[str, list[NoteNodes]] = defaultdict(list)
 
     for note in notes:
-      if not note.guid or not note.guid.value:
+      guid_field: FieldNode | None = None
+
+      seen_field_names: set[str] = set()
+      for field in note.fields:
+        field_name = field.name.lower()
+        if field_name in seen_field_names:
+          self.errors.append(
+            ParseError(
+              path=field.path,
+              line=field.line,
+              message=f"Duplicate field '{field.name}'.",
+            )
+          )
+        else:
+          seen_field_names.add(field_name)
+          if field_name == "id":
+            guid_field = field
+
+      if guid_field:
+        note.guid = guid_field
+        note.fields.remove(guid_field)
+
+      if not note.guid:
         self.errors.append(
           ParseError(
             path=note.end.path,
@@ -63,6 +90,16 @@ class Checker:
             message="Note must have an id field.",
           )
         )
+      elif not note.guid.value:
+        self.errors.append(
+          ParseError(
+            path=note.guid.path,
+            line=note.guid.line,
+            message="Note must have a non-emtpy id value.",
+          )
+        )
+      else:
+        notes_by_guid[note.guid.value].append(note)
 
       if not note.fields:
         self.errors.append(
@@ -72,9 +109,6 @@ class Checker:
             message="Note must have at least one model field.",
           )
         )
-
-      if note.guid and note.guid.value:
-        notes_by_guid[note.guid.value].append(note)
 
     for guid, notes_with_guid in notes_by_guid.items():
       if len(notes_with_guid) > 1:

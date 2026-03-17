@@ -1,13 +1,13 @@
 from pathlib import Path
 
 from anki.cards import Card
-from anki.collection import Collection, AddNoteRequest
+from anki.collection import AddNoteRequest, Collection
 from anki.models import NotetypeDict
 from anki.notes import Note
 from aqt.utils import showInfo, showWarning
 
 from .checker import Checker
-from .data import ParseError, ModelNodes, NoteNodes
+from .data import ModelNodes, NoteNodes, ParseError
 from .format_field import markdown_to_html
 from .parser import ModelParser, NoteParser
 
@@ -63,9 +63,6 @@ class ImportState:
     self._to_add = []
 
   def start(self) -> None:
-    if self.errors:
-      return
-
     self._parse_files()
     if self.errors:
       return
@@ -256,16 +253,6 @@ class ImportState:
         self._anki_notes_by_guid[anki_note.guid] = anki_note
 
   def _process_note(self, my_note: NoteNodes) -> bool:
-    if not my_note.guid or not my_note.guid.value:
-      self.errors.append(
-        ParseError(
-          path=my_note.end.path,
-          line=my_note.end.line,
-          message="Note must have a guid.",
-        )
-      )
-      return False
-
     if anki_note := self._anki_notes_by_guid.get(my_note.guid.value):
       return self._update_existing_anki_note(my_note, anki_note)
     else:

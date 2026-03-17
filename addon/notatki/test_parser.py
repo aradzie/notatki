@@ -62,8 +62,9 @@ def test_note_parser_parses_properties_and_fields() -> None:
       type=PropertyNode(path="deck/sample.note", line=1, name="type", value="Basic"),
       deck=PropertyNode(path="deck/sample.note", line=2, name="deck", value="Default Deck"),
       tags=PropertyNode(path="deck/sample.note", line=3, name="tags", value="One Two"),
-      guid=FieldNode(path="deck/sample.note", line=4, name="id", value="123"),
+      guid=None,
       fields=[
+        FieldNode(path="deck/sample.note", line=4, name="id", value="123"),
         FieldNode(path="deck/sample.note", line=5, name="front", value="Question\n  continued text"),
         FieldNode(path="deck/sample.note", line=7, name="back", value="Answer"),
       ],
@@ -101,122 +102,12 @@ def test_note_parser_reports_duplicate_property() -> None:
       ),
       deck=PropertyNode(name="deck", value="Default"),
       tags=PropertyNode(name="tags", value=""),
-      guid=FieldNode(path="deck/duplicate-property.note", line=3, name="id", value="123"),
+      guid=None,
       fields=[
+        FieldNode(path="deck/duplicate-property.note", line=3, name="id", value="123"),
         FieldNode(path="deck/duplicate-property.note", line=4, name="front", value="Question"),
       ],
       end=Location(path="deck/duplicate-property.note", line=5),
-    ),
-  ]
-
-
-def test_note_parser_reports_duplicate_guid_field() -> None:
-  parser = parse_note(
-    "!id: 123",
-    "!ID: 456",
-    "!Front: Question",
-    "~~~",
-    path="deck/duplicate-field.note",
-  )
-
-  assert parser.errors == [
-    ParseError(
-      path="deck/duplicate-field.note",
-      line=2,
-      message="Duplicate field 'id'.",
-    ),
-  ]
-  assert parser.notes == [
-    NoteNodes(
-      path="deck/duplicate-field.note",
-      line=1,
-      type=PropertyNode(name="type", value="Basic"),
-      deck=PropertyNode(name="deck", value="Default"),
-      tags=PropertyNode(name="tags", value=""),
-      guid=FieldNode(path="deck/duplicate-field.note", line=1, name="id", value="123"),
-      fields=[
-        FieldNode(path="deck/duplicate-field.note", line=3, name="front", value="Question"),
-      ],
-      end=Location(path="deck/duplicate-field.note", line=4),
-    ),
-  ]
-
-
-def test_note_parser_reports_duplicate_other_field() -> None:
-  parser = parse_note(
-    "!id: 123",
-    "!Front: Question",
-    "!FRONT: Another question",
-    "~~~",
-    path="deck/duplicate-field.note",
-  )
-
-  assert parser.errors == [
-    ParseError(
-      path="deck/duplicate-field.note",
-      line=3,
-      message="Duplicate field 'front'.",
-    ),
-  ]
-  assert parser.notes == [
-    NoteNodes(
-      path="deck/duplicate-field.note",
-      line=1,
-      type=PropertyNode(name="type", value="Basic"),
-      deck=PropertyNode(name="deck", value="Default"),
-      tags=PropertyNode(name="tags", value=""),
-      guid=FieldNode(path="deck/duplicate-field.note", line=1, name="id", value="123"),
-      fields=[
-        FieldNode(path="deck/duplicate-field.note", line=2, name="front", value="Question"),
-      ],
-      end=Location(path="deck/duplicate-field.note", line=4),
-    ),
-  ]
-
-
-def test_note_parser_continues_parsing_notes_after_error() -> None:
-  parser = parse_note(
-    "!id: 123",
-    "!Front: Question",
-    "!Front: Duplicate",
-    "~~~",
-    "!id: 456",
-    "!Front: Next question",
-    "~~~",
-    path="deck/recovery.note",
-  )
-
-  assert parser.errors == [
-    ParseError(
-      path="deck/recovery.note",
-      line=3,
-      message="Duplicate field 'front'.",
-    ),
-  ]
-  assert parser.notes == [
-    NoteNodes(
-      path="deck/recovery.note",
-      line=1,
-      type=PropertyNode(name="type", value="Basic"),
-      deck=PropertyNode(name="deck", value="Default"),
-      tags=PropertyNode(name="tags", value=""),
-      guid=FieldNode(path="deck/recovery.note", line=1, name="id", value="123"),
-      fields=[
-        FieldNode(path="deck/recovery.note", line=2, name="front", value="Question"),
-      ],
-      end=Location(path="deck/recovery.note", line=4),
-    ),
-    NoteNodes(
-      path="deck/recovery.note",
-      line=5,
-      type=PropertyNode(name="type", value="Basic"),
-      deck=PropertyNode(name="deck", value="Default"),
-      tags=PropertyNode(name="tags", value=""),
-      guid=FieldNode(path="deck/recovery.note", line=5, name="id", value="456"),
-      fields=[
-        FieldNode(path="deck/recovery.note", line=6, name="front", value="Next question"),
-      ],
-      end=Location(path="deck/recovery.note", line=7),
     ),
   ]
 
