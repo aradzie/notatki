@@ -308,6 +308,8 @@ class ImportState:
     anki_note.guid = my_note.guid.value
     anki_note.tags = my_note.tags.value.split()
 
+    my_field_names_lower = {my_field.name.lower() for my_field in my_note.fields}
+
     for my_field in my_note.fields:
       field_name = anki_field_names.get(my_field.name.lower(), my_field.name)
       if field_name in anki_note:
@@ -321,6 +323,11 @@ class ImportState:
           )
         )
         ok = False
+
+    # Clear fields that were removed from the note file.
+    for field_name_lower, field_name in anki_field_names.items():
+      if field_name_lower not in my_field_names_lower:
+        anki_note[field_name] = ""
 
     return ok
 

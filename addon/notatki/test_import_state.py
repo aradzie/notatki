@@ -454,6 +454,50 @@ def test_import_state_updates_existing_note(col):
   assert cards[0].did == col.decks.id("New Deck")
 
 
+def test_import_state_update_note_clears_removed_field(col):
+  # Arrange
+
+  # Seed the collection using the native Anki note API.
+  basic = col.models.by_name("Basic")
+  existing_note = Note(col, basic)
+  existing_note.guid = "111"
+  existing_note["Front"] = "old question"
+  existing_note["Back"] = "old answer"
+  col.add_note(existing_note, col.decks.id("My Deck"))
+
+  # The updated note file no longer contains the "Back" field.
+  n1 = NoteNodes(
+    type=PropertyNode(path="a.note", line=1, name="type", value="Basic"),
+    deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
+    tags=PropertyNode(path="a.note", line=3, name="tags", value="A B C"),
+    guid=None,
+    fields=[
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+      FieldNode(path="a.note", line=5, name="Front", value="new question"),
+    ],
+    end=Location(path="a.note", line=6),
+  )
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_notes.append(n1)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.updated_notes == [n1]
+  assert state.added_notes == []
+
+  note_ids = col.find_notes("*")
+  assert len(note_ids) == 1
+
+  updated_note = col.get_note(note_ids[0])
+  assert updated_note["Front"] == "<p>new question</p>\n"
+  assert updated_note["Back"] == ""
+
+
 def test_import_state_create_models_and_nodes(col):
   # Arrange
 
