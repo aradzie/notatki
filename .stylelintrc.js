@@ -1,6 +1,6 @@
 export default {
-  extends: ["stylelint-config-recommended"],
   plugins: ["stylelint-plugin-logical-css", "stylelint-order"],
+  extends: ["stylelint-config-recommended", "stylelint-plugin-logical-css/configs/recommended"],
   rules: {
     "property-no-unknown": [
       true,
@@ -23,31 +23,6 @@ export default {
         ],
       },
     ],
-    "function-no-unknown": [
-      true,
-      {
-        ignoreFunctions: [
-          // Less Preprocessor functions
-          "saturate",
-          "desaturate",
-          "lighten",
-          "darken",
-          "mix",
-          "tint",
-          "shade",
-          "contrast",
-        ],
-      },
-    ],
-    "no-invalid-position-at-import-rule": null,
-    "plugin/use-logical-properties-and-values": [
-      true,
-      {
-        severity: "warning",
-        ignore: ["overflow-y", "overflow-x"],
-      },
-    ],
-    "plugin/use-logical-units": [true, { severity: "warning" }],
     "order/order": [
       [
         "at-variables",

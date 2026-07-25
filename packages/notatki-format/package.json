@@ -19,8 +19,8 @@
   "type": "module",
   "main": "dist/index.js",
   "dependencies": {
-    "katex": "^0.16.22",
-    "marked": "^17.0.0"
+    "katex": "^0.18.1",
+    "marked": "^18.0.7"
   },
   "scripts": {
     "compile": "rm -fr dist && tsc",

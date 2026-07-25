@@ -23,7 +23,7 @@
   "dependencies": {
     "@notatki/core": "^0.0.5",
     "@notatki/preview": "^0.0.5",
-    "commander": "^14.0.0"
+    "commander": "^15.0.0"
   },
   "scripts": {
     "compile": "rm -fr dist && tsc"

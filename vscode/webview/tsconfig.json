@@ -5,6 +5,7 @@
     "outDir": "./dist",
     "noEmit": true,
     "lib": ["esnext", "dom"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["vscode-webview"]
   }
 }

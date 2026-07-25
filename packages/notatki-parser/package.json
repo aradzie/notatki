@@ -19,7 +19,7 @@
   "type": "module",
   "main": "index.js",
   "devDependencies": {
-    "peggy": "^5.0.6"
+    "peggy": "^5.1.0"
   },
   "scripts": {
     "compile": "peggy --format=es --dts --output=parser$.js --allowed-start-rules=Start,NoteList,ModelList,Template ./parser.peggy",
