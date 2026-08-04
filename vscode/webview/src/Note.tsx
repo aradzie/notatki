@@ -1,9 +1,9 @@
 import { type Note } from "@notatki/core";
-import { FieldList1 } from "./FieldList.js";
-import { Meta } from "./Meta.js";
+import { FieldList1 } from "./FieldList.tsx";
+import { Meta } from "./Meta.tsx";
 import * as cn from "./Note.module.css";
-import { type Selection } from "./selection.js";
-import { useView } from "./view.js";
+import { type Selection } from "./selection.ts";
+import { useView } from "./view.tsx";
 
 export function Note1({ note, selection }: { note: Note; selection: Selection }) {
   const { view } = useView();

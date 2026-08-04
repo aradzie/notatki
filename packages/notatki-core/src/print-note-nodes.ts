@@ -1,5 +1,5 @@
 import { type NoteNode } from "@notatki/parser";
-import { Output } from "./output.js";
+import { Output } from "./output.ts";
 
 export function printNoteNodes(nodes: Iterable<NoteNode>): string {
   const out = new Output();

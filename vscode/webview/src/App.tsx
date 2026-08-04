@@ -1,8 +1,8 @@
-import { ErrorList } from "./ErrorList.js";
-import { NoteList1 } from "./NoteList.js";
-import { Toolbar } from "./Toolbar.js";
-import { useNotes } from "./use-notes.js";
-import { ViewProvider } from "./view.js";
+import { ErrorList } from "./ErrorList.tsx";
+import { NoteList1 } from "./NoteList.tsx";
+import { Toolbar } from "./Toolbar.tsx";
+import { useNotes } from "./use-notes.ts";
+import { ViewProvider } from "./view.tsx";
 
 export function App() {
   const { notes, selection, errors } = useNotes();

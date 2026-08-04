@@ -1,6 +1,6 @@
 import { type NoteError } from "@notatki/core";
 import * as cn from "./ErrorList.module.css";
-import { revealRange } from "./navigate.js";
+import { revealRange } from "./navigate.ts";
 
 export function ErrorList({ errors }: { errors: NoteError[] }) {
   return (

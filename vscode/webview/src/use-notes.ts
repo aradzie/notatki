@@ -1,9 +1,9 @@
 import { ModelMap, type Note, type NoteError, NoteList, NoteParser } from "@notatki/core";
 import { type ReviveState } from "@notatki/vscode-protocol";
 import { useEffect, useState } from "react";
-import { queue } from "./messages.js";
-import { type Selection } from "./selection.js";
-import { vscode } from "./vscode.js";
+import { queue } from "./messages.ts";
+import { type Selection } from "./selection.ts";
+import { vscode } from "./vscode.ts";
 
 export function useNotes() {
   const [notes, setNotes] = useState<Note[]>([]);

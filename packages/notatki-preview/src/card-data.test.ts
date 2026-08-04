@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { type Model, type ModelCard, Note } from "@notatki/core";
 import { equal, isFalse, isTrue } from "rich-assert";
-import { CardData } from "./card-data.js";
+import { CardData } from "./card-data.ts";
 
 test("card data", () => {
   const card1: ModelCard = {

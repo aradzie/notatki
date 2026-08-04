@@ -24,8 +24,7 @@
   },
   "scripts": {
     "compile": "rm -fr dist && tsc",
-    "pretest": "npm run compile",
-    "test": "node --test 'dist/**/*.test.js'"
+    "test": "node --test 'src/**/*.test.{js,ts}'"
   },
   "publishConfig": {
     "access": "public"

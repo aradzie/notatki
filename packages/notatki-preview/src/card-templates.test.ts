@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import { type Model, type ModelCard, ModelMap, Note } from "@notatki/core";
 import { equal } from "rich-assert";
-import { CardData } from "./card-data.js";
-import { CardTemplates } from "./card-templates.js";
+import { CardData } from "./card-data.ts";
+import { CardTemplates } from "./card-templates.ts";
 
 test("render templates", () => {
   const card1: ModelCard = {

@@ -1,6 +1,6 @@
 import { type Model, type ModelCard, type ModelMap } from "@notatki/core";
 import { parseTemplate, type TemplateItemNode } from "@notatki/parser";
-import { type CardData } from "./card-data.js";
+import { type CardData } from "./card-data.ts";
 
 export class CardTemplates {
   readonly #map = new Map<string, CardTemplate>();

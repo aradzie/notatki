@@ -7,8 +7,8 @@ import {
   SyntaxError,
   type Token,
 } from "@notatki/parser";
-import { type Model, type ModelCard, type ModelField, ModelMap } from "./model.js";
-import { Note, NoteList } from "./note.js";
+import { type Model, type ModelCard, type ModelField, ModelMap } from "./model.ts";
+import { Note, NoteList } from "./note.ts";
 
 const unknown = {
   source: "<unknown>",

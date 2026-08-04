@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import { like } from "rich-assert";
-import { ModelMap } from "./model.js";
-import { Note, NoteList } from "./note.js";
-import { NoteParser } from "./note-parser.js";
+import { ModelMap } from "./model.ts";
+import { Note, NoteList } from "./note.ts";
+import { NoteParser } from "./note-parser.ts";
 
 test("parse models", () => {
   const parser = new NoteParser();

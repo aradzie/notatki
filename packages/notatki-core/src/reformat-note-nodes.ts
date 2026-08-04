@@ -1,5 +1,5 @@
 import { type FieldNode, type NoteNode, type PropertyNode, type Token } from "@notatki/parser";
-import { loc } from "./nodes.js";
+import { loc } from "./nodes.ts";
 
 export function reformatNoteNodes(nodes: Iterable<NoteNode>): NoteNode[] {
   return [...nodes].map(mapNoteNode);

@@ -1,6 +1,6 @@
 import { NoteParser } from "@notatki/core";
 import vscode from "vscode";
-import { allSearchPath, excludeSearchPath, modelExt, noteExt } from "./constants.js";
+import { allSearchPath, excludeSearchPath, modelExt, noteExt } from "./constants.ts";
 
 export async function revealRange(uri: vscode.Uri, column: vscode.ViewColumn, start: number, end: number) {
   const document = await vscode.workspace.openTextDocument(uri);

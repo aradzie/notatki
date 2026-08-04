@@ -1,9 +1,9 @@
 import { generatePreview } from "@notatki/preview";
 import vscode from "vscode";
-import { Command } from "./command.js";
-import { cmdExportPreview } from "./constants.js";
-import { type ErrorChecker } from "./errors.js";
-import { parseNoteFiles } from "./util.js";
+import { Command } from "./command.ts";
+import { cmdExportPreview } from "./constants.ts";
+import { type ErrorChecker } from "./errors.ts";
+import { parseNoteFiles } from "./util.ts";
 
 export class ExportPreviewCommand extends Command {
   readonly #errors: ErrorChecker;

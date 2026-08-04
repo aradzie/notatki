@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import { match } from "rich-assert";
-import { katexBlock, katexInline } from "./katex.js";
+import { katexBlock, katexInline } from "./katex.ts";
 
 test("errors", () => {
   // Sometimes KaTeX throws errors even if throwOnError is false.

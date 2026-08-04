@@ -1,6 +1,6 @@
 import { type Model, type ModelCard, type Note } from "@notatki/core";
 import { formatField, renderHtml } from "@notatki/format";
-import { escapeHtml } from "./html.js";
+import { escapeHtml } from "./html.ts";
 
 const html = renderHtml({ output: "html", throwOnError: false });
 

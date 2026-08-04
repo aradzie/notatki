@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { insertNoteId, NoteParser, printNoteNodes } from "@notatki/core";
-import { findNoteFiles } from "./io.js";
+import { findNoteFiles } from "./io.ts";
 
 export async function insertIdCmd({ dir }: { dir: string }): Promise<void> {
   console.log(`Scanning directory "${dir}"...`);

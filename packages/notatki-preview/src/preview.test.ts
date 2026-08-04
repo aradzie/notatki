@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { ModelMap, Note, NoteList } from "@notatki/core";
 import { match } from "rich-assert";
-import { generatePreview } from "./preview.js";
+import { generatePreview } from "./preview.ts";
 
 test("generate preview", () => {
   const notes = new NoteList();

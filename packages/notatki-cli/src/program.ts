@@ -1,10 +1,10 @@
 import { styleText } from "node:util";
 import { ParseError } from "@notatki/core";
 import { Command } from "commander";
-import { exportCmd } from "./cmd-export.js";
-import { insertIdCmd } from "./cmd-insert-id.js";
-import { reformatCmd } from "./cmd-reformat.js";
-import { pathTo } from "./io.js";
+import { exportCmd } from "./cmd-export.ts";
+import { insertIdCmd } from "./cmd-insert-id.ts";
+import { reformatCmd } from "./cmd-reformat.ts";
+import { pathTo } from "./io.ts";
 
 const program = new Command();
 

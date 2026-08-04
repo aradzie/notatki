@@ -1,4 +1,4 @@
-import type { NoteList } from "../note.js";
+import type { NoteList } from "../note.ts";
 
 export async function exportAnki(col: NoteList): Promise<Buffer> {
   return Buffer.of();

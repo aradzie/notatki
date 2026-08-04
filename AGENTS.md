@@ -75,14 +75,14 @@ Per-workspace, from that workspace's directory:
 
 ```shell
 npm run compile          # e.g. packages/notatki-parser regenerates parser.js from parser.peggy
-npm test                 # node's built-in test runner (node --test); most workspaces run `pretest: compile` first
+npm test                 # node's built-in test runner (node --test)
 ```
 
-Run a single JS/TS test file (from inside its package directory, after compiling if needed):
+Run a single JS/TS test file (from inside its package directory):
 
 ```shell
-node --test dist/note-parser.test.js       # compiled TS packages (notatki-core, notatki-format, etc.)
-node --test parse-notes.test.js            # notatki-parser (plain JS, tests run against parser.peggy output)
+node --test src/note-parser.test.ts
+node --test parse-notes.test.js
 ```
 
 Anki addon (Python, managed with `uv`), from `addon/`:

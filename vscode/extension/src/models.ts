@@ -1,7 +1,7 @@
 import { ModelMap, type NoteError, NoteList, NoteParser } from "@notatki/core";
 import vscode from "vscode";
-import { ankiModels, excludeSearchPath, modelsSearchPath } from "./constants.js";
-import { reportError } from "./util.js";
+import { ankiModels, excludeSearchPath, modelsSearchPath } from "./constants.ts";
+import { reportError } from "./util.ts";
 
 export class ModelManager {
   readonly #context: vscode.ExtensionContext;

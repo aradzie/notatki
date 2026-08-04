@@ -1,7 +1,7 @@
 import { type ModelMap } from "@notatki/core";
 import vscode from "vscode";
-import { ankiNotes } from "./constants.js";
-import { type ModelManager } from "./models.js";
+import { ankiNotes } from "./constants.ts";
+import { type ModelManager } from "./models.ts";
 
 export class Completer implements vscode.CompletionItemProvider {
   readonly #context: vscode.ExtensionContext;

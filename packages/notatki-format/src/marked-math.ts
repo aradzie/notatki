@@ -1,5 +1,5 @@
 import { type MarkedExtension, type TokenizerAndRendererExtension, type Tokens } from "marked";
-import { type MathRenderer, renderTex } from "./math-renderer.js";
+import { type MathRenderer, renderTex } from "./math-renderer.ts";
 
 /**
  * Tests if the given text begins with "\[".

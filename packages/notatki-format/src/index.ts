@@ -1,3 +1,3 @@
-export * from "./format-field.js";
-export * from "./marked-math.js";
-export * from "./math-renderer.js";
+export * from "./format-field.ts";
+export * from "./marked-math.ts";
+export * from "./math-renderer.ts";

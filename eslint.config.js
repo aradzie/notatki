@@ -3,6 +3,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 import ts from "typescript-eslint";
+import custom from "./eslint-plugin-custom.js";
 
 export default [
   {
@@ -14,14 +15,13 @@ export default [
   js.configs["recommended"],
   ...ts.configs["recommended"],
   {
-    plugins: { "react-hooks": reactHooks },
-    rules: reactHooks.configs.recommended.rules,
-  },
-  {
     plugins: {
+      "react-hooks": reactHooks,
       "simple-import-sort": simpleImportSort,
+      custom,
     },
     rules: {
+      ...reactHooks.configs.recommended.rules,
       // configure simple-import-sort
       "simple-import-sort/imports": ["error", { groups: [["^\\u0000", "^node:", "^@?\\w", "^", "^\\."]] }],
       "simple-import-sort/exports": ["error"],
@@ -38,6 +38,8 @@ export default [
         "error",
         { prefer: "type-imports", fixStyle: "inline-type-imports" },
       ],
+      // fix imported paths
+      "custom/check-import-path": "error",
     },
     languageOptions: {
       globals: {

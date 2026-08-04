@@ -1,5 +1,5 @@
 import { formatField } from "@notatki/format";
-import { type NoteList } from "../note.js";
+import { type NoteList } from "../note.ts";
 
 export async function exportCsv(col: NoteList): Promise<string> {
   let width = 0;

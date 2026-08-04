@@ -1,6 +1,6 @@
 import { type LocationRange } from "@notatki/parser";
 import { type RevealRangeMessage } from "@notatki/vscode-protocol";
-import { vscode } from "./vscode.js";
+import { vscode } from "./vscode.ts";
 
 export function revealRange({ source, start, end }: LocationRange): void {
   vscode.postMessage({

@@ -24,7 +24,7 @@
   "scripts": {
     "compile": "peggy --format=es --dts --output=parser$.js --allowed-start-rules=Start,NoteList,ModelList,Template ./parser.peggy",
     "pretest": "npm run compile",
-    "test": "node --test '**/*.test.js'"
+    "test": "node --test '**/*.test.{js,ts}'"
   },
   "publishConfig": {
     "access": "public"

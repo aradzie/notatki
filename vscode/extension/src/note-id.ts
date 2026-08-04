@@ -1,8 +1,8 @@
 import { insertNoteId, NoteParser, printNoteNodes } from "@notatki/core";
 import vscode from "vscode";
-import { Command } from "./command.js";
-import { ankiNotes, cmdInsertId } from "./constants.js";
-import { replaceDocument } from "./util.js";
+import { Command } from "./command.ts";
+import { ankiNotes, cmdInsertId } from "./constants.ts";
+import { replaceDocument } from "./util.ts";
 
 export class InsertIdCommand extends Command {
   constructor() {

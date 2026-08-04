@@ -1,7 +1,7 @@
 import { type NoteList, Output } from "@notatki/core";
-import { CardTemplates } from "./card-templates.js";
-import { expandPreviewOptions, type PreviewOptions } from "./preview-options.js";
-import { PreviewRenderer } from "./preview-renderer.js";
+import { CardTemplates } from "./card-templates.ts";
+import { expandPreviewOptions, type PreviewOptions } from "./preview-options.ts";
+import { PreviewRenderer } from "./preview-renderer.ts";
 
 export function generatePreview(
   notes: NoteList,

@@ -1,7 +1,7 @@
 import { type NoteError, NoteList, NoteParser } from "@notatki/core";
 import vscode from "vscode";
-import { ankiModels, ankiNotes } from "./constants.js";
-import { type ModelManager } from "./models.js";
+import { ankiModels, ankiNotes } from "./constants.ts";
+import { type ModelManager } from "./models.ts";
 
 export class ErrorChecker {
   readonly #context: vscode.ExtensionContext;

@@ -1,12 +1,12 @@
 import vscode from "vscode";
-import { Completer, Completions } from "./completions.js";
-import { ErrorChecker } from "./errors.js";
-import { ExportNotesCommand } from "./export-notes.js";
-import { ExportPreviewCommand } from "./export-preview.js";
-import { ModelsFormatter, NotesFormatter } from "./format.js";
-import { ModelManager } from "./models.js";
-import { InsertIdCommand, insertIdOnSave } from "./note-id.js";
-import { PreviewManager } from "./preview.js";
+import { Completer, Completions } from "./completions.ts";
+import { ErrorChecker } from "./errors.ts";
+import { ExportNotesCommand } from "./export-notes.ts";
+import { ExportPreviewCommand } from "./export-preview.ts";
+import { ModelsFormatter, NotesFormatter } from "./format.ts";
+import { ModelManager } from "./models.ts";
+import { InsertIdCommand, insertIdOnSave } from "./note-id.ts";
+import { PreviewManager } from "./preview.ts";
 
 export async function activate(context: vscode.ExtensionContext) {
   const log = vscode.window.createOutputChannel("Anki Notes", { log: true });

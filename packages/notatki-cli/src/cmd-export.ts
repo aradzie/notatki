@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { exportAnki, exportCsv, NoteParser } from "@notatki/core";
 import { generatePreview } from "@notatki/preview";
-import { findNoteFiles, withExt } from "./io.js";
+import { findNoteFiles, withExt } from "./io.ts";
 
 export async function exportCmd({
   dir,

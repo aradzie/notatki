@@ -12,9 +12,9 @@ import {
   cmdShowPreview,
   cmdShowPreviewToTheSide,
   viewType,
-} from "./constants.js";
-import { type ModelManager } from "./models.js";
-import { reportError, revealRange } from "./util.js";
+} from "./constants.ts";
+import { type ModelManager } from "./models.ts";
+import { reportError, revealRange } from "./util.ts";
 
 class Preview {
   static viewType = viewType;

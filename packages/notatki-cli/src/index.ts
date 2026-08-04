@@ -1,3 +1,3 @@
-export * from "./cmd-export.js";
-export * from "./cmd-insert-id.js";
-export * from "./io.js";
+export * from "./cmd-export.ts";
+export * from "./cmd-insert-id.ts";
+export * from "./io.ts";

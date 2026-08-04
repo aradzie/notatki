@@ -1,9 +1,9 @@
 import { exportAnki, exportCsv } from "@notatki/core";
 import vscode from "vscode";
-import { Command } from "./command.js";
-import { cmdExportCsv } from "./constants.js";
-import { type ErrorChecker } from "./errors.js";
-import { parseNoteFiles } from "./util.js";
+import { Command } from "./command.ts";
+import { cmdExportCsv } from "./constants.ts";
+import { type ErrorChecker } from "./errors.ts";
+import { parseNoteFiles } from "./util.ts";
 
 type Format = "apkg" | "csv";
 

@@ -1,6 +1,6 @@
 import { Marked } from "marked";
-import { mathExtension } from "./marked-math.js";
-import { type MathRenderer } from "./math-renderer.js";
+import { mathExtension } from "./marked-math.ts";
+import { type MathRenderer } from "./math-renderer.ts";
 
 export function formatField(value: string, renderer?: MathRenderer): string {
   const parser = new Marked();

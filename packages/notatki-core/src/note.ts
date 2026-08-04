@@ -1,5 +1,5 @@
 import { type FieldNode, type NoteNode } from "@notatki/parser";
-import { type Model, type ModelField, ModelMap } from "./model.js";
+import { type Model, type ModelField, ModelMap } from "./model.ts";
 
 export class NoteList implements Iterable<Note> {
   readonly #types: ModelMap;

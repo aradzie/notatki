@@ -1,5 +1,5 @@
 import * as cn from "./Toolbar.module.css";
-import { useView } from "./view.js";
+import { useView } from "./view.tsx";
 
 export function Toolbar() {
   const { view, setView } = useView();

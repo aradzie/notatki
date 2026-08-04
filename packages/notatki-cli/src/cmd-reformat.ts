@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { NoteParser, printModelNodes, printNoteNodes, reformatModelNodes, reformatNoteNodes } from "@notatki/core";
-import { findNoteFiles } from "./io.js";
+import { findNoteFiles } from "./io.ts";
 
 export async function reformatCmd({ dir }: { dir: string }): Promise<void> {
   console.log(`Scanning directory "${dir}"...`);

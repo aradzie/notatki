@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import { equal, isFalse, isTrue, like } from "rich-assert";
-import { ModelMap } from "./model.js";
+import { ModelMap } from "./model.ts";
 
 test("model list", () => {
   like([...new ModelMap([])], []);

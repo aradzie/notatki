@@ -1,8 +1,8 @@
 import { type Note, type NoteList, type Output } from "@notatki/core";
-import { CardData } from "./card-data.js";
-import { type CardTemplates } from "./card-templates.js";
-import { escapeHtml } from "./html.js";
-import { type PreviewOptions } from "./preview-options.js";
+import { CardData } from "./card-data.ts";
+import { type CardTemplates } from "./card-templates.ts";
+import { escapeHtml } from "./html.ts";
+import { type PreviewOptions } from "./preview-options.ts";
 
 export type RendererContext = Readonly<{
   options: Readonly<PreviewOptions>;

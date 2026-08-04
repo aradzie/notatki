@@ -1,7 +1,7 @@
 import { type NoteNode } from "@notatki/parser";
-import { loc } from "./nodes.js";
-import { Note } from "./note.js";
-import { type IdGenerator, idGenerator } from "./note-id.js";
+import { loc } from "./nodes.ts";
+import { Note } from "./note.ts";
+import { type IdGenerator, idGenerator } from "./note-id.ts";
 
 export function insertNoteId(nodes: NoteNode[], gen: IdGenerator = idGenerator): boolean {
   let changed = false;

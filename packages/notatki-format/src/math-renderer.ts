@@ -1,5 +1,5 @@
 import { type KatexOptions } from "katex";
-import { katexBlock, katexInline } from "./katex.js";
+import { katexBlock, katexInline } from "./katex.ts";
 
 export type MathRenderer = {
   block: (code: string) => string;
