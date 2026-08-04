@@ -2,12 +2,13 @@ import { type NoteField } from "@notatki/core";
 import { formatField, renderHtml } from "@notatki/format";
 import { clsx } from "clsx";
 import { memo, useEffect, useRef } from "react";
+import { useBaseUri } from "./base-uri.tsx";
 import * as cn from "./Field.module.css";
 import { revealRange } from "./navigate.ts";
 import { isVisible, type Selection } from "./selection.ts";
 
-const FieldValue = memo(function FieldValue({ value }: { value: string }) {
-  const html = formatField(value, renderHtml({ output: "html", throwOnError: false }));
+const FieldValue = memo(function FieldValue({ value, baseUri }: { value: string; baseUri: string }) {
+  const html = formatField(value, renderHtml({ output: "html", throwOnError: false }), baseUri);
   return <div className={cn.value} dangerouslySetInnerHTML={{ __html: html }} />;
 });
 
@@ -15,6 +16,7 @@ export function Field1({ field, selection }: { field: NoteField; selection: Sele
   const loc = field.node?.loc ?? null;
   const ref = useRef<HTMLDivElement>(null);
   const visible = isVisible(loc, selection);
+  const baseUri = useBaseUri();
   useEffect(() => {
     if (visible) {
       const { current } = ref;
@@ -40,7 +42,7 @@ export function Field1({ field, selection }: { field: NoteField; selection: Sele
       <p className={cn.field}>
         <strong className={cn.name}>{field.name}</strong>:
       </p>
-      <FieldValue value={field.value} />
+      <FieldValue value={field.value} baseUri={baseUri} />
     </div>
   );
 }

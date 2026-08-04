@@ -5,6 +5,7 @@ export type ToWebviewMessage = UpdateMessage | SelectMessage;
 export type UpdateMessage = {
   readonly type: "update";
   readonly uri: string;
+  readonly baseUri: string;
   readonly locked: boolean;
   readonly text: string;
   readonly models: readonly Model[];

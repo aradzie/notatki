@@ -38,6 +38,10 @@
   color: lightblue;
 }
 
-.value {
-  /* Empty. */
+.value p > img:only-child {
+  display: block;
+  max-inline-size: 100%;
+  max-block-size: 400px;
+  margin-inline: auto;
+  margin-block: 0;
 }

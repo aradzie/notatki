@@ -21,7 +21,7 @@ class Preview {
   static title = "Anki Notes";
 
   readonly #panel: vscode.WebviewPanel;
-  #uri: string = "";
+  #uri: vscode.Uri = vscode.Uri.file("/omg");
   #locked: boolean = false;
 
   constructor(manager: PreviewManager, panel: vscode.WebviewPanel) {
@@ -35,11 +35,11 @@ class Preview {
     return this.#panel;
   }
 
-  get uri(): string {
+  get uri(): vscode.Uri {
     return this.#uri;
   }
 
-  set uri(value: string) {
+  set uri(value: vscode.Uri) {
     this.#uri = value;
   }
 
@@ -55,7 +55,8 @@ class Preview {
     this.#panel.title = this.#getTitle();
     this.#panel.webview.postMessage({
       type: "update",
-      uri: this.#uri,
+      uri: String(this.#uri),
+      baseUri: String(this.#panel.webview.asWebviewUri(this.#uri)),
       locked: this.#locked,
       text,
       models,
@@ -71,7 +72,7 @@ class Preview {
   }
 
   #getTitle() {
-    const name = this.#uri.split("/").pop();
+    const name = String(this.#uri).split("/").pop();
     if (this.#locked) {
       return `[${Preview.title}]: ${name}`;
     } else {
@@ -148,9 +149,8 @@ export class PreviewManager implements vscode.WebviewPanelSerializer {
     const editor = vscode.window.activeTextEditor;
     if (editor != null && editor.document.languageId === ankiNotes) {
       const { document } = editor;
-      const uri = String(document.uri);
       for (const preview of this.#previews) {
-        if (preview.uri === uri && preview.locked === locked) {
+        if (String(preview.uri) === String(document.uri) && preview.locked === locked) {
           const editorColumn = editor.viewColumn ?? vscode.ViewColumn.One;
           const previewColumn = preview.panel.viewColumn ?? vscode.ViewColumn.One;
           if (sideBySide === editorColumn < previewColumn) {
@@ -171,7 +171,7 @@ export class PreviewManager implements vscode.WebviewPanelSerializer {
         },
       );
       const preview = this.#createPreview(panel);
-      preview.uri = uri;
+      preview.uri = document.uri;
       preview.locked = locked;
       preview.render(document.getText(), [...this.#models.build().types]);
     }
@@ -181,7 +181,7 @@ export class PreviewManager implements vscode.WebviewPanelSerializer {
     if (state.type === "revive") {
       const { uri, locked } = state;
       const preview = this.#createPreview(panel);
-      preview.uri = uri;
+      preview.uri = vscode.Uri.parse(uri);
       preview.locked = locked;
       try {
         const document = await vscode.workspace.openTextDocument(vscode.Uri.parse(uri));
@@ -202,21 +202,19 @@ export class PreviewManager implements vscode.WebviewPanelSerializer {
   }
 
   #updateDocumentPreviews(document: vscode.TextDocument) {
-    const uri = String(document.uri);
     for (const preview of this.#previews) {
-      if (!preview.locked || preview.uri === uri) {
-        preview.uri = uri;
+      if (!preview.locked || String(preview.uri) === String(document.uri)) {
+        preview.uri = document.uri;
         preview.render(document.getText(), [...this.#models.build().types]);
       }
     }
   }
 
   #updateDocumentSelections(document: vscode.TextDocument, selection: vscode.Selection) {
-    const uri = String(document.uri);
     const start = document.offsetAt(selection.start);
     const end = document.offsetAt(selection.end);
     for (const preview of this.#previews) {
-      if (preview.uri === uri) {
+      if (String(preview.uri) === String(document.uri)) {
         preview.select(start, end);
       }
     }
@@ -225,12 +223,12 @@ export class PreviewManager implements vscode.WebviewPanelSerializer {
   setWebviewContent(webview: vscode.Webview) {
     webview.options = {
       enableScripts: true,
-      localResourceRoots: [this.#getAssetsPath("assets")],
     };
     webview.html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Anki Cards Preview</title>
+  <meta http-equiv="Content-Security-Policy" content="img-src ${webview.cspSource} https: data:;">
   <link rel="stylesheet" href="${webview.asWebviewUri(this.#getAssetsPath("assets", "preview.css"))}">
   <script src="${webview.asWebviewUri(this.#getAssetsPath("assets", "preview.js"))}" type="module"></script>
 </head>
