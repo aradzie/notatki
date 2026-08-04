@@ -14,6 +14,11 @@ async function main() {
     sourcemap: true,
     minify: production,
     logLevel: "silent",
+    loader: {
+      ".woff2": "dataurl",
+      ".woff": "dataurl",
+      ".ttf": "dataurl",
+    },
     plugins: [
       /* Add to the end of the plugin array. */
       problemMatcherPlugin,

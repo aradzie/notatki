@@ -231,7 +231,6 @@ export class PreviewManager implements vscode.WebviewPanelSerializer {
 <html lang="en">
 <head>
   <title>Anki Cards Preview</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css" crossOrigin="anonymous">
   <link rel="stylesheet" href="${webview.asWebviewUri(this.#getAssetsPath("assets", "preview.css"))}">
   <script src="${webview.asWebviewUri(this.#getAssetsPath("assets", "preview.js"))}" type="module"></script>
 </head>
