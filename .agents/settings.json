@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(uv *)",
+      "Bash(git *)",
+      "Bash(npm test *)",
+      "Bash(npm run *)",
+      "Bash(npm ls *)",
+      "Bash(npx tsc *)"
+    ]
+  }
+}

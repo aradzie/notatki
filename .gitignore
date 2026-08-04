@@ -19,3 +19,14 @@ __pycache__/
 /notes.html
 /notes.csv
 /notes.txt
+
+.agents/*
+!.agents/settings.json
+!.agents/agents/
+!.agents/commands/
+!.agents/skills/
+!.agents/rules/
+!.agents/hooks/
+
+.agents/**/*.local.json
+.agents/**/.cache/
