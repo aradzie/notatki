@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 
+from .format_field import ImageResolver, html_to_markdown, markdown_to_html
+
 
 @dataclass(slots=True)
 class Location:
@@ -27,7 +29,20 @@ class PropertyNode(Location):
 @dataclass(slots=True)
 class FieldNode(Location):
   name: str = ""
-  value: str = ""
+  value: str = ""  # Original Markdown.
+  html: str = ""  # Rendered HTML.
+
+  def render(self, image_resolver: ImageResolver | None = None) -> None:
+    self.html = markdown_to_html(self.value, image_resolver=image_resolver)
+
+  def unrender(self, image_resolver: ImageResolver | None = None) -> None:
+    self.value = html_to_markdown(self.html, image_resolver=image_resolver)
+
+  @staticmethod
+  def from_html(name: str, html: str, image_resolver: ImageResolver | None = None) -> "FieldNode":
+    field_node = FieldNode(name=name, html=html)
+    field_node.unrender(image_resolver=image_resolver)
+    return field_node
 
 
 @dataclass(slots=True)

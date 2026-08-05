@@ -584,3 +584,96 @@ def test_import_state_imports_examples_directory(col):
   assert col.models.by_name("Basic Math") is not None
   assert col.models.by_name("Basic Math (and reversed card)") is not None
   assert len(col.find_notes("*")) == 8
+
+
+def test_import_state_imports_referenced_image(col, tmp_path):
+  # Arrange
+
+  image = tmp_path / "assets" / "diagram.png"
+  image.parent.mkdir()
+  image.write_bytes(b"fake png bytes")
+  note_path = str(tmp_path / "cards.note")
+
+  m1 = ModelNodes(
+    path="a.model",
+    line=1,
+    name="My Type",
+    fields=[ModelFieldNode(path="a.model", line=2, name="Front")],
+    cards=[
+      ModelCardNode(path="a.model", line=3, name="Card 1", front="{{Front}}", back="{{Front}}"),
+    ],
+  )
+  n1 = NoteNodes(
+    type=PropertyNode(path=note_path, line=1, name="type", value="My Type"),
+    deck=PropertyNode(path=note_path, line=2, name="deck", value="My Deck"),
+    tags=PropertyNode(path=note_path, line=3, name="tags", value=""),
+    guid=None,
+    fields=[
+      FieldNode(path=note_path, line=4, name="Id", value="111"),
+      FieldNode(path=note_path, line=5, name="Front", value="![x](assets/diagram.png)"),
+    ],
+    end=Location(path=note_path, line=6),
+  )
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_models.append(m1)
+  state.incoming_notes.append(n1)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.added_notes == [n1]
+
+  media_filename = "diagram-86610c40ef.png"
+  assert col.media.have(media_filename)
+  assert (Path(col.media.dir()) / media_filename).read_bytes() == b"fake png bytes"
+
+  [note_id] = col.find_notes("")
+  anki_note = col.get_note(note_id)
+  assert anki_note["Front"] == f'<p><img src="{media_filename}" alt="x" /></p>\n'
+
+
+def test_import_state_missing_image_reports_error_and_blocks_import(col, tmp_path):
+  # Arrange
+
+  note_path = str(tmp_path / "cards.note")
+
+  m1 = ModelNodes(
+    path="a.model",
+    line=1,
+    name="My Type",
+    fields=[ModelFieldNode(path="a.model", line=2, name="Front")],
+    cards=[
+      ModelCardNode(path="a.model", line=3, name="Card 1", front="{{Front}}", back="{{Front}}"),
+    ],
+  )
+  n1 = NoteNodes(
+    type=PropertyNode(path=note_path, line=1, name="type", value="My Type"),
+    deck=PropertyNode(path=note_path, line=2, name="deck", value="My Deck"),
+    tags=PropertyNode(path=note_path, line=3, name="tags", value=""),
+    guid=None,
+    fields=[
+      FieldNode(path=note_path, line=4, name="Id", value="111"),
+      FieldNode(path=note_path, line=5, name="Front", value="![x](assets/missing.png)"),
+    ],
+    end=Location(path=note_path, line=6),
+  )
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_models.append(m1)
+  state.incoming_notes.append(n1)
+  state.start()
+
+  # Assert
+
+  assert state.errors == [
+    ParseError(path=note_path, line=5, message="Image file not found: 'assets/missing.png'."),
+  ]
+  assert state.added_models == []
+  assert state.added_notes == []
+  assert col.find_notes("") == []

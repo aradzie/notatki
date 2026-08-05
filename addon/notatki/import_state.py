@@ -6,9 +6,9 @@ from anki.models import NotetypeDict
 from anki.notes import Note
 from aqt.utils import showInfo, showWarning
 
+from .assets import ImportAssetManager
 from .checker import Checker
 from .data import ModelNodes, NoteNodes, ParseError
-from .format_field import markdown_to_html
 from .parser import ModelParser, NoteParser
 
 _IGNORED_DIR_NAMES = {
@@ -29,6 +29,7 @@ class ImportState:
   added_models: list[ModelNodes]  # Added models.
   updated_notes: list[NoteNodes]  # Updated notes.
   added_notes: list[NoteNodes]  # Added notes.
+  asset_manager: ImportAssetManager  # Tracks and imports images referenced from note fields.
   _anki_models_by_name: dict[str, NotetypeDict]  # Maps lowercase model names to models.
   _anki_notes_by_guid: dict[str, Note]  # Maps guids to notes.
   _to_update: list[AddNoteRequest]  # Existing notes to be updated.
@@ -57,6 +58,7 @@ class ImportState:
     self.added_models = []
     self.updated_notes = []
     self.added_notes = []
+    self.asset_manager = ImportAssetManager()
     self._anki_models_by_name = {}
     self._anki_notes_by_guid = {}
     self._to_update = []
@@ -71,7 +73,15 @@ class ImportState:
     if self.errors:
       return
 
+    self._render_fields()
+    if self.errors:
+      return
+
     self._sync_models()
+    if self.errors:
+      return
+
+    self._sync_assets()
     if self.errors:
       return
 
@@ -156,6 +166,12 @@ class ImportState:
     checker.check_notes(self.incoming_notes)
     self.errors.extend(checker.errors)
 
+  def _render_fields(self) -> None:
+    for my_note in self.incoming_notes:
+      for my_field in my_note.fields:
+        my_field.render(image_resolver=self.asset_manager.resolver(my_field))
+    self.errors.extend(self.asset_manager.errors)
+
   def _sync_models(self) -> None:
     for my_model in self.incoming_models:
       if anki_model := self._find_model(my_model.name):
@@ -239,6 +255,9 @@ class ImportState:
 
     return ok
 
+  def _sync_assets(self) -> None:
+    self.asset_manager.import_to(self.col)
+
   def _sync_notes(self) -> None:
     self._load_notes()
     for my_note in self.incoming_notes:
@@ -313,7 +332,7 @@ class ImportState:
     for my_field in my_note.fields:
       field_name = anki_field_names.get(my_field.name.lower(), my_field.name)
       if field_name in anki_note:
-        anki_note[field_name] = markdown_to_html(my_field.value)
+        anki_note[field_name] = my_field.html
       else:
         self.errors.append(
           ParseError(
