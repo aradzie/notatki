@@ -4,7 +4,7 @@ import { Command } from "commander";
 import { exportCmd } from "./cmd-export.ts";
 import { insertIdCmd } from "./cmd-insert-id.ts";
 import { reformatCmd } from "./cmd-reformat.ts";
-import { pathTo } from "./io.ts";
+import { PathError, pathTo } from "./io.ts";
 
 const program = new Command();
 
@@ -20,7 +20,7 @@ program
 program
   .command("export")
   .description("build and export notes to a file in the format that can be imported to Anki")
-  .option("--dir <dir>", "name of the directory with note files", parsePath, parsePath("."))
+  .argument("[paths...]", "note/model files or directories to search", [pathTo(".")])
   .option("--out <file>", "output file name", parsePath, parsePath("notes"))
   .option("--preview", "whether to generate a preview HTML file", false)
   .option("--csv", "output a CSV file")
@@ -29,17 +29,17 @@ program
 program
   .command("insert-id")
   .description("insert unique note id to each note")
-  .option("--dir <dir>", "name of the directory with note source files", parsePath, parsePath("."))
+  .argument("[paths...]", "note files or directories to search", [pathTo(".")])
   .action(insertIdCmd);
 
 program
   .command("reformat")
   .description("reformat note files")
-  .option("--dir <dir>", "name of the directory with note source files", parsePath, parsePath("."))
+  .argument("[paths...]", "note/model files or directories to search", [pathTo(".")])
   .action(reformatCmd);
 
 try {
-  program.parse();
+  await program.parseAsync();
 } catch (err) {
   if (err instanceof ParseError) {
     const lines = [];
@@ -47,6 +47,8 @@ try {
       lines.push(`${String(location.source)}:${location.start.line}:${location.start.column}: ${message}`);
     }
     program.error(lines.join("\n"));
+  } else if (err instanceof PathError) {
+    program.error(err.message);
   } else {
     throw err;
   }

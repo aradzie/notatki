@@ -1,22 +1,14 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { exportAnki, exportCsv, NoteParser } from "@notatki/core";
 import { generatePreview } from "@notatki/preview";
-import { findNoteFiles, withExt } from "./io.ts";
+import { FileFinder, withExt } from "./io.ts";
 
-export async function exportCmd({
-  dir,
-  out,
-  preview,
-  csv,
-}: {
-  dir: string;
-  out: string;
-  preview: boolean;
-  csv: boolean;
-}): Promise<void> {
+export async function exportCmd(
+  paths: string[],
+  { out, preview, csv }: { out: string; preview: boolean; csv: boolean },
+): Promise<void> {
   const parser = new NoteParser();
-  console.log(`Scanning directory "${dir}"...`);
-  const { notePaths, modelPaths } = await findNoteFiles(dir);
+  const { notePaths, modelPaths } = await new FileFinder().find(paths);
   for (const path of modelPaths) {
     console.log(`Parsing models file "${path}"...`);
     const text = await readFile(path, "utf-8");
@@ -47,6 +39,6 @@ export async function exportCmd({
       console.log(`Generated HTML preview to "${path}".`);
     }
   } else {
-    console.warn(`No notes found in "${dir}".`);
+    console.warn(`No notes found.`);
   }
 }
