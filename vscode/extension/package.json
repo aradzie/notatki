@@ -168,12 +168,8 @@
     "@types/vscode": "~1.103.0"
   },
   "scripts": {
-    "compile": "tsc",
-    "prewatch": "npm run compile",
-    "watch": "rm -fr dist && node esbuild.mjs --watch",
-    "prebuild": "npm run compile",
-    "build": "rm -fr dist && node esbuild.mjs --production",
-    "prepackageext": "npm run build",
+    "compile": "rm -fr dist && tsc && node esbuild.mjs",
+    "prepackageext": "npm run compile",
     "packageext": "npx @vscode/vsce package --out=notatki.vsix",
     "preinstallext": "npm run packageext",
     "installext": "code --install-extension notatki.vsix --force",

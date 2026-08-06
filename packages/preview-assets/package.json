@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "@notatki/preview-assets",
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "katex": "^0.18.1"
+  },
+  "scripts": {
+    "compile": "tsc && node esbuild.js"
+  }
+}

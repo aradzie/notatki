@@ -1,4 +1,6 @@
 import { type Note, type NoteList, type Output } from "@notatki/core";
+import CSS from "./asset.css.ts";
+import JS from "./asset.js.ts";
 import { CardData } from "./card-data.ts";
 import { type CardTemplates } from "./card-templates.ts";
 import { escapeHtml } from "./html.ts";
@@ -12,33 +14,8 @@ export type RendererContext = Readonly<{
 }>;
 
 export class PreviewRenderer<Context extends RendererContext = RendererContext> {
-  static readonly defaultStylesheets: readonly string[] = [
-    `https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css`, //
-  ];
-
-  static readonly defaultStyles: readonly string[] = [
-    `:root { color-scheme: light dark; }`,
-    `.card-list { display: flex; flex-flow: row wrap; justify-content: center; align-items: center; gap: 1rem; }`,
-    `.card-list-item { flex: 0 1 auto; min-width: 20rem; padding: 0 1rem; border: 1px dotted #666; }`,
-    `.prop { font-size: 0.75em; color: #666; }`,
-    `.prop-name { font-weight: bold; font-style: normal; }`,
-    `.prop-value { font-weight: normal; font-style: normal; }`,
-    `img { max-width: 100%; }`,
-    `li { text-align: start; }`,
-    `pre { text-align: left; }`,
-    `hr { height: 1px; margin: 1em 0; border: none; background-color: #666; }`,
-  ];
-
-  #stylesheets: string[] = [...PreviewRenderer.defaultStylesheets];
-  #styles: string[] = [...PreviewRenderer.defaultStyles];
-
-  get stylesheets(): string[] {
-    return [...this.#stylesheets];
-  }
-
-  set stylesheets(value: string[]) {
-    this.#stylesheets = [...value];
-  }
+  #styles: string[] = [CSS];
+  #scripts: string[] = [JS];
 
   get styles(): string[] {
     return [...this.#styles];
@@ -46,6 +23,14 @@ export class PreviewRenderer<Context extends RendererContext = RendererContext> 
 
   set styles(value: string[]) {
     this.#styles = [...value];
+  }
+
+  get scripts(): string[] {
+    return [...this.#scripts];
+  }
+
+  set scripts(value: string[]) {
+    this.#scripts = [...value];
   }
 
   render(ctx: Context) {
@@ -60,24 +45,18 @@ export class PreviewRenderer<Context extends RendererContext = RendererContext> 
     ctx.out.print(`<head>`);
     ctx.out.print(`<meta charset="UTF-8">`);
     ctx.out.print(`<title>${escapeHtml(ctx.options.title)}</title>`);
-    this.renderStylesheets(ctx);
     this.renderCommonStyles(ctx);
     this.renderModelStyles(ctx);
+    this.renderScripts(ctx);
     ctx.out.print(`</head>`);
   }
 
-  renderStylesheets(ctx: Context) {
-    for (const stylesheet of this.#stylesheets) {
-      ctx.out.print(`<link rel="stylesheet" href="${escapeHtml(stylesheet)}" crossOrigin="anonymous">`);
-    }
-  }
-
   renderCommonStyles(ctx: Context) {
-    ctx.out.print(`<style>`);
     for (const style of this.#styles) {
+      ctx.out.print(`<style>`);
       ctx.out.print(style);
+      ctx.out.print(`</style>`);
     }
-    ctx.out.print(`</style>`);
   }
 
   renderModelStyles(ctx: Context) {
@@ -89,6 +68,14 @@ export class PreviewRenderer<Context extends RendererContext = RendererContext> 
         ctx.out.print(`}`);
         ctx.out.print(`</style>`);
       }
+    }
+  }
+
+  renderScripts(ctx: Context) {
+    for (const script of this.#scripts) {
+      ctx.out.print(`<script type="module">`);
+      ctx.out.print(script);
+      ctx.out.print(`</script>`);
     }
   }
 

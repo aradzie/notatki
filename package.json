@@ -21,6 +21,7 @@
   "workspaces": [
     "addon",
     "scripts",
+    "packages/preview-assets",
     "packages/notatki-parser",
     "packages/notatki-format",
     "packages/notatki-core",
@@ -31,6 +32,7 @@
     "vscode/extension"
   ],
   "dependencies": {
+    "katex": "^0.18.1",
     "rich-assert": "^0.0.3"
   },
   "devDependencies": {
@@ -49,7 +51,6 @@
   },
   "scripts": {
     "compile": "npm run compile --workspaces --if-present",
-    "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "eslint '{**/*,*}.{js,ts,tsx}'",
     "lint-fix": "eslint '{**/*,*}.{js,ts,tsx}' --fix",

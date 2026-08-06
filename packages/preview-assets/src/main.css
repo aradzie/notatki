@@ -1,0 +1,52 @@
+:root {
+  color-scheme: light dark;
+}
+
+.card-list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-list-item {
+  flex: 0 1 auto;
+  min-inline-size: 20rem;
+  padding: 0 1rem;
+  border: 1px dotted #666;
+}
+
+.prop {
+  color: #666;
+  font-size: 0.75em;
+}
+
+.prop-name {
+  font-weight: bold;
+  font-style: normal;
+}
+
+.prop-value {
+  font-weight: normal;
+  font-style: normal;
+}
+
+img {
+  max-inline-size: 100%;
+}
+
+li {
+  text-align: start;
+}
+
+pre {
+  text-align: start;
+}
+
+hr {
+  block-size: 1px;
+  margin: 1em 0;
+  border: none;
+  background-color: #666;
+}

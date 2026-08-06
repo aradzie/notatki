@@ -13,17 +13,11 @@
     "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@types/vscode-webview": "^1.57.5",
-    "babel-plugin-react-compiler": "^1.0.0"
+    "@types/vscode-webview": "^1.57.5"
   },
   "scripts": {
-    "compile": "tsc",
-    "prewatch": "npm run compile",
-    "watch": "node esbuild.mjs --watch",
-    "prebuild": "npm run compile",
-    "build": "node esbuild.mjs --production"
+    "compile": "tsc && node esbuild.js"
   }
 }

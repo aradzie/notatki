@@ -12,7 +12,7 @@ reformatter code.
 
 ## Repo layout
 
-- `packages/notatki-parser` — Peggy (PEG.js) grammar (`parser.peggy`) that parses `.note`/`.model` text into a raw CST
+- `packages/notatki-parser` — Peggy grammar (`parser.peggy`) that parses `.note`/`.model` text into a raw CST
   (`ParseNodes` in `nodes.d.ts`). This is the only package with a grammar file; everything downstream consumes its
   generated parser.
 - `packages/notatki-format` — Markdown + KaTeX rendering of field values into HTML (`format-field.ts`).
@@ -20,10 +20,8 @@ reformatter code.
   model/note representations), `note-parser.ts` (turns CST nodes into `Note`/`NoteList` objects, applying property
   inheritance — see below), `print-*-nodes.ts` and `reformat-*-nodes.ts` (serialize nodes back to text, used for
   auto-formatting), and `export/` (Anki `.apkg` export via `anki.ts`, CSV export via `csv.ts`).
-- `packages/notatki-preview` — renders a note collection to HTML for the live preview panel (`preview-renderer.ts`,
-  `card-templates.ts` for Anki `{{Field}}`/conditional template substitution).
-- `packages/notatki-cli` — the `notatki` CLI (`commander`-based) exposing export/reformat/insert-id commands over
-  `notatki-core`.
+- `packages/notatki-preview` — renders a note collection to a static preview HTML file.
+- `packages/notatki-cli` — the `notatki` CLI exposing export/preview/reformat/insert-id commands.
 - `vscode/` — the VS Code extension, split into three packages that together implement the standard VS Code
   extension-host/webview split:
   - `vscode/protocol` — shared TypeScript types and message definitions for the two-way communication between the
@@ -61,8 +59,7 @@ before modifying either.
 Run from the repo root unless noted. `npm ci` first if `node_modules` isn't set up.
 
 ```shell
-npm run compile          # compile all workspaces (peggy grammar, tsc, etc.)
-npm run build            # build all workspaces (bundling, packaging)
+npm run compile          # compile all workspaces (peggy grammar, tsc, esbuild, etc.)
 npm test                 # run tests in all workspaces
 npm run lint             # eslint over the whole repo
 npm run lint-fix         # eslint with autofix over the whole repo
@@ -97,14 +94,5 @@ uv run pytest notatki/test_parser.py -k some_test    # single test
 VS Code extension, from `vscode/extension/`:
 
 ```shell
-npm run watch            # esbuild watch mode for dev
 npm run installext       # package (vsce) and install into local VS Code
 ```
-
-## Conventions
-
-- All TS/JS packages use `"type": "module"` — ESM only, import paths need explicit `.js` extensions in source.
-- Shared TS compiler options live in `tsconfig-template.json` (strict, `noUncheckedIndexedAccess`, ESNext/NodeNext);
-  per-package `tsconfig.json` files extend it.
-- Workspace packages depend on each other via their published `@notatki/*` names (e.g. `@notatki/core` depends on
-  `@notatki/parser` and `@notatki/format`) — npm workspaces symlink them locally.
