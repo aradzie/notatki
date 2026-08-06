@@ -4,6 +4,7 @@ import JS from "./asset.js.ts";
 import { CardData } from "./card-data.ts";
 import { type CardTemplates } from "./card-templates.ts";
 import { escapeHtml } from "./html.ts";
+import { type ImageResolver } from "./image-resolver.ts";
 import { type PreviewOptions } from "./preview-options.ts";
 
 export type RendererContext = Readonly<{
@@ -11,6 +12,7 @@ export type RendererContext = Readonly<{
   templates: CardTemplates;
   notes: NoteList;
   out: Output;
+  resolver: ImageResolver;
 }>;
 
 export class PreviewRenderer<Context extends RendererContext = RendererContext> {
@@ -95,7 +97,7 @@ export class PreviewRenderer<Context extends RendererContext = RendererContext> 
 
   renderNoteCardList(ctx: Context, note: Note) {
     for (const card of note.type.cards) {
-      const data = new CardData(note.type, card, note);
+      const data = new CardData(note.type, card, note, ctx.resolver);
       if (ctx.options.showFront) {
         this.renderFrontCard(ctx, data);
       }

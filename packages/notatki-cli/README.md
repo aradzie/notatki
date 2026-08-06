@@ -54,6 +54,12 @@ notatki preview notes/
 Options:
 
 - `--out <file>` — output file name, without extension (default: `notes`)
+- `--images <link|inline|copy>` — how to resolve local images referenced by notes (default: `link`)
+  - `link` — rewrite to a path relative to the generated HTML file, pointing at the original file, unchanged on disk;
+    works whether the HTML is opened locally or served over HTTP
+  - `inline` — embed each image as a `data:` URL, producing a single self-contained (and larger) HTML file
+  - `copy` — copy referenced images into a `<file>.assets/` folder next to the generated HTML and rewrite paths to point
+    there, so the HTML and its folder can be moved or shared together
 
 ### `notatki insert-id [paths...]`
 

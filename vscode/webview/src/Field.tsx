@@ -1,5 +1,5 @@
 import { type NoteField } from "@notatki/core";
-import { formatField, renderHtml } from "@notatki/format";
+import { formatField, renderHtml, resolveWithBaseUri } from "@notatki/format";
 import { clsx } from "clsx";
 import { useEffect, useRef } from "react";
 import { useBaseUri } from "./base-uri.tsx";
@@ -43,6 +43,6 @@ export function Field1({ field, selection }: { field: NoteField; selection: Sele
 }
 
 function FieldValue({ value, baseUri }: { value: string; baseUri: string }) {
-  const html = formatField(value, renderHtml({ output: "html", throwOnError: false }), baseUri);
+  const html = formatField(value, renderHtml({ output: "html", throwOnError: false }), resolveWithBaseUri(baseUri));
   return <div className={cn.value} dangerouslySetInnerHTML={{ __html: html }} />;
 }

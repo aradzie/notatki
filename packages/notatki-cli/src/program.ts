@@ -31,6 +31,11 @@ program
   .description("build notes and generate an HTML preview of the cards")
   .argument("[paths...]", "note/model files or directories to search", [pathTo(".")])
   .option("--out <file>", "output file name", parsePath, parsePath("notes"))
+  .addOption(
+    new Option("--images <mode>", "how to resolve local images referenced by notes")
+      .choices(["link", "inline", "copy"])
+      .default("link"),
+  )
   .action(previewCmd);
 
 program

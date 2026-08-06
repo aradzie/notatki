@@ -3,6 +3,7 @@ import { type Model, type ModelCard, ModelMap, Note } from "@notatki/core";
 import { equal } from "rich-assert";
 import { CardData } from "./card-data.ts";
 import { CardTemplates } from "./card-templates.ts";
+import { ImageResolver } from "./image-resolver.ts";
 
 test("render templates", () => {
   const card1: ModelCard = {
@@ -29,17 +30,18 @@ test("render templates", () => {
     styles: "",
   };
   const templates = new CardTemplates(new ModelMap([model1]));
+  const resolver = new ImageResolver("inline", "/tmp/notes.html");
 
   const note = new Note(model1);
   note.set("front", "FRONT");
   note.set("back", "BACK");
 
   equal(
-    templates.render(new CardData(model1, card1, note), "front"), //
+    templates.render(new CardData(model1, card1, note, resolver), "front"), //
     `<p>FRONT</p>`,
   );
   equal(
-    templates.render(new CardData(model1, card1, note), "back"), //
+    templates.render(new CardData(model1, card1, note, resolver), "back"), //
     `<p>FRONT</p>\n` + //
       `<p>BACK</p>\n` +
       `Type:Type 1\n` +
@@ -53,11 +55,11 @@ test("render templates", () => {
   note.tags = "A::B::C Tag1 Tag2";
 
   equal(
-    templates.render(new CardData(model1, card1, note), "front"), //
+    templates.render(new CardData(model1, card1, note, resolver), "front"), //
     `<p>FRONT</p>`,
   );
   equal(
-    templates.render(new CardData(model1, card1, note), "back"), //
+    templates.render(new CardData(model1, card1, note, resolver), "back"), //
     `<p>FRONT</p>\n` + //
       `<p>BACK</p>\n` +
       `Type:Type 1\n` +
@@ -90,20 +92,21 @@ test("conditional", () => {
     styles: "",
   };
   const templates = new CardTemplates(new ModelMap([model1]));
+  const resolver = new ImageResolver("inline", "/tmp/notes.html");
 
   const note = new Note(model1);
   note.set("front", "FRONT");
   note.set("back", "BACK");
 
   equal(
-    templates.render(new CardData(model1, card1, note), "back"), //
+    templates.render(new CardData(model1, card1, note, resolver), "back"), //
     `<p>FRONT</p>\n<p>BACK</p>\n\n???\n`,
   );
 
   note.set("extra", "EXTRA");
 
   equal(
-    templates.render(new CardData(model1, card1, note), "back"), //
+    templates.render(new CardData(model1, card1, note, resolver), "back"), //
     `<p>FRONT</p>\n<p>BACK</p>\n<p>EXTRA</p>\n\n`,
   );
 });

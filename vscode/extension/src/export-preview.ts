@@ -1,4 +1,4 @@
-import { generatePreview } from "@notatki/preview";
+import { generatePreview, ImageResolver } from "@notatki/preview";
 import vscode from "vscode";
 import { Command } from "./command.ts";
 import { cmdExportPreview } from "./constants.ts";
@@ -27,24 +27,26 @@ export class ExportPreviewCommand extends Command {
   }
 
   async #executeInWorkspace(ws: vscode.WorkspaceFolder) {
+    const rootUri = ws.uri;
+    const outUri = vscode.Uri.joinPath(rootUri, `notes.html`);
     const parser = await parseNoteFiles();
     parser.checkDuplicates();
     const { notes, errors } = parser;
     if (errors.length > 0) {
       this.#errors.showAllErrors(errors);
-      vscode.window.showErrorMessage(`Error parsing notes in "${ws.uri.fsPath}".`);
-      this.#log.error(`Error parsing notes in ${ws.uri.fsPath}`);
+      vscode.window.showErrorMessage(`Error parsing notes in "${rootUri.fsPath}".`);
+      this.#log.error(`Error parsing notes in ${rootUri.fsPath}`);
     } else {
       this.#errors.clearAllErrors();
       if (notes.length > 0) {
-        const out = vscode.Uri.joinPath(ws.uri, `notes.html`);
-        const data = Buffer.from(generatePreview(notes));
-        await vscode.workspace.fs.writeFile(out, data);
-        vscode.window.showInformationMessage(`Exported ${notes.length} note preview(s) to "${out.fsPath}".`);
-        this.#log.info(`Exported ${notes.length} note preview(s) to ${out.fsPath}`);
+        const resolver = new ImageResolver("link", outUri.fsPath);
+        const data = Buffer.from(generatePreview(notes, resolver));
+        await vscode.workspace.fs.writeFile(outUri, data);
+        vscode.window.showInformationMessage(`Exported ${notes.length} note preview(s) to "${outUri.fsPath}".`);
+        this.#log.info(`Exported ${notes.length} note preview(s) to ${outUri.fsPath}`);
       } else {
-        vscode.window.showWarningMessage(`No notes found in "${ws.uri.fsPath}".`);
-        this.#log.warn(`No notes found in ${ws.uri.fsPath}`);
+        vscode.window.showWarningMessage(`No notes found in "${rootUri.fsPath}".`);
+        this.#log.warn(`No notes found in ${rootUri.fsPath}`);
       }
     }
   }

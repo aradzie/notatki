@@ -1,6 +1,7 @@
 import { type Model, type ModelCard, type Note } from "@notatki/core";
 import { formatField, renderHtml } from "@notatki/format";
 import { escapeHtml } from "./html.ts";
+import { type ImageResolver } from "./image-resolver.ts";
 
 const html = renderHtml({ output: "html", throwOnError: false });
 
@@ -10,7 +11,7 @@ export class CardData {
   readonly #note: Note;
   readonly #data: Map<string, string>;
 
-  constructor(model: Model, card: ModelCard, note: Note) {
+  constructor(model: Model, card: ModelCard, note: Note, resolver: ImageResolver) {
     this.#model = model;
     this.#card = card;
     this.#note = note;
@@ -23,8 +24,10 @@ export class CardData {
     this.setValue("Tags", escapeHtml(note.tags));
     this.setValue("Flags", escapeHtml("Flags"));
     // User-defined fields.
-    for (const { name, value } of note) {
-      this.setValue(name, formatField(value, html));
+    for (const { name, value, node } of note) {
+      const source = node?.loc.source;
+      const resolveImage = typeof source === "string" ? resolver.forSource(source) : undefined;
+      this.setValue(name, formatField(value, html, resolveImage));
     }
   }
 

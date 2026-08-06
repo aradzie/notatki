@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import { ModelMap, Note, NoteList } from "@notatki/core";
 import { match } from "rich-assert";
+import { ImageResolver } from "./image-resolver.ts";
 import { generatePreview } from "./preview.ts";
 
 test("generate preview", () => {
@@ -9,7 +10,8 @@ test("generate preview", () => {
   note.set("front", "QUESTION");
   note.set("back", "ANSWER");
   notes.add(note);
-  const html = generatePreview(notes, {
+  const resolver = new ImageResolver("inline", "/tmp/notes.html");
+  const html = generatePreview(notes, resolver, {
     title: "Test Preview",
     showDetails: true,
     showFront: true,
