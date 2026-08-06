@@ -41,8 +41,19 @@ notatki export notes/
 Options:
 
 - `--out <file>` — output file name, without extension (default: `notes`)
-- `--csv` — output a CSV file instead of an `.apkg` file
-- `--preview` — additionally generate an HTML preview of the notes
+- `--format <apkg|csv>` — output file format (default: `apkg`)
+
+### `notatki preview [options] [paths...]`
+
+Build notes and generate an HTML preview of the cards.
+
+```shell
+notatki preview notes/
+```
+
+Options:
+
+- `--out <file>` — output file name, without extension (default: `notes`)
 
 ### `notatki insert-id [paths...]`
 

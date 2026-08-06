@@ -1,42 +1,27 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { exportAnki, exportCsv, NoteParser } from "@notatki/core";
-import { generatePreview } from "@notatki/preview";
-import { FileFinder, withExt } from "./io.ts";
+import { writeFile } from "node:fs/promises";
+import { exportAnki, exportCsv } from "@notatki/core";
+import { withExt } from "./io.ts";
+import { loadNotes } from "./notes.ts";
 
 export async function exportCmd(
   paths: string[],
-  { out, preview, csv }: { out: string; preview: boolean; csv: boolean },
+  { out, format }: { out: string; format: "apkg" | "csv" },
 ): Promise<void> {
-  const parser = new NoteParser();
-  const { notePaths, modelPaths } = await new FileFinder().find(paths);
-  for (const path of modelPaths) {
-    console.log(`Parsing models file "${path}"...`);
-    const text = await readFile(path, "utf-8");
-    parser.parseModels(path, text);
-  }
-  for (const path of notePaths) {
-    console.log(`Parsing notes file "${path}"...`);
-    const text = await readFile(path, "utf-8");
-    parser.parseNotes(path, text);
-  }
-  parser.checkDuplicates();
-  parser.checkErrors();
-  const { notes } = parser;
-  console.log(`Parsed ${notes.length} note(s).`);
+  const notes = await loadNotes(paths);
   if (notes.length > 0) {
-    if (csv) {
-      const path = withExt(out, `.${exportCsv.ext}`);
-      await writeFile(path, await exportCsv(notes));
-      console.log(`Exported notes to "${path}" in CSV format.`);
-    } else {
-      const path = withExt(out, `.${exportAnki.ext}`);
-      await writeFile(path, await exportAnki(notes));
-      console.log(`Exported notes to "${path}".`);
-    }
-    if (preview) {
-      const path = withExt(out, ".html");
-      await writeFile(path, generatePreview(notes));
-      console.log(`Generated HTML preview to "${path}".`);
+    switch (format) {
+      case "apkg": {
+        const path = withExt(out, `.${exportAnki.ext}`);
+        await writeFile(path, await exportAnki(notes));
+        console.log(`Exported notes to "${path}".`);
+        break;
+      }
+      case "csv": {
+        const path = withExt(out, `.${exportCsv.ext}`);
+        await writeFile(path, await exportCsv(notes));
+        console.log(`Exported notes to "${path}" in CSV format.`);
+        break;
+      }
     }
   } else {
     console.warn(`No notes found.`);

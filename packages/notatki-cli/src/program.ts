@@ -1,8 +1,9 @@
 import { styleText } from "node:util";
 import { ParseError } from "@notatki/core";
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import { exportCmd } from "./cmd-export.ts";
 import { insertIdCmd } from "./cmd-insert-id.ts";
+import { previewCmd } from "./cmd-preview.ts";
 import { reformatCmd } from "./cmd-reformat.ts";
 import { PathError, pathTo } from "./io.ts";
 
@@ -22,9 +23,15 @@ program
   .description("build and export notes to a file in the format that can be imported to Anki")
   .argument("[paths...]", "note/model files or directories to search", [pathTo(".")])
   .option("--out <file>", "output file name", parsePath, parsePath("notes"))
-  .option("--preview", "whether to generate a preview HTML file", false)
-  .option("--csv", "output a CSV file")
+  .addOption(new Option("--format <format>", "output file format").choices(["apkg", "csv"]).default("apkg"))
   .action(exportCmd);
+
+program
+  .command("preview")
+  .description("build notes and generate an HTML preview of the cards")
+  .argument("[paths...]", "note/model files or directories to search", [pathTo(".")])
+  .option("--out <file>", "output file name", parsePath, parsePath("notes"))
+  .action(previewCmd);
 
 program
   .command("insert-id")
