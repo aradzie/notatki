@@ -18,15 +18,15 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "notatki": "notatki.js"
+    "notatki": "dist/notatki.js"
   },
-  "dependencies": {
+  "devDependencies": {
     "@notatki/core": "^0.1.0",
     "@notatki/preview": "^0.1.0",
     "commander": "^15.0.0"
   },
   "scripts": {
-    "compile": "rm -fr dist && tsc"
+    "compile": "rm -fr dist && tsc && node esbuild.js"
   },
   "publishConfig": {
     "access": "public"

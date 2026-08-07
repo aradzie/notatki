@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["esnext"],
     "module": "nodenext",
     "moduleResolution": "nodenext",
+    "lib": ["esnext"],
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
-    "noUncheckedSideEffectImports": true,
-    "types": ["node"]
+    "noUncheckedSideEffectImports": true
   }
 }
