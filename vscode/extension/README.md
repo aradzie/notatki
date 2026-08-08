@@ -93,7 +93,7 @@ The addon:
 
 ## Visual Studio Code Extension
 
-To make writing notes easier, this VS Code extension is available.
+This VS Code extension is here to make writing notes easier.
 
 ![VSCode Screenshot](https://raw.githubusercontent.com/aradzie/notatki/master/docs/vscode-screenshot.png)
 
@@ -106,23 +106,40 @@ The extension provides:
 
 This makes writing Anki notes feel like writing documentation.
 
-# Features
+## Features
 
-## Preview
+### Preview
 
-todo
+Open the preview with `Ctrl+Shift+V` (`Cmd+Shift+V` on Mac), or `Ctrl+K V` if you'd rather have it open to the side.
+Both are also available from the editor context menu and the command palette, and there's a "locked" variant of the side
+preview that stays put on the file it was opened for even if you switch tabs.
 
-## Syntax Highlighting
+The preview updates as you type, no need to save first. Each note's fields are rendered through Markdown and KaTeX, so
+bold text, lists, images and math all show up the way they will in Anki. If a note or its model has a parse error,
+you'll see it listed right below the notes, and clicking it jumps you straight to the offending line in the editor —
+clicking a field does the same in reverse, scrolling the editor to match what you clicked in the preview.
 
-todo
+### Syntax Highlighting
 
-## Autocompletion
+Both `.note` and `.model` files get proper syntax highlighting. In `.note` files this covers the `!type:`, `!deck:`
+and `!tags:` properties, field names, the `~~~` terminator, cloze deletions like `{{c1::...}}`, and KaTeX math
+expressions. In `.model` files, the `front` and `back` card templates are highlighted as embedded HTML and the
+`styles` block as embedded CSS, so you get real HTML/CSS highlighting inside your card templates rather than plain text.
 
-todo
+### Autocompletion
 
-## Automatic Note ID Insertion
+Start typing `!` at the beginning of a line in a `.note` file and you'll get suggestions for field names, pulled from
+every `.model` file in your workspace — not just the model the current note happens to use. Typing `!type:` suggests the
+names of models you've defined elsewhere in the project. The extension watches your `.model` files in the background, so
+as you add fields or models, the suggestions stay up to date.
 
-todo
+### Automatic Note ID Insertion
+
+Each note can carry an `!id:` field, a short random identifier that lets the Anki addon recognize a note across
+re-imports and update it in place instead of creating a duplicate. By default, the extension inserts one of these
+automatically whenever you save a `.note` file, filling in an id for any note that doesn't already have one. If you'd
+rather not have that happen on every save, turn off the `anki-notes.insertIdOnSave` setting and run "Insert Unique Note
+Identifiers" manually instead, from the command palette or the editor context menu.
 
 ## Workflow
 
@@ -154,4 +171,4 @@ File → Import Models and Notes...
 
 The addon will parse and import everything.
 
-5. Maybe share your notes with others. Let them collaborate and contribute new notes.
+5. Optionally, share your notes with others so they can collaborate and contribute new notes.
