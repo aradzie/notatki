@@ -2,12 +2,24 @@
   "permissions": {
     "allow": [
       "WebSearch",
+      "WebFetch(domain:docs.npmjs.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(awk *)",
+      "Bash(echo *)",
+      "Bash(file *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(sed *)",
+      "Bash(make)",
+      "Bash(make *)",
       "Bash(uv *)",
       "Bash(git *)",
-      "Bash(npm test *)",
-      "Bash(npm run *)",
-      "Bash(npm ls *)",
-      "Bash(npx tsc *)"
+      "Bash(npm *)",
+      "Bash(npx tsc)",
+      "Bash(npx tsc *)",
+      "Bash(npx notatki)",
+      "Bash(npx notatki *)",
+      "Bash(node --test *)"
     ]
   }
 }

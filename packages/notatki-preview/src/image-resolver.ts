@@ -20,8 +20,7 @@ const imageMimeTypes: Readonly<Record<string, string>> = {
  * `mode`:
  * - `link`: resolves to a path relative to `outPath`, so the reference keeps
  *   working whether the HTML is opened as a local file or served over HTTP,
- *   without copying anything. Falls back to an absolute `file://` URL when
- *   no `outPath` is given, since there's nothing to be relative to.
+ *   without copying anything.
  * - `inline`: embeds the file as a `data:` URL.
  * - `copy`: copies the file into an assets folder next to `outPath` (named
  *   `<basename>.assets`), deduplicated by content hash, and resolves to a
@@ -37,7 +36,7 @@ export class ImageResolver {
   readonly #outDir: string;
   readonly #assetsDirName: string;
   readonly #assetsDir: string;
-  readonly #warnings: string[] = [];
+  readonly #warnings = new Set<string>();
   readonly #copied = new Map<string, string>();
 
   constructor(mode: ImageMode, outPath: string) {
@@ -49,7 +48,7 @@ export class ImageResolver {
   }
 
   get warnings(): readonly string[] {
-    return this.#warnings;
+    return [...this.#warnings];
   }
 
   /** Returns a rewrite function bound to the file that field values in `sourcePath` are relative to. */
@@ -71,7 +70,7 @@ export class ImageResolver {
 
     const fsPath = fileURLToPath(url);
     if (!existsSync(fsPath)) {
-      this.#warnings.push(`Missing image "${href}".`);
+      this.#warnings.add(`Missing image "${href}".`);
       return href;
     }
 
@@ -93,7 +92,7 @@ export class ImageResolver {
     const ext = extname(fsPath).toLowerCase();
     const mime = imageMimeTypes[ext];
     if (mime == null) {
-      this.#warnings.push(`Unrecognized image type "${ext}" for "${basename(fsPath)}"; linking instead of inlining.`);
+      this.#warnings.add(`Unrecognized image type "${ext}" for "${basename(fsPath)}"; linking instead of inlining.`);
       return this.#link(fsPath);
     }
     const bytes = readFileSync(fsPath);
@@ -109,9 +108,8 @@ export class ImageResolver {
     const bytes = readFileSync(fsPath);
     const filename = hashedName(fsPath, bytes);
 
-    const assetsDir = this.#assetsDir!;
-    mkdirSync(assetsDir, { recursive: true });
-    writeFileSync(join(assetsDir, filename), bytes);
+    mkdirSync(this.#assetsDir, { recursive: true });
+    writeFileSync(join(this.#assetsDir, filename), bytes);
 
     this.#copied.set(fsPath, filename);
     return `${this.#assetsDirName}/${filename}`;

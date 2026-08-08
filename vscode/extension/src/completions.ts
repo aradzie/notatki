@@ -53,7 +53,7 @@ export class Completer implements vscode.CompletionItemProvider {
           break;
         }
         case /^!tags:/i.test(line.text): {
-          for (const tag of this.#completions.decks()) {
+          for (const tag of this.#completions.tags()) {
             list.push(new vscode.CompletionItem({ label: tag, description: "Tag name" }));
           }
           break;
