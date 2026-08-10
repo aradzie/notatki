@@ -4,6 +4,7 @@ import { Command, Option } from "commander";
 import { exportCmd } from "./cmd-export.ts";
 import { insertIdCmd } from "./cmd-insert-id.ts";
 import { previewCmd } from "./cmd-preview.ts";
+import { queryCmd } from "./cmd-query.ts";
 import { reformatCmd } from "./cmd-reformat.ts";
 import { PathError, pathTo } from "./io.ts";
 
@@ -36,6 +37,13 @@ program
       .choices(["link", "inline", "copy"])
       .default("link"),
   )
+  .option(
+    "--tags <tags>",
+    "comma-separated tags to filter by; prefix a tag with '-' to exclude notes with that tag " +
+      "(can be repeated; all tags are combined with OR)",
+    collectTags,
+    [] as string[],
+  )
   .action(previewCmd);
 
 program
@@ -43,6 +51,20 @@ program
   .description("insert unique note id to each note")
   .argument("[paths...]", "note files or directories to search", [pathTo(".")])
   .action(insertIdCmd);
+
+program
+  .command("query")
+  .description("filter notes by tags")
+  .argument("[paths...]", "note/model files or directories to search", [pathTo(".")])
+  .option("--out <file>", "output file name", parsePath, parsePath("notes"))
+  .option(
+    "--tags <tags>",
+    "comma-separated tags to filter by; prefix a tag with '-' to exclude notes with that tag " +
+      "(can be repeated; all tags are combined with OR)",
+    collectTags,
+    [] as string[],
+  )
+  .action(queryCmd);
 
 program
   .command("reformat")
@@ -68,4 +90,8 @@ try {
 
 function parsePath(value: string): string {
   return pathTo(value);
+}
+
+function collectTags(value: string, previous: string[]): string[] {
+  return previous.concat(value.split(",").map((tag) => tag.trim()));
 }

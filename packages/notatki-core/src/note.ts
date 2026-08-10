@@ -25,6 +25,16 @@ export class NoteList implements Iterable<Note> {
   add(note: Note): void {
     this.#notes.push(note);
   }
+
+  filter(predicate: (note: Note) => boolean): NoteList {
+    const filtered = new NoteList(this.#types);
+    for (const note of this.#notes) {
+      if (predicate(note)) {
+        filtered.add(note);
+      }
+    }
+    return filtered;
+  }
 }
 
 export class Note implements Iterable<NoteField> {

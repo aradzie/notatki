@@ -16,10 +16,11 @@ __pycache__/
 *.tmp
 *~
 
-notes.assets/
-notes.html
-notes.csv
-notes.txt
+/notes.assets/
+/notes.csv
+/notes.html
+/notes.md
+/notes.txt
 
 .agents/*
 !.agents/settings.json

@@ -1,10 +1,15 @@
 import { writeFile } from "node:fs/promises";
+import { TagFilter } from "@notatki/core";
 import { generatePreview, type ImageMode, ImageResolver } from "@notatki/preview";
 import { withExt } from "./io.ts";
 import { loadNotes } from "./notes.ts";
 
-export async function previewCmd(paths: string[], { out, images }: { out: string; images: ImageMode }): Promise<void> {
-  const notes = await loadNotes(paths);
+export async function previewCmd(
+  paths: string[],
+  { out, images, tags }: { out: string; images: ImageMode; tags: string[] },
+): Promise<void> {
+  const filter = TagFilter.fromCliTags(tags);
+  const notes = (await loadNotes(paths)).filter((note) => filter.matches(note));
   if (notes.length > 0) {
     const path = withExt(out, ".html");
     const resolver = new ImageResolver(images, path);

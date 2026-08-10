@@ -60,6 +60,13 @@ Options:
   - `inline` — embed each image as a `data:` URL, producing a single self-contained (and larger) HTML file
   - `copy` — copy referenced images into a `<file>.assets/` folder next to the generated HTML and rewrite paths to point
     there, so the HTML and its folder can be moved or shared together
+- `--tags <tags>` — comma-separated tags to filter by; prefix a tag with `-` to exclude notes with that tag. Can be
+  repeated, with all tags combined with OR. A tag matches its own hierarchy prefix, so `--tags parent` also matches
+  notes tagged `parent::child`.
+
+```shell
+notatki preview --tags french,spanish,-archived notes/
+```
 
 ### `notatki insert-id [paths...]`
 

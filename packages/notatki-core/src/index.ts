@@ -10,3 +10,4 @@ export * from "./print-model-nodes.ts";
 export * from "./print-note-nodes.ts";
 export * from "./reformat-model-nodes.ts";
 export * from "./reformat-note-nodes.ts";
+export * from "./tag-filter.ts";
