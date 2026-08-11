@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@notatki/core": "^0.1.1",
+    "@notatki/format": "^0.1.1",
     "@notatki/preview": "^0.1.1",
     "commander": "^15.0.0"
   },
