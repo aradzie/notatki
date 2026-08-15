@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "katex": "^0.18.1"
+    "katex": "^0.18.4"
   },
   "scripts": {
     "compile": "tsc && node esbuild.js"

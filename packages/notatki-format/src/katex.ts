@@ -6,7 +6,7 @@ const defaultOptions = {
   throwOnError: false,
 } as const satisfies KatexOptions;
 
-export function katexBlock(value: string, options: KatexOptions): string {
+export function katexDisplay(value: string, options: KatexOptions): string {
   options = { ...defaultOptions, ...options, displayMode: true };
   try {
     return renderToString(value, options) + "\n";

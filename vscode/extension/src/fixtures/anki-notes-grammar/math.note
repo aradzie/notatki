@@ -1,0 +1,20 @@
+!type: Basic Math
+!deck: Math
+!tags: Algebra
+
+!front: Inline \(x + \sin 2.5\), dollars $y_i$, escaped \\(plain\\) and \$plain$.
+!back:
+\[
+\begin{align*}
+  x &= 1
+\end{align*}
+\]
+$$
+z = 3
+$$
+!extra: Unclosed display starts \[
+!Front Next: boundary stops the display
+literal \] is plain now
+!another: Unclosed alternate display starts $$
+!A_B 	 C 	 0-9: boundary stops the alternate display
+~~~

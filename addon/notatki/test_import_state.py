@@ -579,11 +579,13 @@ def test_import_state_imports_examples_directory(col):
   assert [model.name for model in state.added_models] == [
     "Basic Math",
     "Basic Math (and reversed card)",
+    "Cloze Math",
   ]
-  assert len(state.added_notes) == 8
+  assert len(state.added_notes) == 10
   assert col.models.by_name("Basic Math") is not None
   assert col.models.by_name("Basic Math (and reversed card)") is not None
-  assert len(col.find_notes("*")) == 8
+  assert col.models.by_name("Cloze Math") is not None
+  assert len(col.find_notes("*")) == 10
 
 
 def test_import_state_imports_referenced_image(col, tmp_path):

@@ -1,15 +1,15 @@
 import { type KatexOptions } from "katex";
-import { katexBlock, katexInline } from "./katex.ts";
+import { katexDisplay, katexInline } from "./katex.ts";
 
 export type MathRenderer = {
-  block: (code: string) => string;
+  display: (code: string) => string;
   inline: (code: string) => string;
 };
 
 export const renderTex = (): MathRenderer => {
   return {
-    block: (code) => {
-      return `\\[ ${code.trim()} \\]\n`;
+    display: (code) => {
+      return `\\[ ${code.trim()} \\]`;
     },
     inline: (code) => {
       return `\\( ${code.trim()} \\)`;
@@ -19,8 +19,8 @@ export const renderTex = (): MathRenderer => {
 
 export const renderHtml = (options: KatexOptions = {}): MathRenderer => {
   return {
-    block: (code) => {
-      return katexBlock(code, options);
+    display: (code) => {
+      return katexDisplay(code, options);
     },
     inline: (code) => {
       return katexInline(code, options);

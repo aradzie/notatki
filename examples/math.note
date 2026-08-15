@@ -1,5 +1,5 @@
-!type: Basic Math
 !deck: Math
+!type: Basic Math
 !tags: Algebra
 
 !id: PjHgZNbLbL
@@ -12,8 +12,8 @@
 !back:
 \[
 \begin{align*}
-    e^{ix}  &= \cos x + i \sin x \\
-    e^{-ix} &= \cos x - i \sin x
+  e^{ix}  &= \cos x + i \sin x \\
+  e^{-ix} &= \cos x - i \sin x
 \end{align*}
 \]
 ~~~
@@ -34,4 +34,29 @@ then there exists at least one \( c \in (a,b) \) such that the instantaneous rat
 Geometrically: there is at least one point on the curve where the tangent line is parallel to the secant line connecting the endpoints of the curve.
 
 ![Mean Value Theorem](mean_value_theorem.svg)
+~~~
+
+!type: Cloze Math
+!tags: Algebra Identity
+
+!id: QLE5oiqwbb
+!text: \[ {{c2::(a + b)^2::\ldots}} = {{c1::a^2 + 2ab + b^2::\ldots}} \]
+!related:
+\[
+\begin{align*}
+  (a + b)^2 &= a^2 + 2ab + b^2 \\
+  (a - b)^2 &= a^2 - 2ab + b^2
+\end{align*}
+\]
+~~~
+
+!id: uB9DCIo1rD
+!text: \[ {{c2::(a - b)^2::\ldots}} = {{c1::a^2 - 2ab + b^2::\ldots}} \]
+!related:
+\[
+\begin{align*}
+  (a + b)^2 &= a^2 + 2ab + b^2 \\
+  (a - b)^2 &= a^2 - 2ab + b^2
+\end{align*}
+\]
 ~~~

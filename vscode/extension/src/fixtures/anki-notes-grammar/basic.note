@@ -1,0 +1,14 @@
+!TYPE: Basic
+!Deck: Default
+!Tags: one two
+
+!id: abc123
+!Front: Hello <world> & friends
+!Back Extra:
+First line
+Second line
+~~~ 	
+
+!front: Another note
+!back: Property values are inherited
+~~~

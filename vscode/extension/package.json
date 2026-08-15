@@ -164,11 +164,13 @@
     "@notatki/vscode-protocol": "*"
   },
   "devDependencies": {
+    "@notatki/textmate-grammar-test": "*",
     "@types/node": "^24.0.0",
     "@types/vscode": "~1.103.0"
   },
   "scripts": {
     "compile": "rm -fr dist && tsc && node esbuild.mjs",
+    "test": "node --test 'src/**/*.test.{js,ts,mts}'",
     "prepackageext": "npm run compile",
     "packageext": "npx @vscode/vsce package --out=notatki.vsix",
     "preinstallext": "npm run packageext",

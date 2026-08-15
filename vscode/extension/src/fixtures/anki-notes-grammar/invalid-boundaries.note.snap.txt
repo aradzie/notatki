@@ -1,0 +1,7 @@
+ !front: indented text is not a field
+!: empty name is not a field
+!front?: question mark is not allowed in note field names
+!front : space before colon is not a field
+~~~x is not a terminator
+text ~~~ is not a terminator
+<keyword.anki-notes>~~~</keyword.anki-notes>

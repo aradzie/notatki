@@ -143,3 +143,66 @@ styles
   max-height: 400px;
 }
 ~~~
+
+model Cloze Math
+
+cloze
+
+field Text
+field Back Extra?
+field Related?
+
+card Card 1
+
+front
+<div class="front">{{cloze:Text}}</div>
+~~~
+
+back
+<div class="front">{{cloze:Text}}</div>
+<div class="back">
+  {{Back Extra}}
+
+  {{#Related}}
+    <p class="sub">Related</p>
+    {{Related}}
+  {{/Related}}
+</div>
+~~~
+
+styles
+@media (min-width: 600px) {
+  .card {
+    font-family: serif;
+    max-width: 40rem;
+    margin: 1rem auto;
+    padding: 1rem;
+    border: 1px solid gray;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  }
+}
+.front {
+  text-align: center;
+}
+.back {
+  text-align: start;
+}
+.cloze {
+  font-weight: bold;
+  color: blue;
+}
+.nightMode .cloze {
+  color: lightblue;
+}
+.sub {
+  font-weight: bold;
+  color: gray;
+  border-bottom: 1px solid gray;
+}
+.card p > img:only-child {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  max-height: 400px;
+}
+~~~

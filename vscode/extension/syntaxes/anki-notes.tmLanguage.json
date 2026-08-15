@@ -31,32 +31,40 @@
       ]
     },
     "cloze": {
-      "name": "string.other.anki-lang",
-      "begin": "\\{\\{(c[1-9])::",
+      "begin": "\\{\\{(c[1-9][0-9]*)::",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.anki-notes" }
+      },
       "end": "\\}\\}|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
-      "patterns": [{ "include": "#cloze" }]
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.anki-notes" }
+      },
+      "contentName": "keyword.other.anki-notes",
+      "patterns": [
+        { "include": "#cloze" },
+        {
+          "match": "(::)([^:{}]*)(?=\\}\\})",
+          "captures": {
+            "1": { "name": "punctuation.separator.anki-notes" },
+            "2": { "name": "entity.name.type.anki-notes" }
+          }
+        }
+      ]
     },
     "latex": {
       "patterns": [
         {
           "name": "string.other.anki-lang",
-          "begin": "\\\\\\[",
+          "begin": "(?<!\\\\)\\\\\\[",
           "end": "\\\\\\]|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
-          "patterns": [
-            {
-              "include": "#inner-latex"
-            }
-          ]
+          "patterns": [{ "include": "#inner-latex" }]
         },
         {
           "name": "string.other.anki-lang",
-          "begin": "\\\\\\(",
-          "end": "\\\\\\)|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
-          "patterns": [
-            {
-              "include": "#inner-latex"
-            }
-          ]
+          "match": "(?<!\\\\)\\\\\\((.+?)\\\\\\)",
+          "captures": {
+            "1": { "patterns": [{ "include": "#inner-latex" }] }
+          }
         },
         {
           "name": "string.other.anki-lang",
@@ -70,13 +78,10 @@
         },
         {
           "name": "string.other.anki-lang",
-          "begin": "(?<!\\\\)\\$(?!\\$)",
-          "end": "\\$|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
-          "patterns": [
-            {
-              "include": "#inner-latex"
-            }
-          ]
+          "match": "(?<!\\\\)\\$(?![\\s$])(.+?)(?<!\\s)\\$",
+          "captures": {
+            "1": { "patterns": [{ "include": "#inner-latex" }] }
+          }
         }
       ]
     },

@@ -21,14 +21,13 @@ def test_markdown_to_html_with_image_resolver_rewrites_src() -> None:
 
 
 def test_markdown_to_html_with_math() -> None:
-  assert markdown_to_html("Inline \\(x\\) and \\[y+z\\]") == (
-    "<p>Inline \\( x \\) and \\[ y+z \\]</p>\n"
+  assert markdown_to_html("a \\(inline\\) and \\[display\\] b") == (
+    '<p>a <span class="math">\\(inline\\)</span> and '
+    '<span class="display-math">\\[display\\]</span> b</p>\n'
   )
-  assert markdown_to_html("Inline $x$ and $$y+z$$") == (
-    "<p>Inline \\( x \\) and \\[ y+z \\]</p>\n"
-  )
-  assert markdown_to_html(r"\[ a & b \] and \( x < y \)") == (
-    "<p>\\[ a &amp; b \\] and \\( x &lt; y \\)</p>\n"
+  assert markdown_to_html("a $inline$ and $$display$$ b") == (
+    '<p>a <span class="math">\\(inline\\)</span> and '
+    '<span class="display-math">\\[display\\]</span> b</p>\n'
   )
 
 
@@ -52,14 +51,17 @@ def test_html_to_markdown_with_image_resolver_rewrites_src() -> None:
 
 
 def test_html_to_markdown_with_math() -> None:
+  assert html_to_markdown("<p>\\(math\\) and $alt math$</p>\n") == (
+    r"\(math\) and $alt math$"
+  )
   assert html_to_markdown("<p><code>$x$</code> and \\(y\\)</p>\n") == (
-    r"`$x$` and \( y \)"
+    r"`$x$` and \(y\)"
   )
   assert html_to_markdown("<p>Before</p>\n<p>\\[x + y\\]</p>\n") == (
-    "Before\n\n\\[ x + y \\]"
+    "Before\n\n\\[x + y\\]"
   )
-  assert html_to_markdown("<p>\\[a &amp; b\\] and \\(x &lt; y\\)</p>\n") == (
-    r"\[ a & b \] and \( x < y \)"
+  assert html_to_markdown("<p>\\[a &amp; b\\]</p><p>and</p><p>\\(x &lt; y\\)</p>\n") == (
+    "\\[a & b\\]\n\nand\n\n\\(x < y\\)"
   )
   assert html_to_markdown("<pre><code>$$not math$$\n</code></pre>\n") == (
     "```\n$$not math$$\n```"

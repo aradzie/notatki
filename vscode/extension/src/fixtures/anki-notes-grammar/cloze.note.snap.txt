@@ -1,0 +1,11 @@
+<keyword.control.anki-notes>!type:</keyword.control.anki-notes> Cloze
+<keyword.control.anki-notes>!deck:</keyword.control.anki-notes> Geography
+<keyword.control.anki-notes>!tags:</keyword.control.anki-notes> Capitals
+
+<keyword.anki-notes>!text:</keyword.anki-notes> The capital of <punctuation.definition.anki-notes>{{c1::</punctuation.definition.anki-notes><keyword.other.anki-notes>Mongolia<punctuation.separator.anki-notes>::</punctuation.separator.anki-notes><entity.name.type.anki-notes>country</entity.name.type.anki-notes></keyword.other.anki-notes><punctuation.definition.anki-notes>}}</punctuation.definition.anki-notes> is <punctuation.definition.anki-notes>{{c12::</punctuation.definition.anki-notes><keyword.other.anki-notes>Ulaanbaatar<punctuation.separator.anki-notes>::</punctuation.separator.anki-notes><entity.name.type.anki-notes>city</entity.name.type.anki-notes></keyword.other.anki-notes><punctuation.definition.anki-notes>}}</punctuation.definition.anki-notes>.
+<keyword.anki-notes>!extra:</keyword.anki-notes> Nested <punctuation.definition.anki-notes>{{c2::</punctuation.definition.anki-notes><keyword.other.anki-notes>outer <punctuation.definition.anki-notes>{{c3::</punctuation.definition.anki-notes><keyword.other.anki-notes>inner</keyword.other.anki-notes><punctuation.definition.anki-notes>}}</punctuation.definition.anki-notes> done</keyword.other.anki-notes><punctuation.definition.anki-notes>}}</punctuation.definition.anki-notes> text
+<keyword.anki-notes>~~~</keyword.anki-notes>
+
+<keyword.anki-notes>!text:</keyword.anki-notes> <punctuation.definition.anki-notes>{{c1::</punctuation.definition.anki-notes><keyword.other.anki-notes>unclosed cloze</keyword.other.anki-notes>
+<keyword.anki-notes>!extra:</keyword.anki-notes> boundary stops it
+<keyword.anki-notes>~~~</keyword.anki-notes>

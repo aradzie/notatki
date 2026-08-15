@@ -6,8 +6,11 @@
 .vscode-test/**
 node_modules/**
 src/**
+fixtures/**
 **/tsconfig.json
 **/esbuild.*
 **/*.ts
+**/*.cts
+**/*.mts
 *.md
 *.vsix

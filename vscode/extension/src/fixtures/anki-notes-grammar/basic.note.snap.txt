@@ -1,0 +1,14 @@
+<keyword.control.anki-notes>!TYPE:</keyword.control.anki-notes> Basic
+<keyword.control.anki-notes>!Deck:</keyword.control.anki-notes> Default
+<keyword.control.anki-notes>!Tags:</keyword.control.anki-notes> one two
+
+<keyword.anki-notes>!id:</keyword.anki-notes> abc123
+<keyword.anki-notes>!Front:</keyword.anki-notes> Hello &lt;world&gt; &amp; friends
+<keyword.anki-notes>!Back Extra:</keyword.anki-notes>
+First line
+Second line
+<keyword.anki-notes>~~~ 	</keyword.anki-notes>
+
+<keyword.anki-notes>!front:</keyword.anki-notes> Another note
+<keyword.anki-notes>!back:</keyword.anki-notes> Property values are inherited
+<keyword.anki-notes>~~~</keyword.anki-notes>

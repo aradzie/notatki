@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "name": "@notatki/textmate-grammar-test",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@types/node": "^24.0.0",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
+  }
+}

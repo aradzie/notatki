@@ -1,0 +1,11 @@
+!type: Cloze
+!deck: Geography
+!tags: Capitals
+
+!text: The capital of {{c1::Mongolia::country}} is {{c12::Ulaanbaatar::city}}.
+!extra: Nested {{c2::outer {{c3::inner}} done}} text
+~~~
+
+!text: {{c1::unclosed cloze
+!extra: boundary stops it
+~~~
