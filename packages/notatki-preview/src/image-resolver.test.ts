@@ -74,7 +74,7 @@ describe("copy", () => {
     const resolve = resolver.forSource(join(dir, "src/card.note"));
     makeAsset("src/img/asset.png", "data");
     equal(resolve("img/asset.png"), "notes.assets/asset-3a6eb0790f.png");
-    equal(readFileSync(join(dir, "out/notes.assets/asset-3a6eb0790f.png"), "utf-8"), "data");
+    equal(readFileSync(join(dir, "out/notes.assets/asset-3a6eb0790f.png"), "utf8"), "data");
     deepEqual(resolver.warnings, []);
   });
 
@@ -85,7 +85,7 @@ describe("copy", () => {
     makeAsset("src/img2/asset.png", "data");
     equal(resolve("img1/asset.png"), "notes.assets/asset-3a6eb0790f.png");
     equal(resolve("img2/asset.png"), "notes.assets/asset-3a6eb0790f.png");
-    equal(readFileSync(join(dir, "out/notes.assets/asset-3a6eb0790f.png"), "utf-8"), "data");
+    equal(readFileSync(join(dir, "out/notes.assets/asset-3a6eb0790f.png"), "utf8"), "data");
     deepEqual(resolver.warnings, []);
   });
 
@@ -98,8 +98,8 @@ describe("copy", () => {
     const second = resolve("img2/asset.png");
     equal(first, "notes.assets/asset-7692c3ad35.png");
     equal(second, "notes.assets/asset-3fc4ccfe74.png");
-    equal(readFileSync(join(dir, "out/notes.assets/asset-7692c3ad35.png"), "utf-8"), "one");
-    equal(readFileSync(join(dir, "out/notes.assets/asset-3fc4ccfe74.png"), "utf-8"), "two");
+    equal(readFileSync(join(dir, "out/notes.assets/asset-7692c3ad35.png"), "utf8"), "one");
+    equal(readFileSync(join(dir, "out/notes.assets/asset-3fc4ccfe74.png"), "utf8"), "two");
     deepEqual(resolver.warnings, []);
   });
 });

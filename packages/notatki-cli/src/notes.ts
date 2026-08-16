@@ -7,12 +7,12 @@ export async function loadNotes(paths: string[]): Promise<NoteList> {
   const { notePaths, modelPaths } = await new FileFinder().find(paths);
   for (const path of modelPaths) {
     console.log(`Parsing models file "${path}"...`);
-    const text = await readFile(path, "utf-8");
+    const text = await readFile(path, "utf8");
     parser.parseModels(path, text);
   }
   for (const path of notePaths) {
     console.log(`Parsing notes file "${path}"...`);
-    const text = await readFile(path, "utf-8");
+    const text = await readFile(path, "utf8");
     parser.parseNotes(path, text);
   }
   parser.checkDuplicates();

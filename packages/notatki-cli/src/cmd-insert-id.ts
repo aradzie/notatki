@@ -7,7 +7,7 @@ export async function insertIdCmd(paths: string[]): Promise<void> {
   for (const path of notePaths) {
     const parser = new NoteParser();
     console.log(`Parsing notes file "${path}"...`);
-    const text = await readFile(path, "utf-8");
+    const text = await readFile(path, "utf8");
     const nodes = parser.parseNoteNodes(path, text);
     if (parser.errors.length > 0) {
       console.error(`Parse error.`);

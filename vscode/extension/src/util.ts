@@ -27,12 +27,12 @@ export async function parseNoteFiles(): Promise<NoteParser> {
   const { notePaths, modelPaths } = await findNoteFiles();
   for (const path of modelPaths) {
     const data = await vscode.workspace.fs.readFile(path);
-    const text = Buffer.from(data).toString("utf-8");
+    const text = Buffer.from(data).toString("utf8");
     parser.parseModels(path.fsPath, text);
   }
   for (const path of notePaths) {
     const data = await vscode.workspace.fs.readFile(path);
-    const text = Buffer.from(data).toString("utf-8");
+    const text = Buffer.from(data).toString("utf8");
     parser.parseNotes(path.fsPath, text);
   }
   return parser;
