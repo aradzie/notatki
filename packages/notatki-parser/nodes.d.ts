@@ -82,3 +82,12 @@ export type EndIfFieldNode = {
 export type Token = {
   text: string;
 } & Node;
+
+export type ClozeItemNode = string | ClozeNode;
+
+export type ClozeNode = {
+  type: "cloze";
+  id: number;
+  answer: ClozeItemNode[];
+  hint: string | null;
+} & Node;

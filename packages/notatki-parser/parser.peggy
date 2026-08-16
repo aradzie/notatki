@@ -136,6 +136,50 @@ TemplateFieldName =
   text:$( !( _ "}}" ) . )+
   { return { text: text.replaceAll(/\s+/g, " "), loc: location() }; }
 
+// Cloze placeholder parser
+// ------------------------
+//
+// Parses cloze placeholders embedded in note field text, like below:
+//
+// "ambient text {{c1::cloze::hint}} surrounding text"
+//
+// Any substring that cannot be parsed as a well-formed cloze placeholder is
+// treated as ordinary ambient text, so this parser never fails: every input
+// string parses successfully into a mix of text runs and cloze objects.
+//
+// Cloze answers may themselves contain nested cloze placeholders (for
+// overlapping/nested clozes), but hints are always opaque text and are never
+// parsed for nested placeholders. When an answer contains "::", the first
+// one (that isn't part of a nested cloze) separates the answer from the
+// hint.
+
+ClozeText =
+  items:( Cloze / TextRun )*
+  { return items; }
+
+Cloze =
+  "{{" id:ClozeId "::" answer:Answer hint:( "::" @HintText )? "}}"
+  { return { type: "cloze", id, answer, hint, loc: location() }; }
+
+ClozeId =
+  "c" digits:$( [1-9] [0-9]? )
+  { return Number(digits); }
+
+Answer =
+  items:( Cloze / AnswerText )+
+  { return items; }
+
+AnswerText =
+  text:$( !( "::" / "}}" / Cloze ) . )+
+  { return text; }
+
+HintText =
+  $( !"}}" . )*
+
+TextRun =
+  text:$( !Cloze . )+
+  { return text; }
+
 // Shared rules
 // ------------
 
