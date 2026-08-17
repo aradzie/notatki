@@ -1,9 +1,9 @@
 import { type Model, type ModelCard, type Note } from "@notatki/core";
-import { formatField, renderHtml } from "@notatki/format";
+import { formatField, renderHtml, showClozeDeletions } from "@notatki/format";
 import { escapeHtml } from "./html.ts";
 import { type ImageResolver } from "./image-resolver.ts";
 
-const html = renderHtml({ output: "html", throwOnError: false });
+const html = renderHtml({ output: "html", throwOnError: false }, showClozeDeletions);
 
 export class CardData {
   readonly #model: Model;
