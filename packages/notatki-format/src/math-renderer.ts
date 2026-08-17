@@ -7,13 +7,20 @@ export type MathRenderer = {
   inline: (code: string) => string;
 };
 
+// Escapes characters that a browser's HTML tokenizer would otherwise interpret as markup
+// (e.g. "<L" starting a tag) when this raw LaTeX source is spliced into document HTML for
+// MathJax/KaTeX auto-render to pick up later.
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 export const renderTex = (format: (code: string) => string = (code) => code): MathRenderer => {
   return {
     display: (code) => {
-      return `\\[ ${format(code.trim())} \\]`;
+      return `\\[ ${escapeHtml(format(code.trim()))} \\]`;
     },
     inline: (code) => {
-      return `\\( ${format(code.trim())} \\)`;
+      return `\\( ${escapeHtml(format(code.trim()))} \\)`;
     },
   };
 };

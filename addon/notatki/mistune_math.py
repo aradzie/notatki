@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from html import escape
 from typing import TYPE_CHECKING, Match, NamedTuple
 
 if TYPE_CHECKING:
@@ -31,8 +32,8 @@ class MathRenderer(NamedTuple):
 
 def render_tex() -> MathRenderer:
   return MathRenderer(
-    display=lambda code: '<span class="display-math">\\[' + code + "\\]</span>",
-    inline=lambda code: '<span class="math">\\(' + code + "\\)</span>",
+    display=lambda code: '<span class="display-math">\\[' + escape(code) + "\\]</span>",
+    inline=lambda code: '<span class="math">\\(' + escape(code) + "\\)</span>",
   )
 
 

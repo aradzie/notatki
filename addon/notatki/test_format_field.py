@@ -31,6 +31,27 @@ def test_markdown_to_html_with_math() -> None:
   )
 
 
+def test_markdown_to_html_preserves_raw_html_tags_but_escapes_stray_chars() -> None:
+  # Literal HTML tags written in the source pass through as real markup,
+  # e.g. for styling that Markdown itself has no syntax for.
+  assert markdown_to_html("<b>bold</b> and <sub>sub</sub>") == (
+    "<p><b>bold</b> and <sub>sub</sub></p>\n"
+  )
+  # Stray "<", ">", "&" that aren't part of a recognized HTML tag are still escaped.
+  assert markdown_to_html("1 < 2 and 3 > 4 and a & b") == (
+    "<p>1 &lt; 2 and 3 &gt; 4 and a &amp; b</p>\n"
+  )
+
+
+def test_markdown_to_html_escapes_html_special_chars_in_math() -> None:
+  assert markdown_to_html("\\(a & b > c\\)") == (
+    '<p><span class="math">\\(a &amp; b &gt; c\\)</span></p>\n'
+  )
+  assert markdown_to_html("\\[a & b > c\\]") == (
+    '<p><span class="display-math">\\[a &amp; b &gt; c\\]</span></p>'
+  )
+
+
 def test_html_to_markdown_converts_basic_html_structure() -> None:
   html = "<h1>Title</h1>\n<p>Body</p>\n"
 
