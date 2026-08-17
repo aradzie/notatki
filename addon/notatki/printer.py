@@ -42,15 +42,28 @@ def print_models(models: list[ModelNodes]) -> str:
 def print_notes(notes: list[NoteNodes]) -> str:
   lines = Lines()
 
+  last_deck: str | None = None
+  last_type: str | None = None
+  last_tags: str | None = None
+
   for note in notes:
     lines.separate()
 
-    if note.type:
-      lines.append(f"!type: {note.type.value}")
     if note.deck:
-      lines.append(f"!deck: {note.deck.value}")
+      deck_value = note.deck.value
+      if deck_value != last_deck:
+        lines.append(f"!deck: {deck_value}")
+      last_deck = deck_value
+    if note.type:
+      type_value = note.type.value
+      if type_value != last_type:
+        lines.append(f"!type: {type_value}")
+      last_type = type_value
     if note.tags:
-      lines.append(f"!tags: {note.tags.value}")
+      tags_value = note.tags.value or "Untagged"
+      if tags_value != last_tags:
+        lines.append(f"!tags: {tags_value}")
+      last_tags = tags_value
     lines.separate()
 
     if note.guid:
@@ -69,7 +82,7 @@ def print_notes(notes: list[NoteNodes]) -> str:
 
 
 class Lines:
-  def __init__(self):
+  def __init__(self) -> None:
     self._parts: list[str] = []
     self._sep: bool = False
 
@@ -84,5 +97,5 @@ class Lines:
         self._sep = False
       self._parts.extend(line.splitlines())
 
-  def __str__(self):
+  def __str__(self) -> str:
     return "\n".join(self._parts) + "\n" if self._parts else ""

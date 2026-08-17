@@ -91,8 +91,8 @@ def test_print_notes_prints_properties_guid_and_multiline_fields() -> None:
   # Assert
 
   assert result == (
-    "!type: Basic\n"
     "!deck: Default\n"
+    "!type: Basic\n"
     "!tags: One Two\n"
     "\n"
     "!id: 123\n"
@@ -121,5 +121,72 @@ def test_print_notes_skips_missing_optional_properties() -> None:
 
   assert result == (
     "!Front: Question\n"
+    "~~~\n"
+  )
+
+
+def test_print_notes_prints_untagged_for_empty_tags() -> None:
+  # Arrange
+
+  note = NoteNodes(
+    type=PropertyNode(name="type", value="Basic"),
+    deck=PropertyNode(name="deck", value="Default"),
+    tags=PropertyNode(name="tags", value=""),
+    fields=[
+      FieldNode(name="Front", value="Question"),
+    ],
+  )
+
+  # Act
+
+  result = print_notes([note])
+
+  # Assert
+
+  assert result == (
+    "!deck: Default\n"
+    "!type: Basic\n"
+    "!tags: Untagged\n"
+    "\n"
+    "!Front: Question\n"
+    "~~~\n"
+  )
+
+
+def test_print_notes_omits_repeated_property_values() -> None:
+  # Arrange
+
+  notes = [
+    NoteNodes(
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value="One"),
+      fields=[FieldNode(name="Front", value="Q1")],
+    ),
+    NoteNodes(
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Other"),
+      tags=PropertyNode(name="tags", value="One"),
+      fields=[FieldNode(name="Front", value="Q2")],
+    ),
+  ]
+
+  # Act
+
+  result = print_notes(notes)
+
+  # Assert
+
+  assert result == (
+    "!deck: Default\n"
+    "!type: Basic\n"
+    "!tags: One\n"
+    "\n"
+    "!Front: Q1\n"
+    "~~~\n"
+    "\n"
+    "!deck: Other\n"
+    "\n"
+    "!Front: Q2\n"
     "~~~\n"
   )
