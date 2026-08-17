@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import cast
 
 import markdownify
 import mistune
@@ -35,7 +36,9 @@ def markdown_to_html(text: str, image_resolver: ImageResolver | None = None) -> 
     renderer=_ImageAwareRenderer(image_resolver),
     plugins=[math(), "table"],
   )
-  return markdown(text)
+  # The "html" renderer always produces a str, never the token list mistune's
+  # generic return type also allows.
+  return cast(str, markdown(text))
 
 
 def html_to_markdown(html: str, image_resolver: ImageResolver | None = None) -> str:

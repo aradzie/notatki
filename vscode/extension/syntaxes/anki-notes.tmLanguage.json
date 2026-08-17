@@ -54,9 +54,18 @@
     "latex": {
       "patterns": [
         {
+          "comment": "Display LaTeX \\[ ... \\], single line only. Tried before the block form below so a span that closes on its own opening line is highlighted as inline rather than swallowing the rest of the note as an unterminated block.",
           "name": "string.other.anki-lang",
-          "begin": "(?<!\\\\)\\\\\\[",
-          "end": "\\\\\\]|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
+          "match": "(?<!\\\\)\\\\\\[(.+?)\\\\\\]",
+          "captures": {
+            "1": { "patterns": [{ "include": "#inner-latex" }] }
+          }
+        },
+        {
+          "comment": "Display LaTeX \\[ ... \\], spanning multiple lines. The opening delimiter must start a fresh line (the `^` anchor -- nothing, not even the single-line form above, may have already consumed part of this line), and the closing delimiter must be followed by nothing but trailing whitespace.",
+          "name": "string.other.anki-lang",
+          "begin": "^(?<!\\\\)\\\\\\[",
+          "end": "\\\\\\](?=[ \t]*$)|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
           "patterns": [{ "include": "#inner-latex" }]
         },
         {
@@ -67,9 +76,18 @@
           }
         },
         {
+          "comment": "Display LaTeX $$ ... $$, single line only. See the \\[ \\] single-line rule above.",
           "name": "string.other.anki-lang",
-          "begin": "(?<!\\\\)\\$\\$(?!\\$)",
-          "end": "\\$\\$|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
+          "match": "(?<!\\\\)\\$\\$(?!\\$)(.+?)\\$\\$",
+          "captures": {
+            "1": { "patterns": [{ "include": "#inner-latex" }] }
+          }
+        },
+        {
+          "comment": "Display LaTeX $$ ... $$, spanning multiple lines. See the \\[ \\] block rule above.",
+          "name": "string.other.anki-lang",
+          "begin": "^(?<!\\\\)\\$\\$(?!\\$)",
+          "end": "\\$\\$(?=[ \t]*$)|(?=^![-_a-zA-Z0-9]+([ \t]+[-_a-zA-Z0-9]+)*:)|(?=^~~~[ \t]*$)",
           "patterns": [
             {
               "include": "#inner-latex"

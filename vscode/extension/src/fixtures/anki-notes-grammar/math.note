@@ -3,7 +3,9 @@
 !tags: Algebra
 
 !front: Inline \(x + \sin 2.5\), dollars $y_i$, escaped \\(plain\\) and \$plain$.
-!back:
+!back: Single-line display \[x^2\] and alt $$y^2$$ inside one sentence.
+!trailing: \[x\] omg trailing text after a single-line display closer.
+!block:
 \[
 \begin{align*}
   x &= 1
@@ -12,9 +14,12 @@
 $$
 z = 3
 $$
-!extra: Unclosed display starts \[
+!midline: Unclosed display starts \[
 !Front Next: boundary stops the display
 literal \] is plain now
 !another: Unclosed alternate display starts $$
 !A_B 	 C 	 0-9: boundary stops the alternate display
+!unterminated:
+\[
+this block never closes before the terminator
 ~~~

@@ -3,7 +3,9 @@
 <keyword.control.anki-notes>!tags:</keyword.control.anki-notes> Algebra
 
 <keyword.anki-notes>!front:</keyword.anki-notes> Inline <string.other.anki-lang>\(<variable.other.anki-notes>x</variable.other.anki-notes> + <entity.name.function.anki-notes>\sin</entity.name.function.anki-notes> <constant.numeric.anki-notes>2.5</constant.numeric.anki-notes>\)</string.other.anki-lang>, dollars <string.other.anki-lang>$<variable.other.anki-notes>y</variable.other.anki-notes>_<variable.other.anki-notes>i</variable.other.anki-notes>$</string.other.anki-lang>, escaped \\(plain\\) and \$plain$.
-<keyword.anki-notes>!back:</keyword.anki-notes>
+<keyword.anki-notes>!back:</keyword.anki-notes> Single-line display <string.other.anki-lang>\[<variable.other.anki-notes>x</variable.other.anki-notes>^<constant.numeric.anki-notes>2</constant.numeric.anki-notes>\]</string.other.anki-lang> and alt <string.other.anki-lang>$$<variable.other.anki-notes>y</variable.other.anki-notes>^<constant.numeric.anki-notes>2</constant.numeric.anki-notes>$$</string.other.anki-lang> inside one sentence.
+<keyword.anki-notes>!trailing:</keyword.anki-notes> <string.other.anki-lang>\[<variable.other.anki-notes>x</variable.other.anki-notes>\]</string.other.anki-lang> omg trailing text after a single-line display closer.
+<keyword.anki-notes>!block:</keyword.anki-notes>
 <string.other.anki-lang>\[</string.other.anki-lang>
 <string.other.anki-lang><entity.name.function.anki-notes>\begin{align*}</entity.name.function.anki-notes></string.other.anki-lang>
 <string.other.anki-lang>  <variable.other.anki-notes>x</variable.other.anki-notes> &amp;= <constant.numeric.anki-notes>1</constant.numeric.anki-notes></string.other.anki-lang>
@@ -12,9 +14,12 @@
 <string.other.anki-lang>$$</string.other.anki-lang>
 <string.other.anki-lang><variable.other.anki-notes>z</variable.other.anki-notes> = <constant.numeric.anki-notes>3</constant.numeric.anki-notes></string.other.anki-lang>
 <string.other.anki-lang>$$</string.other.anki-lang>
-<keyword.anki-notes>!extra:</keyword.anki-notes> Unclosed display starts <string.other.anki-lang>\[</string.other.anki-lang>
+<keyword.anki-notes>!midline:</keyword.anki-notes> Unclosed display starts \[
 <keyword.anki-notes>!Front Next:</keyword.anki-notes> boundary stops the display
 literal \] is plain now
-<keyword.anki-notes>!another:</keyword.anki-notes> Unclosed alternate display starts <string.other.anki-lang>$$</string.other.anki-lang>
+<keyword.anki-notes>!another:</keyword.anki-notes> Unclosed alternate display starts $$
 <keyword.anki-notes>!A_B 	 C 	 0-9:</keyword.anki-notes> boundary stops the alternate display
+<keyword.anki-notes>!unterminated:</keyword.anki-notes>
+<string.other.anki-lang>\[</string.other.anki-lang>
+<string.other.anki-lang><variable.other.anki-notes>this</variable.other.anki-notes> <variable.other.anki-notes>block</variable.other.anki-notes> <variable.other.anki-notes>never</variable.other.anki-notes> <variable.other.anki-notes>closes</variable.other.anki-notes> <variable.other.anki-notes>before</variable.other.anki-notes> <variable.other.anki-notes>the</variable.other.anki-notes> <variable.other.anki-notes>terminator</variable.other.anki-notes></string.other.anki-lang>
 <keyword.anki-notes>~~~</keyword.anki-notes>
