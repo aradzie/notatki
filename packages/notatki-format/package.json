@@ -20,7 +20,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "katex": "^0.18.4",
-    "marked": "^18.0.9"
+    "marked": "^18.0.10"
   },
   "scripts": {
     "compile": "rm -fr dist && tsc",
