@@ -1,6 +1,6 @@
 {
   "name": "@notatki/parser",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A collection of tools for creating and syncing Anki notes from simple text files.",
   "keywords": [
     "anki",
