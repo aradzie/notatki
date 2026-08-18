@@ -4,6 +4,7 @@ export * from "./insert-note-id.ts";
 export * from "./model.ts";
 export * from "./nodes.ts";
 export * from "./note.ts";
+export * from "./note-diff.ts";
 export * from "./note-parser.ts";
 export * from "./output.ts";
 export * from "./print-model-nodes.ts";

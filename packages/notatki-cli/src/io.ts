@@ -1,5 +1,7 @@
+import { execFile } from "node:child_process";
 import { glob, stat } from "node:fs/promises";
 import { format, join, parse, resolve } from "node:path";
+import { promisify } from "node:util";
 
 const cwd = process.cwd();
 
@@ -24,7 +26,9 @@ export function classify(path: string): FileType {
   }
 }
 
-export abstract class PathError extends Error {
+export abstract class CliError extends Error {}
+
+export abstract class PathError extends CliError {
   readonly path: string;
 
   constructor(path: string, message: string) {
@@ -44,6 +48,24 @@ export class UnsupportedFileTypeError extends PathError {
   constructor(path: string) {
     super(path, `Not a .note or .model file: "${path}"`);
     this.name = "UnsupportedFileTypeError";
+  }
+}
+
+export class GitError extends CliError {
+  constructor(args: readonly string[], message: string) {
+    super(message || `git ${args.join(" ")} failed`);
+    this.name = "GitError";
+  }
+}
+
+export async function git(args: readonly string[]): Promise<string> {
+  try {
+    return (await promisify(execFile)("git", args, { encoding: "utf8" })).stdout;
+  } catch (err) {
+    if (err instanceof Error && "code" in err && typeof err.code === "number" && "stderr" in err) {
+      throw new GitError(args, String(err.stderr).trim());
+    }
+    throw err;
   }
 }
 

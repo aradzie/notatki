@@ -2,11 +2,13 @@ import { styleText } from "node:util";
 import { ParseError } from "@notatki/core";
 import { Command, Option } from "commander";
 import { exportCmd } from "./cmd-export.ts";
+import { gitDiffCmd } from "./cmd-git-diff.ts";
+import { gitDiffInitCmd } from "./cmd-git-diff-init.ts";
 import { insertIdCmd } from "./cmd-insert-id.ts";
 import { previewCmd } from "./cmd-preview.ts";
 import { queryCmd } from "./cmd-query.ts";
 import { reformatCmd } from "./cmd-reformat.ts";
-import { PathError, pathTo } from "./io.ts";
+import { CliError, pathTo } from "./io.ts";
 
 const program = new Command();
 
@@ -47,6 +49,23 @@ program
   .action(previewCmd);
 
 program
+  .command("git-diff")
+  .description("compare two versions of a .note file; intended to be configured as a git diff driver")
+  .argument("<path>", "path of the file as known to git")
+  .argument("<old-file>", "path to a file with the old file's contents, or /dev/null")
+  .argument("<old-hex>", "old blob object name (unused)")
+  .argument("<old-mode>", "old file mode (unused)")
+  .argument("<new-file>", "path to a file with the new file's contents, or /dev/null")
+  .argument("<new-hex>", "new blob object name (unused)")
+  .argument("<new-mode>", "new file mode (unused)")
+  .action(gitDiffCmd);
+
+program
+  .command("git-diff-init")
+  .description("configure the local git repository to run `notatki git-diff` for .note files")
+  .action(gitDiffInitCmd);
+
+program
   .command("insert-id")
   .description("insert unique note id to each note")
   .argument("[paths...]", "note files or directories to search", [pathTo(".")])
@@ -81,7 +100,7 @@ try {
       lines.push(`${String(location.source)}:${location.start.line}:${location.start.column}: ${message}`);
     }
     program.error(lines.join("\n"));
-  } else if (err instanceof PathError) {
+  } else if (err instanceof CliError) {
     program.error(err.message);
   } else {
     throw err;

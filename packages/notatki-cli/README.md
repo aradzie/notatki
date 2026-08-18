@@ -84,6 +84,37 @@ Reformat `.note` and `.model` files in place, using the canonical formatting.
 notatki reformat notes/
 ```
 
+### `notatki git-diff-init`
+
+Configure the current git repository to show semantic diffs for `.note` files. This only affects your local checkout:
+it sets `diff.notatki.command` in the repository's local git config and adds `*.note diff=notatki` to
+`.git/info/attributes` — neither of which is tracked or shared with other clones, so it needs to be run once per
+checkout (e.g. after cloning), the same way you'd run `npm install`. Safe to re-run.
+
+```shell
+notatki git-diff-init
+```
+
+The configured command records the exact `node` binary and script that ran `git-diff-init`, so this works whether
+`notatki` is installed globally, run via `npx notatki git-diff-init`, or invoked from a local `node_modules/.bin`
+— no reliance on `notatki` being on `PATH` afterwards. If that install later moves or is removed, re-run
+`git-diff-init` to refresh it.
+
+### `notatki git-diff <path> <old-file> <old-hex> <old-mode> <new-file> <new-hex> <new-mode>`
+
+Compares two versions of a single `.note` file and prints a summary of added, removed, and changed notes. This isn't
+meant to be run directly — it implements git's
+[external diff driver interface](https://git-scm.com/docs/gitattributes#_defining_a_custom_diff_driver) and is wired
+up automatically by `notatki git-diff-init`. Once configured, ordinary git commands use it for `.note` files:
+
+```shell
+notatki git-diff-init
+git diff notes/example.note
+```
+
+Notes are matched between the old and new version by their `!id:` field; a note without an id is always shown as
+removed-and-added rather than changed, even if its content is unchanged. `.model` files are not diffed.
+
 ## Notes
 
 - Passing a path that doesn't exist, or a file whose extension isn't `.note`/`.model`, is an error.
