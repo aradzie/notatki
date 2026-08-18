@@ -87,3 +87,44 @@ def test_html_to_markdown_with_math() -> None:
   assert html_to_markdown("<pre><code>$$not math$$\n</code></pre>\n") == (
     "```\n$$not math$$\n```"
   )
+
+
+def test_html_to_markdown_does_not_escape_special_chars_inside_math() -> None:
+  # "*" and "_" inside math have no Markdown meaning and must survive verbatim, while the same
+  # characters outside math still get backslash-escaped so they don't turn into emphasis on re-import.
+  assert html_to_markdown("<p>*bold* and \\(a * b\\)</p>\n") == (
+    r"\*bold\* and \(a * b\)"
+  )
+  assert html_to_markdown("<p>\\(a_1\\) and b_c</p>\n") == (r"\(a_1\) and b\_c")
+
+
+def test_html_to_markdown_does_not_escape_special_chars_inside_block_math() -> None:
+  html = "<p>Before</p>\n<p>\\[\na_1 * b\n\\]</p>\n"
+
+  assert html_to_markdown(html) == "Before\n\n\\[\na_1 * b\n\\]"
+
+
+def test_html_to_markdown_never_treats_dollar_delimiters_as_math() -> None:
+  # Anki only ever supports \( \) / \[ \] -- $ / $$ are normalized to those on import (see
+  # mistune_math.render_tex), so a literal "$" on export is always plain text, never math, and
+  # whatever it delimits is escaped normally rather than passed through verbatim.
+  assert html_to_markdown("<p>$a_1 * b$ and $5 * $10</p>\n") == (
+    r"$a\_1 \* b$ and $5 \* $10"
+  )
+
+
+def test_markdown_html_markdown_roundtrip_preserves_math() -> None:
+  # Special chars in math source must survive a full markdown_to_html -> html_to_markdown roundtrip.
+  # $ / $$ delimiters are normalized to \( \) / \[ \] along the way, since that's the only form Anki
+  # itself supports -- the roundtrip is expected to change delimiter style, not content.
+  cases = [
+    (r"Inline: \(a_1 * b\) done.", r"Inline: \(a_1 * b\) done."),
+    (r"Inline dollar: $a_1 * b$ done.", r"Inline dollar: \(a_1 * b\) done."),
+    (r"Display single line: \[a_1 * b\] done.", r"Display single line: \[a_1 * b\] done."),
+    (r"Display dollar single line: $$a_1 * b$$ done.", r"Display dollar single line: \[a_1 * b\] done."),
+    ("Solve:\n\\[\na_1 * b\n\\]\n", "Solve:\n\n\\[\na_1 * b\n\\]"),
+    ("Solve:\n$$\na_1 * b\n$$\n", "Solve:\n\n\\[\na_1 * b\n\\]"),
+  ]
+
+  for source, expected in cases:
+    assert html_to_markdown(markdown_to_html(source)) == expected

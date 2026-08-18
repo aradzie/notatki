@@ -1,12 +1,24 @@
+import re
 from collections.abc import Callable
 from typing import cast
 
 import markdownify
 import mistune
 
-from .mistune_math import math
+from .mistune_math import BLOCK_DISPLAY_MATH_PATTERN, DISPLAY_MATH_PATTERN, INLINE_MATH_PATTERN, math
 
 ImageResolver = Callable[[str], str]
+
+# Matches a math fragment (delimiters included) wherever it appears in a text node, so it can be
+# carved out and left unescaped -- see _ImageAwareConverter.escape. Anki itself only ever supports the
+# \( \) / \[ \] delimiters, so only those patterns are matched here -- a literal "$" in exported HTML
+# is always plain text, never math. Block is listed first so a standalone `\[ ... \]` span is preferred
+# over the single-line interpretation when both would match at the same position, mirroring the
+# priority mistune_math.py's plugin registration already encodes.
+MATH_PATTERN = re.compile(
+  "|".join([BLOCK_DISPLAY_MATH_PATTERN, DISPLAY_MATH_PATTERN, INLINE_MATH_PATTERN]),
+  re.MULTILINE,
+)
 
 
 class _ImageAwareRenderer(mistune.HTMLRenderer):
@@ -29,6 +41,19 @@ class _ImageAwareConverter(markdownify.MarkdownConverter):
     if self._image_resolver is not None:
       el["src"] = self._image_resolver(el.attrs.get("src", None) or "")
     return super().convert_img(el, text, parent_tags)
+
+  def escape(self, text: str, parent_tags: set[str]) -> str:
+    # Math fragments (\( \), \[ \]) are opaque LaTeX source: characters like `*` and `_`
+    # inside them have no Markdown meaning and must survive verbatim, so only the text
+    # between math fragments goes through the normal escaping.
+    pieces = []
+    last_end = 0
+    for m in MATH_PATTERN.finditer(text):
+      pieces.append(super().escape(text[last_end : m.start()], parent_tags))
+      pieces.append(m.group(0))
+      last_end = m.end()
+    pieces.append(super().escape(text[last_end:], parent_tags))
+    return "".join(pieces)
 
 
 def markdown_to_html(text: str, image_resolver: ImageResolver | None = None) -> str:
