@@ -10,12 +10,14 @@ export function useNotes() {
   const [selection, setSelection] = useState<Selection>({ start: 0, end: 0 });
   const [errors, setErrors] = useState<NoteError[]>([]);
   const [baseUri, setBaseUri] = useState<string>("");
+  const [sourceText, setSourceText] = useState<string>("");
   useEffect(() => {
     return queue.subscribe((message) => {
       switch (message.type) {
         case "update": {
           const { uri, locked, text, models, baseUri } = message;
           setBaseUri(baseUri);
+          setSourceText(text);
 
           // Remember the preview state to be able to restore the preview by the extension.
           vscode.setState({ type: "revive", uri, locked } as ReviveState);
@@ -42,5 +44,5 @@ export function useNotes() {
       }
     });
   }, []);
-  return { notes, selection, errors, baseUri };
+  return { notes, selection, errors, baseUri, sourceText };
 }

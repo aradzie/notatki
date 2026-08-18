@@ -1,17 +1,27 @@
 import { type NoteField } from "@notatki/core";
 import { formatField, renderHtml, resolveWithBaseUri, showClozeDeletions } from "@notatki/format";
+import { type LocationRange } from "@notatki/parser";
 import { clsx } from "clsx";
 import { useEffect, useRef } from "react";
-import { useBaseUri } from "./base-uri.tsx";
+import { useDocument } from "./document.tsx";
 import * as cn from "./Field.module.css";
 import { revealRange } from "./navigate.ts";
 import { isVisible, type Selection } from "./selection.ts";
+
+function firstNonWhitespaceOffset(sourceText: string, loc: LocationRange): number {
+  const { offset: end } = loc.end;
+  let offset = loc.start.offset;
+  while (offset < end && /\s/.test(sourceText.charAt(offset))) {
+    offset++;
+  }
+  return offset;
+}
 
 export function Field1({ field, selection }: { field: NoteField; selection: Selection }) {
   const loc = field.node?.loc ?? null;
   const ref = useRef<HTMLDivElement>(null);
   const visible = isVisible(loc, selection);
-  const baseUri = useBaseUri();
+  const { baseUri, sourceText } = useDocument();
   useEffect(() => {
     if (visible) {
       const { current } = ref;
@@ -29,8 +39,12 @@ export function Field1({ field, selection }: { field: NoteField; selection: Sele
       ref={ref}
       className={clsx(cn.root, { [cn.active]: visible })}
       onClick={() => {
-        if (loc != null) {
-          revealRange(loc);
+        const { node } = field;
+        if (node != null) {
+          const offset =
+            field.value !== "" ? firstNonWhitespaceOffset(sourceText, node.value.loc) : node.name.loc.end.offset;
+          const position = { offset, line: 0, column: 0 };
+          revealRange({ source: node.loc.source, start: position, end: position });
         }
       }}
     >
