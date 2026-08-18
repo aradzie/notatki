@@ -3,7 +3,6 @@
   "compilerOptions": {
     "rootDir": "./src",
     "noEmit": true,
-    "verbatimModuleSyntax": false,
-    "types": ["node"]
+    "verbatimModuleSyntax": false
   }
 }
