@@ -1,5 +1,7 @@
-import { formatField } from "@notatki/format";
+import { formatField, renderMathInHtml } from "@notatki/format";
 import { type NoteList } from "../note.ts";
+
+const math = renderMathInHtml();
 
 export async function exportCsv(col: NoteList): Promise<string> {
   let width = 0;
@@ -21,7 +23,7 @@ export async function exportCsv(col: NoteList): Promise<string> {
     fields[index++] = note.deck;
     fields[index++] = note.tags;
     for (const field of note) {
-      fields[index++] = formatField(field.value);
+      fields[index++] = formatField(field.value, math);
     }
     lines.push(fields.map(escape).join(";"));
   }

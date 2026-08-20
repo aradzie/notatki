@@ -1,10 +1,10 @@
 import { type MarkedExtension, type TokenizerAndRendererExtension, type Tokens } from "marked";
-import { type MathRenderer, renderTex } from "./math-renderer.ts";
+import { type MathAltType, type MathRenderer, type MathType } from "./math-renderer.ts";
 
 const DISPLAY_START_RE = /\\\[/;
 const DISPLAY_RE = /^\\\[(.+?)\\\]/;
 // Unlike DISPLAY_START_RE, anchored to a line start (`\n`, since this is only ever searched
-// within the *remainder* of the source, never at its very beginning -- see displayLatexBlock).
+// within the *remainder* of the source, never at its very beginning -- see displayMathBlock).
 // This is what stops marked's paragraph-clipping (the `startBlock` mechanism) from breaking a
 // paragraph mid-line: without the anchor, any occurrence of `\[` anywhere in an in-progress
 // paragraph -- even mid-line -- would prematurely end it.
@@ -26,19 +26,19 @@ const DISPLAY_ALT_BLOCK_RE = /^\$\$(?!\$)([\s\S]+?)\$\$[ \t]*(?:\n|$)/;
 const INLINE_ALT_START_RE = /\$(?![\s$])/;
 const INLINE_ALT_RE = /^\$(?![\s$])(.+?)(?<!\s)\$/;
 
-export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExtension {
+export function mathExtension(renderer: MathRenderer): MarkedExtension {
   // Common syntax.
 
-  type LatexToken = Tokens.Generic & {
-    type: "displayLatexBlock" | "displayLatex" | "inlineLatex";
+  type MathToken = Tokens.Generic & {
+    type: MathType;
     code: string;
   };
 
   // Display LaTeX: \[ ... \], spanning multiple lines. Must be given top priority at the block
   // level so it claims its whole span before any built-in block rule (heading/list/blockquote/
   // etc.) can tear it apart on an embedded line that looks like the start of another block.
-  const displayLatexBlock: TokenizerAndRendererExtension = {
-    name: "displayLatexBlock",
+  const displayMathBlock: TokenizerAndRendererExtension = {
+    name: "displayMathBlock",
     level: "block",
     start(src) {
       return DISPLAY_BLOCK_START_RE.exec(src)?.index ?? -1;
@@ -46,7 +46,7 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
     tokenizer(src) {
       const m = DISPLAY_BLOCK_RE.exec(src);
       if (m) {
-        return { type: "displayLatexBlock", raw: m[0]!, code: m[1]! } satisfies LatexToken;
+        return { type: "displayMathBlock", raw: m[0]!, code: m[1]! } satisfies MathToken;
       }
       return undefined;
     },
@@ -55,9 +55,9 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
     },
   };
 
-  // Display LaTeX: \[ ... \] (single line only; multi-line spans are handled by displayLatexBlock)
-  const displayLatex: TokenizerAndRendererExtension = {
-    name: "displayLatex",
+  // Display LaTeX: \[ ... \] (single line only; multi-line spans are handled by displayMathBlock)
+  const displayMath: TokenizerAndRendererExtension = {
+    name: "displayMath",
     level: "inline",
     start(src) {
       return DISPLAY_START_RE.exec(src)?.index ?? -1;
@@ -65,7 +65,7 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
     tokenizer(src) {
       const m = DISPLAY_RE.exec(src);
       if (m) {
-        return { type: "displayLatex", raw: m[0]!, code: m[1]! } satisfies LatexToken;
+        return { type: "displayMath", raw: m[0]!, code: m[1]! } satisfies MathToken;
       }
       return undefined;
     },
@@ -75,8 +75,8 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
   };
 
   // Inline LaTeX: \( ... \)
-  const inlineLatex: TokenizerAndRendererExtension = {
-    name: "inlineLatex",
+  const inlineMath: TokenizerAndRendererExtension = {
+    name: "inlineMath",
     level: "inline",
     start(src) {
       return INLINE_START_RE.exec(src)?.index ?? -1;
@@ -84,7 +84,7 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
     tokenizer(src) {
       const m = INLINE_RE.exec(src);
       if (m) {
-        return { type: "inlineLatex", raw: m[0]!, code: m[1]! } satisfies LatexToken;
+        return { type: "inlineMath", raw: m[0]!, code: m[1]! } satisfies MathToken;
       }
       return undefined;
     },
@@ -95,15 +95,15 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
 
   // Alternate syntax.
 
-  type LatexTokenAlt = Tokens.Generic & {
-    type: "displayAltLatexBlock" | "displayAltLatex" | "inlineAltLatex";
+  type MathTokenAlt = Tokens.Generic & {
+    type: MathAltType;
     code: string;
   };
 
-  // Display LaTeX: $$ ... $$, spanning multiple lines. See displayLatexBlock for why this needs
+  // Display LaTeX: $$ ... $$, spanning multiple lines. See displayMathBlock for why this needs
   // to be a top-priority block extension rather than an inline one.
-  const displayAltLatexBlock: TokenizerAndRendererExtension = {
-    name: "displayAltLatexBlock",
+  const displayAltMathBlock: TokenizerAndRendererExtension = {
+    name: "displayAltMathBlock",
     level: "block",
     start(src) {
       return DISPLAY_ALT_BLOCK_START_RE.exec(src)?.index ?? -1;
@@ -111,7 +111,7 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
     tokenizer(src) {
       const m = DISPLAY_ALT_BLOCK_RE.exec(src);
       if (m) {
-        return { type: "displayAltLatexBlock", raw: m[0]!, code: m[1]! } satisfies LatexTokenAlt;
+        return { type: "displayAltMathBlock", raw: m[0]!, code: m[1]! } satisfies MathTokenAlt;
       }
       return undefined;
     },
@@ -121,9 +121,9 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
   };
 
   // Display LaTeX: $$ ... $$ (single line only; multi-line spans are handled by
-  // displayAltLatexBlock)
-  const displayAltLatex: TokenizerAndRendererExtension = {
-    name: "displayAltLatex",
+  // displayAltMathBlock)
+  const displayAltMath: TokenizerAndRendererExtension = {
+    name: "displayAltMath",
     level: "inline",
     start(src) {
       return DISPLAY_ALT_START_RE.exec(src)?.index ?? -1;
@@ -131,7 +131,7 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
     tokenizer(src) {
       const m = DISPLAY_ALT_RE.exec(src);
       if (m) {
-        return { type: "displayAltLatex", raw: m[0]!, code: m[1]! } satisfies LatexTokenAlt;
+        return { type: "displayAltMath", raw: m[0]!, code: m[1]! } satisfies MathTokenAlt;
       }
       return undefined;
     },
@@ -141,8 +141,8 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
   };
 
   // Inline LaTeX: $ ... $
-  const inlineAltLatex: TokenizerAndRendererExtension = {
-    name: "inlineAltLatex",
+  const inlineAltMath: TokenizerAndRendererExtension = {
+    name: "inlineAltMath",
     level: "inline",
     start(src) {
       return INLINE_ALT_START_RE.exec(src)?.index ?? -1;
@@ -150,7 +150,7 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
     tokenizer(src) {
       const m = INLINE_ALT_RE.exec(src);
       if (m) {
-        return { type: "inlineAltLatex", raw: m[0]!, code: m[1]! } satisfies LatexTokenAlt;
+        return { type: "inlineAltMath", raw: m[0]!, code: m[1]! } satisfies MathTokenAlt;
       }
       return undefined;
     },
@@ -161,12 +161,12 @@ export function mathExtension(renderer: MathRenderer = renderTex()): MarkedExten
 
   return {
     extensions: [
-      displayLatexBlock, //
-      displayLatex,
-      inlineLatex,
-      displayAltLatexBlock,
-      displayAltLatex,
-      inlineAltLatex,
+      displayMathBlock, //
+      displayMath,
+      inlineMath,
+      displayAltMathBlock,
+      displayAltMath,
+      inlineAltMath,
     ],
   };
 }

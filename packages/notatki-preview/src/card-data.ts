@@ -1,9 +1,9 @@
 import { type Model, type ModelCard, type Note } from "@notatki/core";
-import { formatField, renderHtml, showClozeDeletions } from "@notatki/format";
+import { formatField, renderMathAsHtml, showClozeDeletions } from "@notatki/format";
 import { escapeHtml } from "./html.ts";
 import { type ImageResolver } from "./image-resolver.ts";
 
-const html = renderHtml({ output: "html", throwOnError: false }, showClozeDeletions);
+const math = renderMathAsHtml({ output: "html", throwOnError: false }, showClozeDeletions);
 
 export class CardData {
   readonly #model: Model;
@@ -27,7 +27,7 @@ export class CardData {
     for (const { name, value, node } of note) {
       const source = node?.loc.source;
       const resolveImage = typeof source === "string" ? resolver.forSource(source) : undefined;
-      this.setValue(name, formatField(value, html, resolveImage));
+      this.setValue(name, formatField(value, math, resolveImage));
     }
   }
 

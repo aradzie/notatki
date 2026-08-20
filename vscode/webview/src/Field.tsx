@@ -1,5 +1,5 @@
 import { type NoteField } from "@notatki/core";
-import { formatField, renderHtml, resolveWithBaseUri, showClozeDeletions } from "@notatki/format";
+import { formatField, renderMathAsHtml, resolveWithBaseUri, showClozeDeletions } from "@notatki/format";
 import { type LocationRange } from "@notatki/parser";
 import { clsx } from "clsx";
 import { useEffect, useRef } from "react";
@@ -57,10 +57,7 @@ export function Field1({ field, selection }: { field: NoteField; selection: Sele
 }
 
 function FieldValue({ value, baseUri }: { value: string; baseUri: string }) {
-  const html = formatField(
-    value,
-    renderHtml({ output: "html", throwOnError: false }, showClozeDeletions),
-    resolveWithBaseUri(baseUri),
-  );
+  const math = renderMathAsHtml({ output: "html", throwOnError: false }, showClozeDeletions);
+  const html = formatField(value, math, resolveWithBaseUri(baseUri));
   return <div className={cn.value} dangerouslySetInnerHTML={{ __html: html }} />;
 }
