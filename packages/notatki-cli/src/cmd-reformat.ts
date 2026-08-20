@@ -1,8 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { NoteParser, printModelNodes, printNoteNodes, reformatModelNodes, reformatNoteNodes } from "@notatki/core";
+import { prettyPrintField } from "@notatki/format";
 import { FileFinder } from "./io.ts";
 
-export async function reformatCmd(paths: string[]): Promise<void> {
+export async function reformatCmd(paths: string[], { formatNotes }: { formatNotes: boolean }): Promise<void> {
   const { notePaths, modelPaths } = await new FileFinder().find(paths);
   for (const path of modelPaths) {
     const parser = new NoteParser();
@@ -23,7 +24,7 @@ export async function reformatCmd(paths: string[]): Promise<void> {
     if (parser.errors.length > 0) {
       console.error(`Parse error.`);
     } else {
-      await writeFile(path, printNoteNodes(reformatNoteNodes(nodes)));
+      await writeFile(path, printNoteNodes(reformatNoteNodes(nodes, formatNotes ? prettyPrintField : undefined)));
     }
   }
 }

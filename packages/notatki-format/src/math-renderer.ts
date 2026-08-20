@@ -4,10 +4,7 @@ import { katexDisplay, katexInline } from "./katex.ts";
 
 export type MathType = "displayMathBlock" | "displayMath" | "inlineMath";
 export type MathAltType = "displayAltMathBlock" | "displayAltMath" | "inlineAltMath";
-export type MathRenderer = {
-  display: (code: string) => string;
-  inline: (code: string) => string;
-};
+export type MathRenderer = (code: string, type: MathType | MathAltType) => string;
 
 // Formats math for notes that will be imported into Anki as pre-rendered HTML (e.g. CSV export),
 // where Anki's own MathJax integration still runs at review time. Both delimiter conventions
@@ -16,13 +13,18 @@ export type MathRenderer = {
 // Contrast with `renderMathAsHtml`, which fully pre-renders math to KaTeX HTML for contexts with no
 // Anki add-on to do that later (e.g. the static preview).
 export const renderMathInHtml = (format: (code: string) => string = (code) => code): MathRenderer => {
-  return {
-    display: (code) => {
-      return `\\[ ${escapeHtml(format(code.trim()))} \\]`;
-    },
-    inline: (code) => {
-      return `\\( ${escapeHtml(format(code.trim()))} \\)`;
-    },
+  return (code, type) => {
+    switch (type) {
+      case "displayMathBlock":
+      case "displayAltMathBlock":
+        return `\n<p>\\[ ${escapeHtml(format(code.trim()))} \\]</p>\n`;
+      case "displayMath":
+      case "displayAltMath":
+        return `\\[ ${escapeHtml(format(code.trim()))} \\]`;
+      case "inlineMath":
+      case "inlineAltMath":
+        return `\\( ${escapeHtml(format(code.trim()))} \\)`;
+    }
   };
 };
 
@@ -35,13 +37,18 @@ export const renderMathAsHtml = (
   options: KatexOptions = {},
   format: (code: string) => string = (code) => code,
 ): MathRenderer => {
-  return {
-    display: (code) => {
-      return katexDisplay(format(code), options);
-    },
-    inline: (code) => {
-      return katexInline(format(code), options);
-    },
+  return (code, type) => {
+    switch (type) {
+      case "displayMathBlock":
+      case "displayAltMathBlock":
+        return `\n<p>${katexDisplay(format(code), options)}</p>\n`;
+      case "displayMath":
+      case "displayAltMath":
+        return katexDisplay(format(code), options);
+      case "inlineMath":
+      case "inlineAltMath":
+        return katexInline(format(code), options);
+    }
   };
 };
 

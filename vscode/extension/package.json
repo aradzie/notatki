@@ -155,12 +155,33 @@
           "description": "Automatically insert unique note identifiers on save.",
           "default": true,
           "type": "boolean"
+        },
+        "anki-notes.formatNotes": {
+          "description": "Also reformat field values as Markdown, including embedded LaTeX.",
+          "default": true,
+          "type": "boolean"
+        },
+        "anki-notes.mathDelimiterStyle": {
+          "description": "Delimiter style to use for LaTeX math when reformatting notes. Only applies when \"Format Notes\" is enabled.",
+          "default": "unchanged",
+          "type": "string",
+          "enum": [
+            "unchanged",
+            "latex",
+            "dollar"
+          ],
+          "enumDescriptions": [
+            "Keep whichever delimiter convention each math span was originally written in.",
+            "Force LaTeX-style delimiters: \\( \\) for inline math, \\[ \\] for display math.",
+            "Force dollar-style delimiters: $ $ for inline math, $$ $$ for display math."
+          ]
         }
       }
     }
   },
   "dependencies": {
     "@notatki/core": "*",
+    "@notatki/format": "*",
     "@notatki/vscode-protocol": "*"
   },
   "devDependencies": {

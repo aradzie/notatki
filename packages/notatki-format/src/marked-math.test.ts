@@ -192,9 +192,18 @@ test("math content is not re-tokenized as markdown", () => {
 function render(markdown: string): string {
   return new Marked()
     .use(
-      mathExtension({
-        display: (code) => `<dm>${code.trim()}</dm>`,
-        inline: (code) => `<im>${code.trim()}</im>`,
+      mathExtension((code, type) => {
+        switch (type) {
+          case "displayMathBlock":
+          case "displayAltMathBlock":
+            return `<p><dm>${code.trim()}</dm></p>`;
+          case "displayMath":
+          case "displayAltMath":
+            return `<dm>${code.trim()}</dm>`;
+          case "inlineMath":
+          case "inlineAltMath":
+            return `<im>${code.trim()}</im>`;
+        }
       }),
     )
     .parse(markdown, { async: false })

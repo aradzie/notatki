@@ -1,5 +1,5 @@
-import { type MarkedExtension, type TokenizerAndRendererExtension, type Tokens } from "marked";
-import { type MathAltType, type MathRenderer, type MathType } from "./math-renderer.ts";
+import type { MarkedExtension, TokenizerAndRendererExtension, Tokens } from "marked";
+import type { MathAltType, MathRenderer, MathType } from "./math-renderer.ts";
 
 const DISPLAY_START_RE = /\\\[/;
 const DISPLAY_RE = /^\\\[(.+?)\\\]/;
@@ -11,7 +11,7 @@ const DISPLAY_RE = /^\\\[(.+?)\\\]/;
 const DISPLAY_BLOCK_START_RE = /\n\\\[/;
 // The closing delimiter must end its own line -- only horizontal whitespace, then a newline or
 // end of input, may follow it -- otherwise this isn't a standalone block.
-const DISPLAY_BLOCK_RE = /^\\\[([\s\S]+?)\\\][ \t]*(?:\n|$)/;
+const DISPLAY_BLOCK_RE = /^\\\[([\s\S]+?)\\\][ \t]*(?=\n|$)/;
 
 const INLINE_START_RE = /\\\(/;
 const INLINE_RE = /^\\\((.+?)\\\)/;
@@ -21,7 +21,7 @@ const DISPLAY_ALT_RE = /^\$\$(?!\$)(.+?)\$\$/;
 // See DISPLAY_BLOCK_START_RE.
 const DISPLAY_ALT_BLOCK_START_RE = /\n\$\$(?!\$)/;
 // See DISPLAY_BLOCK_RE.
-const DISPLAY_ALT_BLOCK_RE = /^\$\$(?!\$)([\s\S]+?)\$\$[ \t]*(?:\n|$)/;
+const DISPLAY_ALT_BLOCK_RE = /^\$\$(?!\$)([\s\S]+?)\$\$[ \t]*(?=\n|$)/;
 
 const INLINE_ALT_START_RE = /\$(?![\s$])/;
 const INLINE_ALT_RE = /^\$(?![\s$])(.+?)(?<!\s)\$/;
@@ -50,8 +50,8 @@ export function mathExtension(renderer: MathRenderer): MarkedExtension {
       }
       return undefined;
     },
-    renderer({ code }) {
-      return `<p>${renderer.display(code)}</p>`;
+    renderer({ code, type }) {
+      return renderer(code, type as MathType);
     },
   };
 
@@ -69,8 +69,8 @@ export function mathExtension(renderer: MathRenderer): MarkedExtension {
       }
       return undefined;
     },
-    renderer({ code }) {
-      return renderer.display(code);
+    renderer({ code, type }) {
+      return renderer(code, type as MathType);
     },
   };
 
@@ -88,8 +88,8 @@ export function mathExtension(renderer: MathRenderer): MarkedExtension {
       }
       return undefined;
     },
-    renderer({ code }) {
-      return renderer.inline(code);
+    renderer({ code, type }) {
+      return renderer(code, type as MathType);
     },
   };
 
@@ -115,8 +115,8 @@ export function mathExtension(renderer: MathRenderer): MarkedExtension {
       }
       return undefined;
     },
-    renderer({ code }) {
-      return `<p>${renderer.display(code)}</p>`;
+    renderer({ code, type }) {
+      return renderer(code, type as MathType);
     },
   };
 
@@ -135,8 +135,8 @@ export function mathExtension(renderer: MathRenderer): MarkedExtension {
       }
       return undefined;
     },
-    renderer({ code }) {
-      return renderer.display(code);
+    renderer({ code, type }) {
+      return renderer(code, type as MathType);
     },
   };
 
@@ -154,8 +154,8 @@ export function mathExtension(renderer: MathRenderer): MarkedExtension {
       }
       return undefined;
     },
-    renderer({ code }) {
-      return renderer.inline(code);
+    renderer({ code, type }) {
+      return renderer(code, type as MathType);
     },
   };
 

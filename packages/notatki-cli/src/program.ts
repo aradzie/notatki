@@ -74,6 +74,7 @@ program
   .command("reformat")
   .description("reformat note files")
   .argument("[paths...]", "note/model files or directories to search", [pathTo(".")])
+  .option("--format-notes", "also reformat field values as Markdown and normalize embedded LaTeX", false)
   .action(reformatCmd);
 
 try {
