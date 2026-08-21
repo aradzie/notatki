@@ -1,6 +1,6 @@
 {
   "name": "@notatki/cli",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A collection of tools for creating and syncing Anki notes from simple text files.",
   "keywords": [
     "anki",
@@ -21,9 +21,9 @@
     "notatki": "dist/notatki.js"
   },
   "devDependencies": {
-    "@notatki/core": "^0.5.0",
-    "@notatki/format": "^0.5.0",
-    "@notatki/preview": "^0.5.0",
+    "@notatki/core": "^0.6.0",
+    "@notatki/format": "^0.6.0",
+    "@notatki/preview": "^0.6.0",
     "commander": "^15.0.0"
   },
   "scripts": {
