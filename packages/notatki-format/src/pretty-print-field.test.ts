@@ -51,8 +51,8 @@ test("rewrites each math type while leaving surrounding text untouched", () => {
 });
 
 test("multi-line block math keeps its content wrapped onto its own lines", () => {
-  equal(prettyPrintField("\\[\n  x  \n  y  \n\\]"), "\\[\nx  \n  y\n\\]");
-  equal(prettyPrintField("$$\n  x  \n  y  \n$$"), "$$\nx  \n  y\n$$");
+  equal(prettyPrintField("\\[\n  x  \n  y  \n\\]"), "\\[\n  x\n  y\n\\]");
+  equal(prettyPrintField("$$\n  x  \n  y  \n$$"), "$$\n  x\n  y\n$$");
 });
 
 test("rewrites math nested in headings, emphasis, strong, del", () => {

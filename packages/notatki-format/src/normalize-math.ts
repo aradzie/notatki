@@ -21,14 +21,40 @@ export function normalizeMath(
   options: NormalizeMathOptions = DEFAULT_NORMALIZE_MATH_OPTIONS,
 ): string {
   const kind = kindOf(type);
+  const trimmedCode = trimMathCode(code, kind);
   switch (options.delimiterStyle) {
     case "unchanged":
-      return isDollarType(type) ? wrapDollar(code.trim(), kind) : wrapLatex(code.trim(), kind);
+      return isDollarType(type) ? wrapDollar(trimmedCode, kind) : wrapLatex(trimmedCode, kind);
     case "latex":
-      return wrapLatex(code.trim(), kind);
+      return wrapLatex(trimmedCode, kind);
     case "dollar":
-      return wrapDollar(code.trim(), kind);
+      return wrapDollar(trimmedCode, kind);
   }
+}
+
+/**
+ * Trims math source text, preserving the indentation of multiline block content.
+ *
+ * Only "block" math can span multiple lines, so other kinds are trimmed normally. For block
+ * content, the steps are: strip all trailing whitespace (including newlines) from the whole
+ * text; split into lines; strip trailing spaces from each line; drop leading empty lines. This
+ * leaves each line's own leading indentation untouched, which is what actually distinguishes a
+ * multi-line formula's structure (e.g. an `align` environment's body vs. its `\begin`/`\end`).
+ */
+function trimMathCode(code: string, kind: MathKind): string {
+  if (kind !== "block") {
+    return code.trim();
+  }
+
+  const result = code
+    .trimEnd()
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .reduce((prev, curr) => (prev ? prev + "\n" + curr : curr), "");
+
+  // Content that's only ever one substantive line (just surrounded by blank padding lines)
+  // isn't really multi-line at all; collapse it the same way as any other single-line math.
+  return result.includes("\n") ? result : result.trim();
 }
 
 function kindOf(type: MathType | MathAltType): MathKind {

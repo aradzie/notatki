@@ -47,7 +47,20 @@ test("block-level math with single-line content is written on one line, like the
 test("block-level math with multi-line content is wrapped onto its own lines", () => {
   equal(normalizeMath("x\ny", "displayMathBlock"), "\\[\nx\ny\n\\]");
   equal(normalizeMath("x\ny", "displayAltMathBlock"), "$$\nx\ny\n$$");
-  equal(normalizeMath("  x\ny  ", "displayMathBlock"), "\\[\nx\ny\n\\]");
+});
+
+test("block-level math preserves each line's own leading indentation", () => {
+  equal(normalizeMath("\n\n   a = 1\n   b = 2\n", "displayMathBlock"), "\\[\n   a = 1\n   b = 2\n\\]");
+  equal(normalizeMath("  x\ny  ", "displayMathBlock"), "\\[\n  x\ny\n\\]");
+});
+
+test("block-level math strips only trailing spaces from each line and drops leading blank lines", () => {
+  equal(normalizeMath("x  \n  y  ", "displayMathBlock"), "\\[\nx\n  y\n\\]");
+  equal(normalizeMath("\n\nx\n  y", "displayMathBlock"), "\\[\nx\n  y\n\\]");
+});
+
+test("block-level math leaves interior blank lines and other lines' indentation untouched", () => {
+  equal(normalizeMath("x\n\n  y", "displayMathBlock"), "\\[\nx\n\n  y\n\\]");
 });
 
 test("single-line-vs-multi-line only applies to block-level math, not inline or single-line display", () => {
