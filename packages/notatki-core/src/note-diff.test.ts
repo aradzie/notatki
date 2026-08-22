@@ -1,10 +1,13 @@
 import { test } from "node:test";
-import { parseNoteList } from "@notatki/parser";
+import { isNoteNode, parseNoteList } from "@notatki/parser";
 import { deepEqual } from "rich-assert";
 import { diffNoteFiles } from "./note-diff.ts";
 
 function diff(oldText: string, newText: string) {
-  return diffNoteFiles(parseNoteList(oldText, "old.note"), parseNoteList(newText, "new.note"));
+  return diffNoteFiles(
+    parseNoteList(oldText, "old.note").filter(isNoteNode),
+    parseNoteList(newText, "new.note").filter(isNoteNode),
+  );
 }
 
 test("note-diff: unchanged note produces no diff", () => {

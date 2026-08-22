@@ -156,6 +156,54 @@ test("note parsing error: duplicate field", () => {
   like([...parser.errors], [{ message: 'Duplicate field: "front"' }]);
 });
 
+test("checkDuplicates reports an id shared between a note and a tombstone", () => {
+  const parser = new NoteParser();
+
+  parser.parseNotes("example.notes", `!type: basic\n!id:123\n!front:a\n~~~\n!delete:123\n`);
+  parser.checkDuplicates();
+
+  like(
+    [...parser.errors],
+    [
+      { message: 'Duplicate ID: "123"' },
+      { message: 'Duplicate ID: "123"' },
+    ],
+  );
+});
+
+test("checkDuplicates reports an id shared between two tombstones", () => {
+  const parser = new NoteParser();
+
+  parser.parseNotes("example.notes", `!delete:123\n!delete:123\n`);
+  parser.checkDuplicates();
+
+  like(
+    [...parser.errors],
+    [
+      { message: 'Duplicate ID: "123"' },
+      { message: 'Duplicate ID: "123"' },
+    ],
+  );
+});
+
+test("checkDuplicates allows a lone tombstone", () => {
+  const parser = new NoteParser();
+
+  parser.parseNotes("example.notes", `!delete:123\n`);
+  parser.checkDuplicates();
+
+  like([...parser.errors], []);
+});
+
+test("checkDuplicates reports a tombstone with an empty id", () => {
+  const parser = new NoteParser();
+
+  parser.parseNotes("example.notes", `!delete: \n`);
+  parser.checkDuplicates();
+
+  like([...parser.errors], [{ message: "Delete directive must have a non-empty id value." }]);
+});
+
 test("note parsing error: duplicate id", () => {
   const a = new Note(ModelMap.basic);
   a.id = "123";

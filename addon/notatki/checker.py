@@ -2,9 +2,11 @@ from collections import defaultdict
 
 from .data import (
   FieldNode,
+  Location,
   ModelNodes,
   NoteNodes,
   ParseError,
+  TombstoneNode,
 )
 
 
@@ -56,8 +58,8 @@ class Checker:
         else:
           seen_card_names.add(card_name)
 
-  def check_notes(self, notes: list[NoteNodes]) -> None:
-    notes_by_guid: defaultdict[str, list[NoteNodes]] = defaultdict(list)
+  def check_notes(self, notes: list[NoteNodes], tombstones: list[TombstoneNode]) -> None:
+    locations_by_guid: defaultdict[str, list[Location]] = defaultdict(list)
 
     for note in notes:
       guid_field: FieldNode | None = None
@@ -99,7 +101,7 @@ class Checker:
           )
         )
       else:
-        notes_by_guid[note.guid.value].append(note)
+        locations_by_guid[note.guid.value].append(note.guid)
 
       if not note.fields:
         self.errors.append(
@@ -110,16 +112,26 @@ class Checker:
           )
         )
 
-    for guid, notes_with_guid in notes_by_guid.items():
-      if len(notes_with_guid) > 1:
-        locations = ", ".join(
-          f"{note.guid.path}:{note.guid.line}" for note in notes_with_guid if note.guid
-        )
-        first_note = notes_with_guid[0]
+    for tombstone in tombstones:
+      if tombstone.guid:
+        locations_by_guid[tombstone.guid].append(tombstone)
+      else:
         self.errors.append(
           ParseError(
-            path=first_note.guid.path,
-            line=first_note.guid.line,
-            message=f"Duplicate note id '{guid}' at {locations}.",
+            path=tombstone.path,
+            line=tombstone.line,
+            message="Delete directive must have a non-empty id value.",
+          )
+        )
+
+    for guid, locations in locations_by_guid.items():
+      if len(locations) > 1:
+        joined = ", ".join(f"{location.path}:{location.line}" for location in locations)
+        first_location = locations[0]
+        self.errors.append(
+          ParseError(
+            path=first_location.path,
+            line=first_location.line,
+            message=f"Duplicate note id '{guid}' at {joined}.",
           )
         )

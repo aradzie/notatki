@@ -192,13 +192,14 @@ styles
 
 ### Purpose
 
-A `.note` file defines concrete note instances. Each note carries:
+A `.note` file is a sequence of entries. Each entry is one of:
 
-- optional note properties
-- field values
-- a terminating `~~~`
+- a **note**, carrying optional note properties, field values, and a terminating `~~~`
+- a **delete directive**, a single line requesting that a previously exported note be removed from Anki,
+  identified by id
+- a **comment**, a freeform line ignored by all tooling
 
-Multiple notes may appear in one file.
+Multiple entries of any of these kinds may appear in one file, in any order.
 
 ### Note structure
 
@@ -209,6 +210,9 @@ A note is parsed as:
 3. a required terminator line `~~~`
 
 Blank lines may appear between properties, fields, and notes.
+
+Delete directives and comments (described later in this section) are separate kinds of entry and do not follow this
+structure — they are not notes, and neither requires a `~~~` terminator.
 
 ### Note properties
 
@@ -227,6 +231,10 @@ Recognized property names:
 - `!tags:`
 
 These names are case-insensitive, so forms like `!TYPE:` and `!Tags:` are valid.
+
+The name `delete` is also reserved, for delete directives (see "Delete directives" below). Unlike `type`, `deck`, and
+`tags`, it is not a property: it carries no state forward to later entries, and no regular field may be named
+`delete`.
 
 Property values are single-line text values. Repeated internal whitespace is normalized to single spaces.
 
@@ -326,6 +334,63 @@ Interpretation:
 
 - the first two notes use `type = Basic`, `deck = Math`, and `tags = Equation`
 - the third note keeps `type = Basic` and `deck = Math`, but overrides `tags` with `Definition`
+
+Delete directives do not read or change this state. A `!delete:` entry has no effect on the inherited `type`, `deck`,
+or `tags` values — later notes see the same inherited values they would have if the delete directive were not there.
+
+### Comments
+
+A line whose first character is `#` is a comment and is ignored by all tooling. No whitespace may precede the `#`.
+
+Comments are allowed wherever a property line may appear: before the first entry in a file, among a note's own leading
+`!type:`/`!deck:`/`!tags:` lines, or between one entry and the next — including immediately before or after a delete
+directive.
+
+```text
+# Reviewed 2026-08-22, still needs a diagram
+!type: Basic
+!deck: Math
+!tags: Equation
+
+!front: Quadratic Formula
+!back: ...
+~~~
+```
+
+Once a note's field lines have begun, `#` is no longer special: a `#` line inside a note's fields, or inside a
+multiline field value, is ordinary content, not a comment. Comments are specific to `.note` files — `.model` files do
+not support them.
+
+### Delete directives
+
+A `.note` file can request that a previously exported note be removed from Anki, without needing to know or repeat any
+of its fields. A delete directive is a single line, and is itself the entire entry:
+
+```text
+!delete: <id>
+```
+
+`<id>` uses the same syntax as the value of an `!id:` field, and identifies the note to delete.
+
+Delete directives are not notes:
+
+- the line is the entire entry — no terminating `~~~` follows it, and its value cannot span multiple lines
+- they carry no fields and are not associated with any model
+- `delete` is a reserved name; no regular field may be called `delete`
+- they do not read or modify `type`, `deck`, or `tags` state — that state carries forward through a delete directive
+  exactly as if the directive were not there
+
+Multiple delete directives may appear one after another. Each carries exactly one id and is its own entry — deletions
+are never batched into a single directive:
+
+```text
+!delete: aaaaaaaaaa
+!delete: bbbbbbbbbb
+```
+
+An id used by a `!delete:` directive is checked for uniqueness across the whole file the same way `!id:` values are:
+reusing an id — between two delete directives, or between a delete directive and a note's `!id:` — is a duplicate note
+id error.
 
 ### Example note files
 
@@ -480,10 +545,11 @@ Examples of semantic errors:
 
 - unknown note type
 - unknown field
+- a field named `delete`
 - duplicate model
 - duplicate field in a model
 - duplicate field in a note
-- duplicate note id
+- duplicate note id (including ids reused by a `!delete:` directive)
 
 ## Practical authoring guidance
 
@@ -494,3 +560,5 @@ Examples of semantic errors:
 - Keep field names consistent between model and note files.
 - For optional fields in models, add `?` to the declaration line.
 - For multiline field values in notes, start the content after the `:` and continue until the next field or `~~~`.
+- Use `# comment` lines (no leading whitespace) to annotate `.note` files — they're skipped by all tooling.
+- Use `!delete: <id>` to remove a previously exported note from Anki; one directive per id, no `~~~` needed.

@@ -7,6 +7,7 @@ from .data import (
   ModelCardNode,
   ModelFieldNode,
   ModelNodes,
+  TombstoneNode,
 )
 from .parser import ModelParser, NoteParser
 
@@ -108,6 +109,170 @@ def test_note_parser_reports_duplicate_property() -> None:
         FieldNode(path="deck/duplicate-property.note", line=4, name="front", value="Question"),
       ],
       end=Location(path="deck/duplicate-property.note", line=5),
+    ),
+  ]
+
+
+def test_note_parser_parses_tombstone() -> None:
+  parser = parse_note(
+    "!delete: abc123",
+    path="deck/tombstone.note",
+  )
+
+  assert parser.errors == []
+  assert parser.notes == []
+  assert parser.tombstones == [
+    TombstoneNode(path="deck/tombstone.note", line=1, guid="abc123"),
+  ]
+
+
+def test_note_parser_parses_consecutive_tombstones_and_falls_through_to_next_note() -> None:
+  parser = parse_note(
+    "!type: Basic",
+    "!deck: Math",
+    "!tags: Equation",
+    "!delete: aaaaaaaaaa",
+    "!delete: bbbbbbbbbb",
+    "!front: Question",
+    "!back: Answer",
+    "~~~",
+    path="deck/mixed.note",
+  )
+
+  assert parser.errors == []
+  assert parser.tombstones == [
+    TombstoneNode(path="deck/mixed.note", line=4, guid="aaaaaaaaaa"),
+    TombstoneNode(path="deck/mixed.note", line=5, guid="bbbbbbbbbb"),
+  ]
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/mixed.note",
+      line=6,
+      type=PropertyNode(path="deck/mixed.note", line=1, name="type", value="Basic"),
+      deck=PropertyNode(path="deck/mixed.note", line=2, name="deck", value="Math"),
+      tags=PropertyNode(path="deck/mixed.note", line=3, name="tags", value="Equation"),
+      guid=None,
+      fields=[
+        FieldNode(path="deck/mixed.note", line=6, name="front", value="Question"),
+        FieldNode(path="deck/mixed.note", line=7, name="back", value="Answer"),
+      ],
+      end=Location(path="deck/mixed.note", line=8),
+    ),
+  ]
+
+
+def test_note_parser_discards_comments() -> None:
+  parser = parse_note(
+    "# top of file comment",
+    "!type: Basic",
+    "# comment between properties",
+    "!deck: Math",
+    "!tags: Equation",
+    "# comment before fields",
+    "!front: Question",
+    "!back: Answer",
+    "~~~",
+    path="deck/commented.note",
+  )
+
+  assert parser.errors == []
+  assert parser.tombstones == []
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/commented.note",
+      line=7,
+      type=PropertyNode(path="deck/commented.note", line=2, name="type", value="Basic"),
+      deck=PropertyNode(path="deck/commented.note", line=4, name="deck", value="Math"),
+      tags=PropertyNode(path="deck/commented.note", line=5, name="tags", value="Equation"),
+      guid=None,
+      fields=[
+        FieldNode(path="deck/commented.note", line=7, name="front", value="Question"),
+        FieldNode(path="deck/commented.note", line=8, name="back", value="Answer"),
+      ],
+      end=Location(path="deck/commented.note", line=9),
+    ),
+  ]
+
+
+def test_note_parser_treats_hash_inside_field_as_content() -> None:
+  parser = parse_note(
+    "!front: Question",
+    "# not a comment, this is content",
+    "!back: Answer",
+    "~~~",
+    path="deck/comment-in-field.note",
+  )
+
+  assert parser.errors == []
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/comment-in-field.note",
+      line=1,
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value=""),
+      guid=None,
+      fields=[
+        FieldNode(
+          path="deck/comment-in-field.note",
+          line=1,
+          name="front",
+          value="Question\n# not a comment, this is content",
+        ),
+        FieldNode(path="deck/comment-in-field.note", line=3, name="back", value="Answer"),
+      ],
+      end=Location(path="deck/comment-in-field.note", line=4),
+    ),
+  ]
+
+
+def test_note_parser_requires_no_whitespace_before_hash() -> None:
+  parser = parse_note(
+    " # indented, not a comment",
+    path="deck/indented-hash.note",
+  )
+
+  assert parser.errors == [
+    ParseError(
+      path="deck/indented-hash.note",
+      line=1,
+      message="Unexpected text outside a multiline field.",
+    ),
+  ]
+  assert parser.notes == []
+  assert parser.tombstones == []
+
+
+def test_note_parser_reports_delete_as_reserved_field_name() -> None:
+  parser = parse_note(
+    "!front: Question",
+    "!delete: abc123",
+    "!back: Answer",
+    "~~~",
+    path="deck/reserved-delete.note",
+  )
+
+  assert parser.errors == [
+    ParseError(
+      path="deck/reserved-delete.note",
+      line=2,
+      message="'delete' is a reserved field name.",
+    ),
+  ]
+  assert parser.tombstones == []
+  assert parser.notes == [
+    NoteNodes(
+      path="deck/reserved-delete.note",
+      line=1,
+      type=PropertyNode(name="type", value="Basic"),
+      deck=PropertyNode(name="deck", value="Default"),
+      tags=PropertyNode(name="tags", value=""),
+      guid=None,
+      fields=[
+        FieldNode(path="deck/reserved-delete.note", line=1, name="front", value="Question"),
+        FieldNode(path="deck/reserved-delete.note", line=3, name="back", value="Answer"),
+      ],
+      end=Location(path="deck/reserved-delete.note", line=4),
     ),
   ]
 

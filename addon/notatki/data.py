@@ -46,6 +46,11 @@ class FieldNode(Location):
 
 
 @dataclass(slots=True)
+class TombstoneNode(Location):
+  guid: str = ""
+
+
+@dataclass(slots=True)
 class NoteNodes(Location):
   type: PropertyNode | None = None
   deck: PropertyNode | None = None

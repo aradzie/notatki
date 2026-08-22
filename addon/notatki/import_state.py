@@ -3,12 +3,12 @@ from pathlib import Path
 from anki.cards import Card
 from anki.collection import AddNoteRequest, Collection
 from anki.models import NotetypeDict
-from anki.notes import Note
+from anki.notes import Note, NoteId
 from aqt.utils import showInfo, showWarning
 
 from .assets import ImportAssetManager
 from .checker import Checker
-from .data import ModelNodes, NoteNodes, ParseError
+from .data import ModelNodes, NoteNodes, ParseError, TombstoneNode
 from .parser import ModelParser, NoteParser
 
 _IGNORED_DIR_NAMES = {
@@ -25,10 +25,12 @@ class ImportState:
   note_paths: list[Path]  # A list of paths to note files.
   incoming_models: list[ModelNodes]  # Parsed models.
   incoming_notes: list[NoteNodes]  # Parsed notes.
+  incoming_tombstones: list[TombstoneNode]  # Parsed delete directives.
   updated_models: list[ModelNodes]  # Updated models.
   added_models: list[ModelNodes]  # Added models.
   updated_notes: list[NoteNodes]  # Updated notes.
   added_notes: list[NoteNodes]  # Added notes.
+  deleted_notes: list[TombstoneNode]  # Tombstones whose target note was found and deleted.
   asset_manager: ImportAssetManager  # Tracks and imports images referenced from note fields.
   _anki_models_by_name: dict[str, NotetypeDict]  # Maps lowercase model names to models.
   _anki_notes_by_guid: dict[str, Note]  # Maps guids to notes.
@@ -54,10 +56,12 @@ class ImportState:
     self.note_paths = []
     self.incoming_models = []
     self.incoming_notes = []
+    self.incoming_tombstones = []
     self.updated_models = []
     self.added_models = []
     self.updated_notes = []
     self.added_notes = []
+    self.deleted_notes = []
     self.asset_manager = ImportAssetManager()
     self._anki_models_by_name = {}
     self._anki_notes_by_guid = {}
@@ -85,7 +89,13 @@ class ImportState:
     if self.errors:
       return
 
+    self._load_notes()
+
     self._sync_notes()
+    if self.errors:
+      return
+
+    self._delete_tombstoned_notes()
     if self.errors:
       return
 
@@ -99,8 +109,9 @@ class ImportState:
         f"Added {len(self.added_models)} and "
         f"updated {len(self.updated_models)} models."
         "\n"
-        f"Added {len(self.added_notes)} and "
-        f"updated {len(self.updated_notes)} notes."
+        f"Added {len(self.added_notes)}, "
+        f"updated {len(self.updated_notes)}, and "
+        f"deleted {len(self.deleted_notes)} notes."
       )
 
   def find_files(self, root: Path) -> None:
@@ -142,6 +153,7 @@ class ImportState:
       note_parser = NoteParser(str(path))
       self._parse_file(path, note_parser)
       self.incoming_notes.extend(note_parser.notes)
+      self.incoming_tombstones.extend(note_parser.tombstones)
     if self.errors:
       return
 
@@ -163,7 +175,7 @@ class ImportState:
   def _check_incoming_data(self) -> None:
     checker = Checker()
     checker.check_models(self.incoming_models)
-    checker.check_notes(self.incoming_notes)
+    checker.check_notes(self.incoming_notes, self.incoming_tombstones)
     self.errors.extend(checker.errors)
 
   def _render_fields(self) -> None:
@@ -259,7 +271,6 @@ class ImportState:
     self.asset_manager.import_to(self.col)
 
   def _sync_notes(self) -> None:
-    self._load_notes()
     for my_note in self.incoming_notes:
       self._process_note(my_note)
     self._save_notes()
@@ -270,6 +281,15 @@ class ImportState:
       anki_note = self.col.get_note(note_id)
       if anki_note.guid:
         self._anki_notes_by_guid[anki_note.guid] = anki_note
+
+  def _delete_tombstoned_notes(self) -> None:
+    note_ids: list[NoteId] = []
+    for tombstone in self.incoming_tombstones:
+      if anki_note := self._anki_notes_by_guid.get(tombstone.guid):
+        note_ids.append(anki_note.id)
+        self.deleted_notes.append(tombstone)
+    if note_ids:
+      self.col.remove_notes(note_ids)
 
   def _process_note(self, my_note: NoteNodes) -> bool:
     if anki_note := self._anki_notes_by_guid.get(my_note.guid.value):

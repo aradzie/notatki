@@ -1,15 +1,51 @@
-import { type FieldNode, type NoteNode, type PropertyNode, type Token } from "@notatki/parser";
+import {
+  type CommentNode,
+  type FieldNode,
+  type NoteListItemNode,
+  type NoteNode,
+  type PropertyNode,
+  type Token,
+  type TombstoneNode,
+} from "@notatki/parser";
 import { loc } from "./nodes.ts";
 
 export function reformatNoteNodes(
-  nodes: Iterable<NoteNode>,
+  nodes: Iterable<NoteListItemNode>,
   formatField: (text: string) => string = (text) => text,
-): NoteNode[] {
+): NoteListItemNode[] {
+  function mapNode(node: NoteListItemNode): NoteListItemNode {
+    switch (node.type) {
+      case "note":
+        return mapNoteNode(node);
+      case "tombstone":
+        return mapTombstoneNode(node);
+      case "comment":
+        return mapCommentNode(node);
+    }
+  }
+
   function mapNoteNode(node: NoteNode): NoteNode {
     return {
+      type: "note",
       properties: node.properties.map(mapPropertyNode),
       fields: node.fields.map(mapFieldNode),
       end: { text: "~~~", loc },
+      loc,
+    };
+  }
+
+  function mapTombstoneNode(node: TombstoneNode): TombstoneNode {
+    return {
+      type: "tombstone",
+      id: { text: node.id.text, loc },
+      loc,
+    };
+  }
+
+  function mapCommentNode(node: CommentNode): CommentNode {
+    return {
+      type: "comment",
+      lines: [...node.lines],
       loc,
     };
   }
@@ -29,7 +65,7 @@ export function reformatNoteNodes(
     };
   }
 
-  return [...nodes].map(mapNoteNode);
+  return [...nodes].map(mapNode);
 }
 
 function nameOf({ text }: Token): Token {

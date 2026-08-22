@@ -20,7 +20,7 @@ export async function reformatCmd(paths: string[], { formatNotes }: { formatNote
     const parser = new NoteParser();
     console.log(`Parsing notes file "${path}"...`);
     const text = await readFile(path, "utf8");
-    const nodes = parser.parseNoteNodes(path, text);
+    const nodes = parser.parseNoteListNodes(path, text);
     if (parser.errors.length > 0) {
       console.error(`Parse error.`);
     } else {

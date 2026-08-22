@@ -1,6 +1,9 @@
 import {
+  isNoteNode,
+  isTombstoneNode,
   type LocationRange,
   type ModelNode,
+  type NoteListItemNode,
   type NoteNode,
   parseModelList,
   parseNoteList,
@@ -62,16 +65,17 @@ export class NoteParser {
   }
 
   checkDuplicates() {
-    const byId = new Map<string, Note[]>();
+    const byId = new Map<string, LocationRange[]>();
     const byTitle = new Map<string, Note[]>();
     for (const note of this.#notes) {
       const { id } = note;
       if (id) {
+        const { node } = note.get("id");
         let list = byId.get(id);
         if (list == null) {
           byId.set(id, (list = []));
         }
-        list.push(note);
+        list.push(node?.value.loc ?? unknown);
       }
       const { value } = note.first;
       const title = value.trim().replaceAll(/\s+/g, " ");
@@ -83,11 +87,25 @@ export class NoteParser {
         list.push(note);
       }
     }
-    for (const [key, list] of byId) {
-      if (list.length > 1) {
-        for (const note of list) {
-          const { node } = note.get("id");
-          this.#errors.push({ message: `Duplicate ID: "${key}"`, location: node?.value.loc ?? unknown });
+    for (const tombstone of this.#notes.tombstones) {
+      const id = tombstone.id.text;
+      if (id) {
+        let list = byId.get(id);
+        if (list == null) {
+          byId.set(id, (list = []));
+        }
+        list.push(tombstone.id.loc);
+      } else {
+        this.#errors.push({
+          message: "Delete directive must have a non-empty id value.",
+          location: tombstone.id.loc,
+        });
+      }
+    }
+    for (const [key, locations] of byId) {
+      if (locations.length > 1) {
+        for (const location of locations) {
+          this.#errors.push({ message: `Duplicate ID: "${key}"`, location });
         }
       }
     }
@@ -176,8 +194,16 @@ export class NoteParser {
   }
 
   parseNoteNodes(path: string, text: string): NoteNode[] {
+    return this.parseNoteListNodes(path, text).filter(isNoteNode);
+  }
+
+  parseNoteListNodes(path: string, text: string): NoteListItemNode[] {
     try {
-      return parseNoteList(text, path);
+      const nodes = parseNoteList(text, path);
+      for (const tombstone of nodes.filter(isTombstoneNode)) {
+        this.#notes.addTombstone(tombstone);
+      }
+      return nodes;
     } catch (err) {
       if (err instanceof SyntaxError) {
         const { message, location } = err;

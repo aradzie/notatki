@@ -54,6 +54,7 @@ export function newNote(): NoteMaker {
     },
     make(): NoteNode {
       return {
+        type: "note",
         properties: [...properties],
         fields: [...fields],
         end: { text: "~~~", loc },

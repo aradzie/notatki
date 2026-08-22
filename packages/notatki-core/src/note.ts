@@ -1,17 +1,23 @@
-import { type FieldNode, type NoteNode } from "@notatki/parser";
+import { type FieldNode, type NoteNode, type TombstoneNode } from "@notatki/parser";
 import { type Model, type ModelField, ModelMap } from "./model.ts";
 
 export class NoteList implements Iterable<Note> {
   readonly #types: ModelMap;
   readonly #notes: Note[];
+  readonly #tombstones: TombstoneNode[];
 
   constructor(types = new ModelMap()) {
     this.#types = types;
     this.#notes = [];
+    this.#tombstones = [];
   }
 
   get types(): ModelMap {
     return this.#types;
+  }
+
+  get tombstones(): readonly TombstoneNode[] {
+    return this.#tombstones;
   }
 
   [Symbol.iterator](): Iterator<Note> {
@@ -26,12 +32,19 @@ export class NoteList implements Iterable<Note> {
     this.#notes.push(note);
   }
 
+  addTombstone(tombstone: TombstoneNode): void {
+    this.#tombstones.push(tombstone);
+  }
+
   filter(predicate: (note: Note) => boolean): NoteList {
     const filtered = new NoteList(this.#types);
     for (const note of this.#notes) {
       if (predicate(note)) {
         filtered.add(note);
       }
+    }
+    for (const tombstone of this.#tombstones) {
+      filtered.addTombstone(tombstone);
     }
     return filtered;
   }

@@ -13,6 +13,7 @@ from .data import (
   NoteNodes,
   ParseError,
   PropertyNode,
+  TombstoneNode,
 )
 from .import_state import ImportState
 
@@ -679,3 +680,87 @@ def test_import_state_missing_image_reports_error_and_blocks_import(col, tmp_pat
   assert state.added_models == []
   assert state.added_notes == []
   assert col.find_notes("") == []
+
+
+def test_import_state_deletes_tombstoned_note(col):
+  # Arrange
+
+  basic = col.models.by_name("Basic")
+  existing_note = Note(col, basic)
+  existing_note.guid = "111"
+  existing_note["Front"] = "question"
+  existing_note["Back"] = "answer"
+  col.add_note(existing_note, col.decks.id("My Deck"))
+
+  tombstone = TombstoneNode(path="a.note", line=1, guid="111")
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_tombstones.append(tombstone)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.deleted_notes == [tombstone]
+  assert col.find_notes("") == []
+
+
+def test_import_state_ignores_tombstone_for_missing_note(col):
+  # Arrange
+
+  tombstone = TombstoneNode(path="a.note", line=1, guid="does-not-exist")
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_tombstones.append(tombstone)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.deleted_notes == []
+
+
+def test_import_state_deletes_tombstoned_note_while_adding_another(col):
+  # Arrange
+
+  basic = col.models.by_name("Basic")
+  existing_note = Note(col, basic)
+  existing_note.guid = "old-note"
+  existing_note["Front"] = "old question"
+  existing_note["Back"] = "old answer"
+  col.add_note(existing_note, col.decks.id("My Deck"))
+
+  tombstone = TombstoneNode(path="a.note", line=1, guid="old-note")
+  n1 = NoteNodes(
+    type=PropertyNode(path="a.note", line=2, name="type", value="Basic"),
+    deck=PropertyNode(path="a.note", line=3, name="deck", value="My Deck"),
+    tags=PropertyNode(path="a.note", line=4, name="tags", value=""),
+    guid=None,
+    fields=[
+      FieldNode(path="a.note", line=5, name="Id", value="new-note"),
+      FieldNode(path="a.note", line=6, name="Front", value="new question"),
+      FieldNode(path="a.note", line=7, name="Back", value="new answer"),
+    ],
+    end=Location(path="a.note", line=8),
+  )
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_tombstones.append(tombstone)
+  state.incoming_notes.append(n1)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.deleted_notes == [tombstone]
+  assert state.added_notes == [n1]
+
+  note_ids = col.find_notes("")
+  assert len(note_ids) == 1
+  assert col.get_note(note_ids[0]).guid == "new-note"

@@ -18,7 +18,7 @@
       "patterns": [
         {
           "name": "keyword.control.anki-notes",
-          "match": "(?i)^!(type|deck|tags):"
+          "match": "(?i)^!(type|deck|tags|delete):"
         },
         {
           "name": "keyword.anki-notes",

@@ -4,14 +4,19 @@ Start = "" { return null; }
 // ----------------
 
 NoteList =
-  list:( ( _ Newline )* @Note )* ( _ Newline )* _
+  list:( ( _ Newline )* @NoteListItem )* ( _ Newline )* _
   { return list; }
+
+NoteListItem =
+  Comment
+  / Tombstone
+  / Note
 
 Note =
   properties:( ( _ Newline )* @NoteProperty _ Newline )*
   fields:( ( _ Newline )* @NoteField _ Newline )*
   end:( ( _ Newline )* @NoteEnd _ Newline )
-  { return { properties, fields, end, loc: location() }; }
+  { return { type: "note", properties, fields, end, loc: location() }; }
 
 NoteProperty "property" =
   name:NotePropertyName _ value:NormalText
@@ -44,6 +49,22 @@ NoteFieldValue =
 NoteEnd =
   text:"~~~"
   { return { text, loc: location() }; }
+
+Tombstone "tombstone" =
+  "!delete:"i _ id:TombstoneId
+  { return { type: "tombstone", id, loc: location() }; }
+
+TombstoneId =
+  text:Text
+  { return { text, loc: location() }; }
+
+Comment "comment" =
+  head:CommentLine lines:( Newline @CommentLine )*
+  { return { type: "comment", lines: [head, ...lines], loc: location() }; }
+
+CommentLine =
+  "#" text:Text
+  { return text; }
 
 // Model file parser
 // -----------------

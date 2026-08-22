@@ -12,7 +12,7 @@ export class NotesFormatter implements vscode.DocumentFormattingEditProvider {
 
   provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
     const parser = new NoteParser();
-    const nodes = parser.parseNoteNodes(document.uri.fsPath, document.getText());
+    const nodes = parser.parseNoteListNodes(document.uri.fsPath, document.getText());
     if (parser.errors.length > 0) {
       return [];
     } else {

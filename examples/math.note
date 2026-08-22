@@ -60,3 +60,12 @@ Geometrically: there is at least one point on the curve where the tangent line i
 \end{align*}
 \]
 ~~~
+
+# We can mark some notes for deletion by using the `!delete:` directive.
+# This is useful for removing outdated or incorrect notes from the deck.
+
+!delete: note-id-1
+
+!delete: note-id-2
+
+!delete: note-id-3

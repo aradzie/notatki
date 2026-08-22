@@ -11,6 +11,7 @@ from .data import (
   NoteState,
   ParseError,
   PropertyNode,
+  TombstoneNode,
 )
 
 
@@ -25,10 +26,12 @@ def _field_name_pattern() -> str:
 class NoteParser:
   _FIELD_RE = re.compile(rf"^!(?P<name>{_field_name_pattern()}):(?P<value>.*)$")
   _END_RE = re.compile(r"^~~~[ \t]*$")
+  _COMMENT_RE = re.compile(r"^#")
 
   def __init__(self, path: str) -> None:
     self.errors: list[ParseError] = []
     self.notes: list[NoteNodes] = []
+    self.tombstones: list[TombstoneNode] = []
     self._path = path
     self._line = 1
     self._note_location: Location | None = None
@@ -45,6 +48,8 @@ class NoteParser:
       self._handle_field_like(m)
     elif self._END_RE.match(line):
       self._handle_end()
+    elif self._current_field is None and self._COMMENT_RE.match(line):
+      pass  # Comment line; discarded.
     else:
       self._handle_text(line)
     self._line += 1
@@ -134,6 +139,17 @@ class NoteParser:
           line=self._line,
           name=name,
           value=_collapse_ws(value),
+        )
+      case "delete":
+        if len(self._fields):
+          self._error("'delete' is a reserved field name.")
+          return
+        self.tombstones.append(
+          TombstoneNode(
+            path=self._path,
+            line=self._line,
+            guid=value.strip(),
+          ),
         )
       case _:
         field = FieldNode(
