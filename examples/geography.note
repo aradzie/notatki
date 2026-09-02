@@ -1,11 +1,809 @@
-!type: Cloze
 !deck: Geography
-!tags: Capitals
+!type: Cloze
+!tags: Geography Rankings
+
+!id: S6oEkSOFAb
+!text: Among UN member states, the largest country by total area is {{c1::Russia::country}}.
+~~~
+
+!id: QBzFUNoJOO
+!text: Among UN member states, the second-largest country by total area is {{c1::Canada::country}}.
+~~~
+
+!id: gtrGyx9gcx
+!text: Among UN member states, the smallest country by total area is {{c1::Monaco::country}}.
+~~~
+
+!id: xgqwpQpQ1B
+!text: Among UN member states, the second-smallest country by total area is {{c1::Nauru::country}}.
+~~~
+
+!id: AWXiuZFc0s
+!text: Among UN member states, the country with the largest 2025 population is {{c1::India::country}}.
+~~~
+
+!id: ZCadhZLc3f
+!text: Among UN member states, the country with the second-largest 2025 population is {{c1::China::country}}.
+~~~
+
+!id: f2cZJvCvkD
+!text: Among UN member states, the country with the smallest 2025 population is {{c1::Tuvalu::country}}.
+~~~
+
+!id: 22NknnpGww
+!text: Among UN member states, the country with the second-smallest 2025 population is {{c1::Nauru::country}}.
+~~~
+
+!tags: Geography Capitals
+
+!id: 64Uz0PebIT
+!text: The capital of {{c2::Afghanistan::country}} is {{c1::Kabul::city}}.
+~~~
+
+!id: 9F7uHD9h5S
+!text: The capital of {{c2::Albania::country}} is {{c1::Tirana::city}}.
+~~~
+
+!id: PhWgbeWek7
+!text: The capital of {{c2::Algeria::country}} is {{c1::Algiers::city}}.
+~~~
+
+!id: l9SgHVWDmn
+!text: The capital of {{c2::Andorra::country}} is {{c1::Andorra la Vella::city}}.
+~~~
+
+!id: rTtInNXeVC
+!text: The capital of {{c2::Angola::country}} is {{c1::Luanda::city}}.
+~~~
+
+!id: 6u9QnswLQu
+!text: The capital of {{c2::Antigua and Barbuda::country}} is {{c1::Saint John's::city}}.
+~~~
+
+!id: ff0BjD48hO
+!text: The capital of {{c2::Argentina::country}} is {{c1::Buenos Aires::city}}.
+~~~
+
+!id: WKo0Z0vy9F
+!text: The capital of {{c2::Armenia::country}} is {{c1::Yerevan::city}}.
+~~~
+
+!id: ygeQVyplId
+!text: The capital of {{c2::Australia::country}} is {{c1::Canberra::city}}.
+~~~
+
+!id: eF9q0ft8qq
+!text: The capital of {{c2::Austria::country}} is {{c1::Vienna::city}}.
+~~~
+
+!id: yYpdDmeaLb
+!text: The capital of {{c2::Azerbaijan::country}} is {{c1::Baku::city}}.
+~~~
+
+!id: tGBPFgdbzr
+!text: The capital of {{c2::Bahamas::country}} is {{c1::Nassau::city}}.
+~~~
+
+!id: vcy4nBd2ws
+!text: The capital of {{c2::Bahrain::country}} is {{c1::Manama::city}}.
+~~~
+
+!id: 563tYpwoFe
+!text: The capital of {{c2::Bangladesh::country}} is {{c1::Dhaka::city}}.
+~~~
+
+!id: Pc8YfllhTO
+!text: The capital of {{c2::Barbados::country}} is {{c1::Bridgetown::city}}.
+~~~
+
+!id: MZ3fHP6q08
+!text: The capital of {{c2::Belarus::country}} is {{c1::Minsk::city}}.
+~~~
+
+!id: tvGkAmJCSK
+!text: The capital of {{c2::Belgium::country}} is {{c1::Brussels::city}}.
+~~~
+
+!id: Qg4sQRumou
+!text: The capital of {{c2::Belize::country}} is {{c1::Belmopan::city}}.
+~~~
+
+!id: azk7frsols
+!text: The capital of {{c2::Benin::country}} is {{c1::Porto-Novo::city}}.
+~~~
+
+!id: AnBHAfzRBb
+!text: The capital of {{c2::Bhutan::country}} is {{c1::Thimphu::city}}.
+~~~
+
+!id: 8fJ3vRvqKn
+!text: The capital of {{c2::Bolivia::country}} is {{c1::Sucre::city}}.
+~~~
+
+!id: HgMohzmYkt
+!text: The capital of {{c2::Bosnia and Herzegovina::country}} is {{c1::Sarajevo::city}}.
+~~~
+
+!id: Za5PTzMMAD
+!text: The capital of {{c2::Botswana::country}} is {{c1::Gaborone::city}}.
+~~~
+
+!id: uxYav3fV0K
+!text: The capital of {{c2::Brazil::country}} is {{c1::Brasília::city}}.
+~~~
+
+!id: o7NzrpvE2g
+!text: The capital of {{c2::Brunei::country}} is {{c1::Bandar Seri Begawan::city}}.
+~~~
+
+!id: v1DQmOcHdy
+!text: The capital of {{c2::Bulgaria::country}} is {{c1::Sofia::city}}.
+~~~
+
+!id: 0hGJah7JE0
+!text: The capital of {{c2::Burkina Faso::country}} is {{c1::Ouagadougou::city}}.
+~~~
+
+!id: enXBrhSO2E
+!text: The capital of {{c2::Burundi::country}} is {{c1::Gitega::city}}.
+~~~
+
+!id: 9AEvX9dgnt
+!text: The capital of {{c2::Cambodia::country}} is {{c1::Phnom Penh::city}}.
+~~~
+
+!id: EUiBAZNCg7
+!text: The capital of {{c2::Cameroon::country}} is {{c1::Yaoundé::city}}.
+~~~
+
+!id: bjIP4hKFF0
+!text: The capital of {{c2::Canada::country}} is {{c1::Ottawa::city}}.
+~~~
+
+!id: 6OT8RiUh5r
+!text: The capital of {{c2::Cape Verde::country}} is {{c1::Praia::city}}.
+~~~
+
+!id: oxb4foFVyZ
+!text: The capital of {{c2::Central African Republic::country}} is {{c1::Bangui::city}}.
+~~~
+
+!id: fJfACWLG15
+!text: The capital of {{c2::Chad::country}} is {{c1::N'Djamena::city}}.
+~~~
+
+!id: 6xT0Itg26A
+!text: The capital of {{c2::Chile::country}} is {{c1::Santiago::city}}.
+~~~
+
+!id: b4jUc0csii
+!text: The capital of {{c2::China::country}} is {{c1::Beijing::city}}.
+~~~
+
+!id: gH4OQzFmJK
+!text: The capital of {{c2::Colombia::country}} is {{c1::Bogotá::city}}.
+~~~
+
+!id: SXeGCdC8F3
+!text: The capital of {{c2::Comoros::country}} is {{c1::Moroni::city}}.
+~~~
+
+!id: jYSECY7TfF
+!text: The capital of {{c2::Congo::country}} is {{c1::Brazzaville::city}}.
+~~~
+
+!id: Fr3Fa1ac3U
+!text: The capital of {{c2::Costa Rica::country}} is {{c1::San José::city}}.
+~~~
+
+!id: yUOsJW4y0R
+!text: The capital of {{c2::Croatia::country}} is {{c1::Zagreb::city}}.
+~~~
+
+!id: ttkhsrqjWJ
+!text: The capital of {{c2::Cuba::country}} is {{c1::Havana::city}}.
+~~~
+
+!id: dt2ajPbowL
+!text: The capital of {{c2::Cyprus::country}} is {{c1::Nicosia::city}}.
+~~~
+
+!id: 0y8qyQm3mk
+!text: The capital of {{c2::Czechia::country}} is {{c1::Prague::city}}.
+~~~
+
+!id: KvZXSWGqjp
+!text: The capital of {{c2::Denmark::country}} is {{c1::Copenhagen::city}}.
+~~~
+
+!id: FHgMltdr6t
+!text: The capital of {{c2::Djibouti::country}} is {{c1::Djibouti::city}}.
+~~~
+
+!id: Uaf86wtfQF
+!text: The capital of {{c2::Dominica::country}} is {{c1::Roseau::city}}.
+~~~
+
+!id: vYEJg8Yj4q
+!text: The capital of {{c2::Dominican Republic::country}} is {{c1::Santo Domingo::city}}.
+~~~
+
+!id: fur49b3dCO
+!text: The capital of {{c2::DR Congo::country}} is {{c1::Kinshasa::city}}.
+~~~
+
+!id: hq61VLKDyg
+!text: The capital of {{c2::Ecuador::country}} is {{c1::Quito::city}}.
+~~~
+
+!id: sPlviZ76Hi
+!text: The capital of {{c2::Egypt::country}} is {{c1::Cairo::city}}.
+~~~
+
+!id: EVbgplgT8A
+!text: The capital of {{c2::El Salvador::country}} is {{c1::San Salvador::city}}.
+~~~
+
+!id: OYNgGy2bgf
+!text: The capital of {{c2::Equatorial Guinea::country}} is {{c1::Malabo::city}}.
+~~~
+
+!id: W97rfIscf3
+!text: The capital of {{c2::Eritrea::country}} is {{c1::Asmara::city}}.
+~~~
+
+!id: 8sdRKxsgzp
+!text: The capital of {{c2::Estonia::country}} is {{c1::Tallinn::city}}.
+~~~
+
+!id: a1kkpGhjru
+!text: The capital of {{c2::Eswatini::country}} is {{c1::Lobamba::city}}.
+~~~
+
+!id: m4AUnr9yYb
+!text: The capital of {{c2::Ethiopia::country}} is {{c1::Addis Ababa::city}}.
+~~~
+
+!id: KM9BZweioa
+!text: The capital of {{c2::Fiji::country}} is {{c1::Suva::city}}.
+~~~
+
+!id: acfdjRwlKm
+!text: The capital of {{c2::Finland::country}} is {{c1::Helsinki::city}}.
+~~~
+
+!id: zT11OWlbwf
+!text: The capital of {{c2::France::country}} is {{c1::Paris::city}}.
+~~~
+
+!id: hfKrUWlRh0
+!text: The capital of {{c2::Gabon::country}} is {{c1::Libreville::city}}.
+~~~
+
+!id: uTCunimmc2
+!text: The capital of {{c2::Gambia::country}} is {{c1::Banjul::city}}.
+~~~
+
+!id: vuRmiQkuFH
+!text: The capital of {{c2::Georgia::country}} is {{c1::Tbilisi::city}}.
+~~~
+
+!id: Q6pcFVSi4c
+!text: The capital of {{c2::Germany::country}} is {{c1::Berlin::city}}.
+~~~
+
+!id: i5atQ3LipU
+!text: The capital of {{c2::Ghana::country}} is {{c1::Accra::city}}.
+~~~
+
+!id: vnK9iZMYz7
+!text: The capital of {{c2::Greece::country}} is {{c1::Athens::city}}.
+~~~
+
+!id: 2kKIbjuhcj
+!text: The capital of {{c2::Grenada::country}} is {{c1::St. George's::city}}.
+~~~
+
+!id: sNCqEMyItc
+!text: The capital of {{c2::Guatemala::country}} is {{c1::Guatemala City::city}}.
+~~~
+
+!id: IxHuxoEk5c
+!text: The capital of {{c2::Guinea::country}} is {{c1::Conakry::city}}.
+~~~
+
+!id: IWT7bxHyrL
+!text: The capital of {{c2::Guinea-Bissau::country}} is {{c1::Bissau::city}}.
+~~~
+
+!id: vqWuuMbNhC
+!text: The capital of {{c2::Guyana::country}} is {{c1::Georgetown::city}}.
+~~~
+
+!id: T3S5sjYqfw
+!text: The capital of {{c2::Haiti::country}} is {{c1::Port-au-Prince::city}}.
+~~~
+
+!id: cM2NJfWp2a
+!text: The capital of {{c2::Honduras::country}} is {{c1::Tegucigalpa::city}}.
+~~~
+
+!id: SOiGwqLCon
+!text: The capital of {{c2::Hungary::country}} is {{c1::Budapest::city}}.
+~~~
+
+!id: lp9KfhGXj3
+!text: The capital of {{c2::Iceland::country}} is {{c1::Reykjavik::city}}.
+~~~
+
+!id: UEx61VFbGK
+!text: The capital of {{c2::India::country}} is {{c1::New Delhi::city}}.
+~~~
+
+!id: QYZffXUTRi
+!text: The capital of {{c2::Indonesia::country}} is {{c1::Jakarta::city}}.
+~~~
+
+!id: 4c3k0siOg6
+!text: The capital of {{c2::Iran::country}} is {{c1::Tehran::city}}.
+~~~
+
+!id: utyuOP7lhD
+!text: The capital of {{c2::Iraq::country}} is {{c1::Baghdad::city}}.
+~~~
+
+!id: 7zBxqvJ065
+!text: The capital of {{c2::Ireland::country}} is {{c1::Dublin::city}}.
+~~~
+
+!id: m9hgl2YvgK
+!text: The capital of {{c2::Israel::country}} is {{c1::Jerusalem::city}}.
+~~~
+
+!id: jPs2DaUFAJ
+!text: The capital of {{c2::Italy::country}} is {{c1::Rome::city}}.
+~~~
+
+!id: 3ecuQ9bPng
+!text: The capital of {{c2::Ivory Coast::country}} is {{c1::Yamoussoukro::city}}.
+~~~
+
+!id: nZsD3UYZCp
+!text: The capital of {{c2::Jamaica::country}} is {{c1::Kingston::city}}.
+~~~
+
+!id: cVP1dwVcPw
+!text: The capital of {{c2::Japan::country}} is {{c1::Tokyo::city}}.
+~~~
+
+!id: AcUJGwjp26
+!text: The capital of {{c2::Jordan::country}} is {{c1::Amman::city}}.
+~~~
+
+!id: I5hmtXiL3d
+!text: The capital of {{c2::Kazakhstan::country}} is {{c1::Astana::city}}.
+~~~
+
+!id: rKDWxg39PC
+!text: The capital of {{c2::Kenya::country}} is {{c1::Nairobi::city}}.
+~~~
+
+!id: Wqhw1uKGvC
+!text: The capital of {{c2::Kiribati::country}} is {{c1::South Tarawa::city}}.
+~~~
+
+!id: EZI7LFfnyy
+!text: The capital of {{c2::Kuwait::country}} is {{c1::Kuwait City::city}}.
+~~~
+
+!id: K9k94EiaYo
+!text: The capital of {{c2::Kyrgyzstan::country}} is {{c1::Bishkek::city}}.
+~~~
+
+!id: MfMbSInE2M
+!text: The capital of {{c2::Laos::country}} is {{c1::Vientiane::city}}.
+~~~
+
+!id: 8OqaBypVp7
+!text: The capital of {{c2::Latvia::country}} is {{c1::Riga::city}}.
+~~~
+
+!id: kRJ9AZpj6P
+!text: The capital of {{c2::Lebanon::country}} is {{c1::Beirut::city}}.
+~~~
+
+!id: r8A7w5htkn
+!text: The capital of {{c2::Lesotho::country}} is {{c1::Maseru::city}}.
+~~~
+
+!id: 6Mgwo95U3k
+!text: The capital of {{c2::Liberia::country}} is {{c1::Monrovia::city}}.
+~~~
+
+!id: zTYxqRn6UL
+!text: The capital of {{c2::Libya::country}} is {{c1::Tripoli::city}}.
+~~~
+
+!id: 6FyHwEEYzt
+!text: The capital of {{c2::Liechtenstein::country}} is {{c1::Vaduz::city}}.
+~~~
+
+!id: nLbGOgJD7F
+!text: The capital of {{c2::Lithuania::country}} is {{c1::Vilnius::city}}.
+~~~
+
+!id: f1ZlKdwghY
+!text: The capital of {{c2::Luxembourg::country}} is {{c1::Luxembourg::city}}.
+~~~
+
+!id: eGWu9POIMe
+!text: The capital of {{c2::Madagascar::country}} is {{c1::Antananarivo::city}}.
+~~~
+
+!id: Tk8Daamvy3
+!text: The capital of {{c2::Malawi::country}} is {{c1::Lilongwe::city}}.
+~~~
+
+!id: JfMcLpkRVV
+!text: The capital of {{c2::Malaysia::country}} is {{c1::Kuala Lumpur::city}}.
+~~~
+
+!id: jSiMHyVMok
+!text: The capital of {{c2::Maldives::country}} is {{c1::Malé::city}}.
+~~~
+
+!id: yU0VPmSfmt
+!text: The capital of {{c2::Mali::country}} is {{c1::Bamako::city}}.
+~~~
+
+!id: pYB43uo9kS
+!text: The capital of {{c2::Malta::country}} is {{c1::Valletta::city}}.
+~~~
+
+!id: tonKp7QfzY
+!text: The capital of {{c2::Marshall Islands::country}} is {{c1::Majuro::city}}.
+~~~
+
+!id: 9mDfkcRX5j
+!text: The capital of {{c2::Mauritania::country}} is {{c1::Nouakchott::city}}.
+~~~
+
+!id: P1rgYlafB8
+!text: The capital of {{c2::Mauritius::country}} is {{c1::Port Louis::city}}.
+~~~
+
+!id: Gw53WzLrOA
+!text: The capital of {{c2::Mexico::country}} is {{c1::Mexico City::city}}.
+~~~
+
+!id: cehavlQuuc
+!text: The capital of {{c2::Micronesia::country}} is {{c1::Palikir::city}}.
+~~~
+
+!id: OQ8H70S456
+!text: The capital of {{c2::Moldova::country}} is {{c1::Chișinău::city}}.
+~~~
+
+!id: CFdQxFdkvD
+!text: The capital of {{c2::Monaco::country}} is {{c1::Monaco::city}}.
+~~~
 
 !id: tsjqWGG2sy
-!text: The capital of {{c1::Mongolia::country}} is {{c2::Ulaanbaatar::city}}.
+!text: The capital of {{c2::Mongolia::country}} is {{c1::Ulaanbaatar::city}}.
+~~~
+
+!id: 9I0qE8AT0o
+!text: The capital of {{c2::Montenegro::country}} is {{c1::Podgorica::city}}.
+~~~
+
+!id: kUqUAThh1A
+!text: The capital of {{c2::Morocco::country}} is {{c1::Rabat::city}}.
+~~~
+
+!id: QZybcAhxbS
+!text: The capital of {{c2::Mozambique::country}} is {{c1::Maputo::city}}.
+~~~
+
+!id: 5fxWpqFQav
+!text: The capital of {{c2::Myanmar::country}} is {{c1::Naypyidaw::city}}.
+~~~
+
+!id: uXESNWWi4N
+!text: The capital of {{c2::Namibia::country}} is {{c1::Windhoek::city}}.
+~~~
+
+!id: Wi1bsaC0mE
+!text: The capital of {{c2::Nauru::country}} is {{c1::Yaren::city}}.
+~~~
+
+!id: Med5SNdYU4
+!text: The capital of {{c2::Nepal::country}} is {{c1::Kathmandu::city}}.
+~~~
+
+!id: 4GmBqPcmyd
+!text: The capital of {{c2::Netherlands::country}} is {{c1::Amsterdam::city}}.
+~~~
+
+!id: 0bnDtiWHLB
+!text: The capital of {{c2::New Zealand::country}} is {{c1::Wellington::city}}.
+~~~
+
+!id: 3BcX6iSHNj
+!text: The capital of {{c2::Nicaragua::country}} is {{c1::Managua::city}}.
+~~~
+
+!id: TOaNk5ykxV
+!text: The capital of {{c2::Niger::country}} is {{c1::Niamey::city}}.
+~~~
+
+!id: aa7ay0UBT8
+!text: The capital of {{c2::Nigeria::country}} is {{c1::Abuja::city}}.
+~~~
+
+!id: VWO6WsAxdS
+!text: The capital of {{c2::North Korea::country}} is {{c1::Pyongyang::city}}.
+~~~
+
+!id: RhGoDNbgrp
+!text: The capital of {{c2::North Macedonia::country}} is {{c1::Skopje::city}}.
+~~~
+
+!id: r6dRyHxiEh
+!text: The capital of {{c2::Norway::country}} is {{c1::Oslo::city}}.
+~~~
+
+!id: sdXL4ksFCd
+!text: The capital of {{c2::Oman::country}} is {{c1::Muscat::city}}.
+~~~
+
+!id: K7cdAFE0RV
+!text: The capital of {{c2::Pakistan::country}} is {{c1::Islamabad::city}}.
+~~~
+
+!id: 0k87DrKOSI
+!text: The capital of {{c2::Palau::country}} is {{c1::Ngerulmud::city}}.
+~~~
+
+!id: qSKrvc4F0w
+!text: The capital of {{c2::Panama::country}} is {{c1::Panama City::city}}.
+~~~
+
+!id: oDOEXDy5fr
+!text: The capital of {{c2::Papua New Guinea::country}} is {{c1::Port Moresby::city}}.
+~~~
+
+!id: 53EXxV64PR
+!text: The capital of {{c2::Paraguay::country}} is {{c1::Asunción::city}}.
+~~~
+
+!id: kWKqYDagky
+!text: The capital of {{c2::Peru::country}} is {{c1::Lima::city}}.
+~~~
+
+!id: TgzYMd717o
+!text: The capital of {{c2::Philippines::country}} is {{c1::Manila::city}}.
+~~~
+
+!id: gjpAvG6BIC
+!text: The capital of {{c2::Poland::country}} is {{c1::Warsaw::city}}.
+~~~
+
+!id: Oqm0LVihqj
+!text: The capital of {{c2::Portugal::country}} is {{c1::Lisbon::city}}.
+~~~
+
+!id: UmAl5MYlRT
+!text: The capital of {{c2::Qatar::country}} is {{c1::Doha::city}}.
+~~~
+
+!id: CvYBf8eYcx
+!text: The capital of {{c2::Romania::country}} is {{c1::Bucharest::city}}.
+~~~
+
+!id: as1FAuzLhR
+!text: The capital of {{c2::Russia::country}} is {{c1::Moscow::city}}.
+~~~
+
+!id: RxotY2u1hO
+!text: The capital of {{c2::Rwanda::country}} is {{c1::Kigali::city}}.
+~~~
+
+!id: eIidPQiBJG
+!text: The capital of {{c2::Saint Kitts and Nevis::country}} is {{c1::Basseterre::city}}.
+~~~
+
+!id: kTtComTiZk
+!text: The capital of {{c2::Saint Lucia::country}} is {{c1::Castries::city}}.
+~~~
+
+!id: ehxSy4L71S
+!text: The capital of {{c2::Saint Vincent and the Grenadines::country}} is {{c1::Kingstown::city}}.
+~~~
+
+!id: JdqoFfsnf5
+!text: The capital of {{c2::Samoa::country}} is {{c1::Apia::city}}.
+~~~
+
+!id: gUkSW6Tt6h
+!text: The capital of {{c2::San Marino::country}} is {{c1::City of San Marino::city}}.
+~~~
+
+!id: P6rgL0Iszk
+!text: The capital of {{c2::São Tomé and Príncipe::country}} is {{c1::São Tomé::city}}.
+~~~
+
+!id: CCcLznXEOg
+!text: The capital of {{c2::Saudi Arabia::country}} is {{c1::Riyadh::city}}.
+~~~
+
+!id: 04HzAYyevj
+!text: The capital of {{c2::Senegal::country}} is {{c1::Dakar::city}}.
+~~~
+
+!id: grhhWdjX6h
+!text: The capital of {{c2::Serbia::country}} is {{c1::Belgrade::city}}.
+~~~
+
+!id: TJhU4V4xew
+!text: The capital of {{c2::Seychelles::country}} is {{c1::Victoria::city}}.
+~~~
+
+!id: LMHcYXz1cJ
+!text: The capital of {{c2::Sierra Leone::country}} is {{c1::Freetown::city}}.
+~~~
+
+!id: Ge4Ti8fjtO
+!text: The capital of {{c2::Singapore::country}} is {{c1::Singapore::city}}.
+~~~
+
+!id: kZlB8MGMU9
+!text: The capital of {{c2::Slovakia::country}} is {{c1::Bratislava::city}}.
+~~~
+
+!id: KQgh2MMXhy
+!text: The capital of {{c2::Slovenia::country}} is {{c1::Ljubljana::city}}.
+~~~
+
+!id: 3hXw5xNunB
+!text: The capital of {{c2::Solomon Islands::country}} is {{c1::Honiara::city}}.
+~~~
+
+!id: im7y9Vqhhv
+!text: The capital of {{c2::Somalia::country}} is {{c1::Mogadishu::city}}.
+~~~
+
+!id: fEda1SmuFN
+!text: The capitals of {{c2::South Africa::country}} are {{c1::Pretoria, Bloemfontein, and Cape Town::cities}}.
+~~~
+
+!id: gLkp1fz0wf
+!text: The capital of {{c2::South Korea::country}} is {{c1::Seoul::city}}.
+~~~
+
+!id: ofGNMkOy3L
+!text: The capital of {{c2::South Sudan::country}} is {{c1::Juba::city}}.
+~~~
+
+!id: jc6gv4sb3N
+!text: The capital of {{c2::Spain::country}} is {{c1::Madrid::city}}.
+~~~
+
+!id: iOBV19I7Eo
+!text: The capital of {{c2::Sri Lanka::country}} is {{c1::Colombo::city}}.
+~~~
+
+!id: 01ZLXwNFyR
+!text: The capital of {{c2::Sudan::country}} is {{c1::Khartoum::city}}.
+~~~
+
+!id: fgtyUmiOBY
+!text: The capital of {{c2::Suriname::country}} is {{c1::Paramaribo::city}}.
+~~~
+
+!id: q1wH3MnBAY
+!text: The capital of {{c2::Sweden::country}} is {{c1::Stockholm::city}}.
+~~~
+
+!id: Gkk3eHPCq6
+!text: The capital of {{c2::Switzerland::country}} is {{c1::Bern::city}}.
 ~~~
 
 !id: 9cRqecNmPe
-!text: The capital of {{c1::Syria::country}} is {{c2::Damascus::city}}.
+!text: The capital of {{c2::Syria::country}} is {{c1::Damascus::city}}.
+~~~
+
+!id: Vaefqb4TFL
+!text: The capital of {{c2::Tajikistan::country}} is {{c1::Dushanbe::city}}.
+~~~
+
+!id: k19hVP6fyJ
+!text: The capital of {{c2::Tanzania::country}} is {{c1::Dodoma::city}}.
+~~~
+
+!id: gs6RbqG15E
+!text: The capital of {{c2::Thailand::country}} is {{c1::Bangkok::city}}.
+~~~
+
+!id: 0Zt3Ibf7uK
+!text: The capital of {{c2::Timor-Leste::country}} is {{c1::Dili::city}}.
+~~~
+
+!id: zkz27tYfdU
+!text: The capital of {{c2::Togo::country}} is {{c1::Lomé::city}}.
+~~~
+
+!id: Gk30Z9UnWj
+!text: The capital of {{c2::Tonga::country}} is {{c1::Nuku'alofa::city}}.
+~~~
+
+!id: cBQkOnN5ez
+!text: The capital of {{c2::Trinidad and Tobago::country}} is {{c1::Port of Spain::city}}.
+~~~
+
+!id: KNaSrrexjT
+!text: The capital of {{c2::Tunisia::country}} is {{c1::Tunis::city}}.
+~~~
+
+!id: WIXsZ3dxbU
+!text: The capital of {{c2::Türkiye::country}} is {{c1::Ankara::city}}.
+~~~
+
+!id: T1gteoP44k
+!text: The capital of {{c2::Turkmenistan::country}} is {{c1::Ashgabat::city}}.
+~~~
+
+!id: qYNR8SlAFh
+!text: The capital of {{c2::Tuvalu::country}} is {{c1::Funafuti::city}}.
+~~~
+
+!id: iYGoLDnyUC
+!text: The capital of {{c2::Uganda::country}} is {{c1::Kampala::city}}.
+~~~
+
+!id: DqmyNFAnCa
+!text: The capital of {{c2::Ukraine::country}} is {{c1::Kyiv::city}}.
+~~~
+
+!id: viDbXd0yzU
+!text: The capital of {{c2::United Arab Emirates::country}} is {{c1::Abu Dhabi::city}}.
+~~~
+
+!id: mQfaIfGHAp
+!text: The capital of {{c2::United Kingdom::country}} is {{c1::London::city}}.
+~~~
+
+!id: 64g1MRHtKH
+!text: The capital of {{c2::United States::country}} is {{c1::Washington D.C.::city}}.
+~~~
+
+!id: s7u0bMil0f
+!text: The capital of {{c2::Uruguay::country}} is {{c1::Montevideo::city}}.
+~~~
+
+!id: 1yF5YhbQRP
+!text: The capital of {{c2::Uzbekistan::country}} is {{c1::Tashkent::city}}.
+~~~
+
+!id: MjRe6bJKRe
+!text: The capital of {{c2::Vanuatu::country}} is {{c1::Port Vila::city}}.
+~~~
+
+!id: cWaEJj5hMM
+!text: The capital of {{c2::Venezuela::country}} is {{c1::Caracas::city}}.
+~~~
+
+!id: zeUQb5yDIz
+!text: The capital of {{c2::Vietnam::country}} is {{c1::Hanoi::city}}.
+~~~
+
+!id: flbinKRgkc
+!text: The capital of {{c2::Yemen::country}} is {{c1::Sana'a::city}}.
+~~~
+
+!id: zjR9ZjxqIm
+!text: The capital of {{c2::Zambia::country}} is {{c1::Lusaka::city}}.
+~~~
+
+!id: DfP8tFhKPG
+!text: The capital of {{c2::Zimbabwe::country}} is {{c1::Harare::city}}.
 ~~~

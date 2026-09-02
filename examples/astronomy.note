@@ -1,17 +1,223 @@
-!type: Basic
 !deck: Astronomy
+!type: Cloze
+!tags: Astronomy Solar-System Planets
 
 !id: sQ2f0rZPkv
-!front: The first planet from the Sun.
-!back: Mercury
+!text: The {{c2::first::position from the Sun}} planet from the Sun is {{c1::Mercury::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
 ~~~
 
 !id: c5oy4Sdwcd
-!front: The second planet from the Sun.
-!back: Venus
+!text: The {{c2::second::position from the Sun}} planet from the Sun is {{c1::Venus::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
 ~~~
 
-!id: rwEgiAQAln
-!front: The largest planet in the Solar System.
-!back: Jupiter
+!id: 35x6HyJqZP
+!text: The {{c2::third::position from the Sun}} planet from the Sun is {{c1::Earth::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: 3lHEUwJRYS
+!text: The {{c2::fourth::position from the Sun}} planet from the Sun is {{c1::Mars::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: jbuNVH8ner
+!text: The {{c2::fifth::position from the Sun}} planet from the Sun is {{c1::Jupiter::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: rq3BqmzhpO
+!text: The {{c2::sixth::position from the Sun}} planet from the Sun is {{c1::Saturn::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: sfMbOnvfYZ
+!text: The {{c2::seventh::position from the Sun}} planet from the Sun is {{c1::Uranus::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: tIhyVvorEf
+!text: The {{c2::eighth::position from the Sun}} planet from the Sun is {{c1::Neptune::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: ZOvHhajAG0
+!text: The {{c2::largest::size rank}} planet by diameter is {{c1::Jupiter::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: ljJZkmwji0
+!text: The {{c2::second-largest::size rank}} planet by diameter is {{c1::Saturn::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: kk10fP0WIT
+!text: The {{c2::third-largest::size rank}} planet by diameter is {{c1::Uranus::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: mGyT4dZfas
+!text: The {{c2::most massive::mass rank}} planet is {{c1::Jupiter::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: d3IIZBIqgp
+!text: The {{c2::second-most massive::mass rank}} planet is {{c1::Saturn::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: kapqXXRP3k
+!text: The {{c2::third-most massive::mass rank}} planet is {{c1::Neptune::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: qFL39N0Bvt
+!text: {{c1::Uranus::planet name}} is the third-largest planet by diameter, but {{c2::Neptune::planet name}} is the third-most massive planet.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: G2nY3cBp0E
+!text: The {{c2::smallest::size rank}} planet is {{c1::Mercury::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: WGeVosQXPr
+!text: The {{c2::densest::density rank}} planet is {{c1::Earth::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: yzpTH3HaWS
+!text: The {{c2::hottest::temperature rank}} planet is {{c1::Venus::planet name}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: OF9cftRwRF
+!text: The four large Galilean moons of Jupiter are {{c1::Io, Europa, Ganymede, and Callisto::moon names}}.
+~~~
+
+!id: XL2yxbdydF
+!text: The largest moon in the Solar System is {{c1::Ganymede::moon name}}, a moon of {{c2::Jupiter::planet name}}.
+~~~
+
+!id: 6QQX21IRDr
+!text: {{c1::Titan::moon name}} is Saturn's largest moon and is known for its thick atmosphere.
+~~~
+
+!id: Pq3y7bRfqR
+!text: {{c1::Enceladus::moon name}}, a moon of Saturn, is known for icy geysers and evidence of a subsurface ocean.
+~~~
+
+!id: laMm1VQfj0
+!text: The two small moons of Mars are {{c1::Phobos and Deimos::moon names}}.
+~~~
+
+!id: W16wqgU8Vm
+!text: {{c1::Triton::moon name}} is Neptune's largest moon and has a retrograde orbit.
+~~~
+
+!id: OEofmrcZGe
+!text: The largest moon of Uranus is {{c1::Titania::moon name}}.
+~~~
+
+!id: kQZyEwzZLm
+!text: {{c1::Io::moon name}}, a moon of Jupiter, is the most volcanically active body in the Solar System.
+~~~
+
+!id: vc61Xaxqbq
+!text: {{c1::Europa::moon name}}, a moon of Jupiter, is an important candidate for a subsurface ocean.
+~~~
+
+!id: XpthLKiPrh
+!text: Earth's only natural satellite is {{c1::the Moon::moon name}}.
+~~~
+
+!id: Ldk3tQDrJt
+!text: The asteroid belt lies mainly between {{c1::Mars and Jupiter::neighboring planets}}.
+~~~
+
+!id: 6NCbgfqrW3
+!text: The Kuiper Belt lies beyond {{c1::Neptune::planet name}}.
+~~~
+
+!id: HdaIkxtjDS
+!text: The four inner rocky planets are {{c1::Mercury, Venus, Earth, and Mars::planet names}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: yyE5NGbkYE
+!text: The four giant planets are {{c1::Jupiter, Saturn, Uranus, and Neptune::planet names}}.
+!back extra: ![Solar system planets](solar-system-planets.png)
+~~~
+
+!id: MxKJEu0QFQ
+!text: All four giant planets have {{c1::rings::feature}}, even though Saturn's are the most prominent.
+~~~
+
+!tags: Astronomy Solar-System Small-Bodies
+
+!id: Lc4q6ucGYf
+!text: The most famous periodic comet is {{c1::Halley's Comet::comet name}}, which returns roughly every {{c2::76 years::orbital period}}.
+~~~
+
+!id: joDKmzYYnm
+!text: {{c1::Comet 67P/Churyumov-Gerasimenko::comet name}} was visited by the {{c2::Rosetta::space mission}} spacecraft.
+~~~
+
+!id: pO81jevqJj
+!text: {{c1::Shoemaker-Levy 9::comet name}} broke apart and collided with {{c2::Jupiter::planet name}} in 1994.
+~~~
+
+!id: 9UofZvmCkV
+!text: The largest object in the asteroid belt is {{c1::Ceres::body name}}, which is classified as a {{c2::dwarf planet::body type}}.
+~~~
+
+!id: lLBk8K6xNX
+!text: {{c1::Pluto::body name}} is a dwarf planet in the {{c2::Kuiper Belt::region}}.
+~~~
+
+!id: B6x9CVbS4I
+!text: {{c1::Eris::body name}} is a distant dwarf planet whose discovery helped motivate Pluto's reclassification.
+~~~
+
+!id: bqTZfpxLaL
+!text: {{c1::Vesta::body name}} is one of the largest objects in the asteroid belt.
+~~~
+
+!id: PhHzHheNqo
+!text: {{c1::Bennu::asteroid name}} is a near-Earth asteroid sampled by NASA's {{c2::OSIRIS-REx::space mission}} mission.
+~~~
+
+!id: cbnpIDakak
+!text: The first confirmed interstellar object seen passing through the Solar System was {{c1::1I/'Oumuamua::object name}}.
+~~~
+
+!id: W3fAzgiGK9
+!text: The second confirmed interstellar object seen passing through the Solar System was {{c1::2I/Borisov::object name}}.
+~~~
+
+!tags: Astronomy Stars Nearby-Stars
+
+!id: HzmukHHkAA
+!text: The closest known star to the Sun outside the Solar System is {{c1::Proxima Centauri::star name}}.
+~~~
+
+!id: 7672DldUlb
+!text: Counting individual stars, the {{c1::second-closest::distance rank}} star to the Sun is commonly listed as {{c2::Alpha Centauri A::star name}}.
+~~~
+
+!id: X1BJkBAZd6
+!text: Counting individual stars, the {{c1::third-closest::distance rank}} star to the Sun is commonly listed as {{c2::Alpha Centauri B::star name}}.
+~~~
+
+!id: q9PSVxf1KP
+!text: {{c1::Alpha Centauri A and Alpha Centauri B::star names}} are nearly tied in distance from the Sun because they form a close binary pair.
+~~~
+
+!id: gpUYQ5RaJQ
+!text: {{c2::Proxima Centauri::star name}} is part of the {{c1::Alpha Centauri::stellar system}} system.
+~~~
+
+!id: W1CDrAxWZc
+!text: {{c1::Sirius::star name}} is one of the nearest stars to the Sun and the brightest star in Earth's night sky.
 ~~~
