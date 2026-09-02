@@ -405,6 +405,54 @@ def test_import_state_updates_existing_model(col):
   assert updated_model["css"] == "new css"
 
 
+def test_import_state_model_with_no_changes_is_not_updated(col):
+  # Arrange
+
+  # Seed the collection using the native Anki model API.
+  anki_model = col.models.new("My Type")
+  col.models.add_field(anki_model, col.models.new_field("Front"))
+  col.models.add_field(anki_model, col.models.new_field("Back"))
+  template = col.models.new_template("Card 1")
+  template["qfmt"] = "{{Front}}"
+  template["afmt"] = "{{Back}}"
+  col.models.add_template(anki_model, template)
+  anki_model["css"] = "css"
+  col.models.add(anki_model)
+
+  # An incoming model that is identical to the existing one, modulo case.
+  m1 = ModelNodes(
+    path="a.model",
+    line=1,
+    name="MY TYPE",
+    fields=[
+      ModelFieldNode(path="a.model", line=2, name="FRONT"),
+      ModelFieldNode(path="a.model", line=3, name="BACK"),
+    ],
+    cards=[
+      ModelCardNode(
+        path="a.model",
+        line=4,
+        name="CARD 1",
+        front="{{Front}}",
+        back="{{Back}}",
+      ),
+    ],
+    styles="css",
+  )
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_models.append(m1)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.updated_models == []
+  assert state.added_models == []
+
+
 def test_import_state_updates_existing_note(col):
   # Arrange
 
@@ -453,6 +501,54 @@ def test_import_state_updates_existing_note(col):
   cards = updated_note.cards()
   assert len(cards) == 1
   assert cards[0].did == col.decks.id("New Deck")
+
+
+def test_import_state_note_with_no_changes_is_not_updated(col):
+  # Arrange
+
+  # Seed the collection using the native Anki note API.
+  basic = col.models.by_name("Basic")
+  existing_note = Note(col, basic)
+  existing_note.guid = "111"
+  existing_note["Front"] = "<p>question</p>\n"
+  existing_note["Back"] = "<p>answer</p>\n"
+  existing_note.tags = ["A", "B", "C"]
+  col.add_note(existing_note, col.decks.id("My Deck"))
+
+  # An incoming note that renders to the same content, modulo tag order and case.
+  n1 = NoteNodes(
+    type=PropertyNode(path="a.note", line=1, name="type", value="BASIC"),
+    deck=PropertyNode(path="a.note", line=2, name="deck", value="My Deck"),
+    tags=PropertyNode(path="a.note", line=3, name="tags", value="C A B"),
+    guid=None,
+    fields=[
+      FieldNode(path="a.note", line=4, name="Id", value="111"),
+      FieldNode(path="a.note", line=5, name="FRONT", value="question"),
+      FieldNode(path="a.note", line=6, name="BACK", value="answer"),
+    ],
+    end=Location(path="a.note", line=7),
+  )
+
+  # Act
+
+  state = ImportState(col)
+  state.incoming_notes.append(n1)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.updated_notes == []
+  assert state.added_notes == []
+
+  note_ids = col.find_notes("*")
+  assert len(note_ids) == 1
+
+  unchanged_note = col.get_note(note_ids[0])
+  assert unchanged_note["Front"] == "<p>question</p>\n"
+  assert unchanged_note["Back"] == "<p>answer</p>\n"
+  assert unchanged_note.tags == ["A", "B", "C"]
+  assert unchanged_note.cards()[0].did == col.decks.id("My Deck")
 
 
 def test_import_state_update_note_clears_removed_field(col):
@@ -551,6 +647,7 @@ def test_import_state_create_models_and_nodes(col):
 
   # Act
 
+  # Re-importing the exact same data is a no-op: nothing actually changed.
   state = ImportState(col)
   state.incoming_models.append(m1)
   state.incoming_notes.append(n1)
@@ -559,8 +656,8 @@ def test_import_state_create_models_and_nodes(col):
   # Assert
 
   assert state.errors == []
-  assert state.updated_models == [m1]
-  assert state.updated_notes == [n1]
+  assert state.updated_models == []
+  assert state.updated_notes == []
   assert state.added_models == []
   assert state.added_notes == []
 

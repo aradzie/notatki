@@ -187,6 +187,8 @@ class ImportState:
   def _sync_models(self) -> None:
     for my_model in self.incoming_models:
       if anki_model := self._find_model(my_model.name):
+        if not self._model_would_change(my_model, anki_model):
+          continue
         if self._update_anki_model(my_model, anki_model):
           self.col.models.update(anki_model)
           self.updated_models.append(my_model)
@@ -212,6 +214,31 @@ class ImportState:
       anki_model["css"] = my_model.styles
 
     return anki_model
+
+  def _model_would_change(self, my_model: ModelNodes, anki_model: NotetypeDict) -> bool:
+    if my_model.cloze != anki_model["type"]:
+      return True
+
+    anki_field_names_lower = {fld["name"].lower() for fld in anki_model["flds"]}
+    for my_field in my_model.fields:
+      if my_field.name.lower() not in anki_field_names_lower:
+        return True
+
+    for my_card in my_model.cards:
+      found = False
+      for anki_card in anki_model["tmpls"]:
+        if anki_card["name"].lower() == my_card.name.lower():
+          found = True
+          if anki_card["qfmt"] != my_card.front or anki_card["afmt"] != my_card.back:
+            return True
+          break
+      if not found:
+        return True
+
+    if my_model.styles and anki_model["css"] != my_model.styles:
+      return True
+
+    return False
 
   def _update_anki_model(self, my_model: ModelNodes, anki_model: NotetypeDict) -> bool:
     # The update procedure is non-destructive.
@@ -331,11 +358,44 @@ class ImportState:
       )
       return False
 
+    if not self._note_would_change(my_note, anki_note):
+      return True
+
     if self._update_anki_note_fields(my_note, anki_note):
       deck_id = self.col.decks.id(my_note.deck.value)
       self._to_update.append(AddNoteRequest(anki_note, deck_id))
       self.updated_notes.append(my_note)
       return True
+
+    return False
+
+  def _note_would_change(self, my_note: NoteNodes, anki_note: Note) -> bool:
+    anki_type = anki_note.note_type()
+    if anki_type["name"].lower() != my_note.type.value.lower():
+      return True
+
+    if sorted(anki_note.tags) != sorted(my_note.tags.value.split()):
+      return True
+
+    anki_field_names = {fld["name"].lower(): fld["name"] for fld in anki_type["flds"]}
+    my_field_names_lower = {my_field.name.lower() for my_field in my_note.fields}
+
+    for my_field in my_note.fields:
+      field_name = anki_field_names.get(my_field.name.lower(), my_field.name)
+      if field_name not in anki_note or anki_note[field_name] != my_field.html:
+        return True
+
+    # Fields that were removed from the note file must be cleared.
+    for field_name_lower, field_name in anki_field_names.items():
+      if field_name_lower not in my_field_names_lower and anki_note[field_name] != "":
+        return True
+
+    deck = self.col.decks.by_name(my_note.deck.value)
+    if not deck:
+      return True
+    for card in anki_note.cards():
+      if card.did != deck["id"]:
+        return True
 
     return False
 
