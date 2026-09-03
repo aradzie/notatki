@@ -15,10 +15,12 @@ from .data import (
 def test_checker_reports_duplicate_model_names_case_insensitively() -> None:
   checker = Checker()
 
-  checker.check_models([
-    ModelNodes(path="a.model", line=1, name="Basic"),
-    ModelNodes(path="b.model", line=1, name="BASIC"),
-  ])
+  checker.check_models(
+    [
+      ModelNodes(path="a.model", line=1, name="Basic"),
+      ModelNodes(path="b.model", line=1, name="BASIC"),
+    ]
+  )
 
   assert checker.errors == [
     ParseError(path="b.model", line=1, message="Duplicate model 'BASIC'."),
@@ -29,7 +31,10 @@ def test_checker_reports_duplicate_model_fields_and_cards_case_insensitively() -
   checker = Checker()
 
   m1 = ModelNodes(
-    path="a.model", line=1, name="Basic", fields=[
+    path="a.model",
+    line=1,
+    name="Basic",
+    fields=[
       ModelFieldNode(path="a.model", line=2, name="Front"),
       ModelFieldNode(path="a.model", line=3, name="FRONT"),
     ],
@@ -61,7 +66,7 @@ def test_checker_reports_missing_guid_field() -> None:
 
   assert checker.errors == [
     ParseError(path="a.note", line=4, message="Note must have an id field."),
-    ParseError(path='a.note', line=4, message='Note must have at least one model field.'),
+    ParseError(path="a.note", line=4, message="Note must have at least one model field."),
   ]
 
 
@@ -81,7 +86,7 @@ def test_checker_reports_missing_model_fields() -> None:
   checker.check_notes(notes=[n1], tombstones=[])
 
   assert checker.errors == [
-    ParseError(path='a.note', line=4, message='Note must have at least one model field.'),
+    ParseError(path="a.note", line=4, message="Note must have at least one model field."),
   ]
 
 
@@ -197,7 +202,8 @@ def test_checker_reports_duplicate_note_fields_case_insensitively() -> None:
   n1 = NoteNodes(
     type=PropertyNode(path="a.note", line=1, name="type", value="Basic"),
     deck=PropertyNode(path="a.note", line=2, name="deck", value="Default"),
-    tags=PropertyNode(path="a.note", line=3, name="tags", value=""), guid=None,
+    tags=PropertyNode(path="a.note", line=3, name="tags", value=""),
+    guid=None,
     fields=[
       FieldNode(path="a.note", line=4, name="Id", value="123"),
       FieldNode(path="a.note", line=5, name="Front", value="Q"),

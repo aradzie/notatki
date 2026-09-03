@@ -67,7 +67,7 @@ def test_print_models_prints_complete_model_definition() -> None:
     "styles\n"
     ".card { color: red; }\n"
     "~~~\n"
-  )
+  )  # fmt: skip
 
 
 def test_print_notes_prints_properties_guid_and_multiline_fields() -> None:
@@ -101,7 +101,7 @@ def test_print_notes_prints_properties_guid_and_multiline_fields() -> None:
     "continued\n"
     "!Back: Answer\n"
     "~~~\n"
-  )
+  )  # fmt: skip
 
 
 def test_print_notes_skips_missing_optional_properties() -> None:
@@ -122,7 +122,7 @@ def test_print_notes_skips_missing_optional_properties() -> None:
   assert result == (
     "!Front: Question\n"
     "~~~\n"
-  )
+  )  # fmt: skip
 
 
 def test_print_notes_prints_untagged_for_empty_tags() -> None:
@@ -150,7 +150,7 @@ def test_print_notes_prints_untagged_for_empty_tags() -> None:
     "\n"
     "!Front: Question\n"
     "~~~\n"
-  )
+  )  # fmt: skip
 
 
 def test_print_notes_omits_repeated_property_values() -> None:
@@ -189,4 +189,4 @@ def test_print_notes_omits_repeated_property_values() -> None:
     "\n"
     "!Front: Q2\n"
     "~~~\n"
-  )
+  )  # fmt: skip

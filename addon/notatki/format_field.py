@@ -37,7 +37,7 @@ class _ImageAwareConverter(markdownify.MarkdownConverter):
     super().__init__(heading_style=heading_style)
     self._image_resolver = image_resolver
 
-  def convert_img(self, el, text, parent_tags):  # noqa: ANN001
+  def convert_img(self, el, text, parent_tags):
     if self._image_resolver is not None:
       el["src"] = self._image_resolver(el.attrs.get("src", None) or "")
     return super().convert_img(el, text, parent_tags)

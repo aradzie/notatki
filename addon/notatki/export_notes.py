@@ -12,12 +12,12 @@ from anki.collection import (
 from anki.notes import Note, NoteId
 from anki.utils import ids2str
 from aqt import AnkiQt, gui_hooks
-from aqt.import_export.exporting import ExportOptions, Exporter
+from aqt.import_export.exporting import Exporter, ExportOptions
 from aqt.operations import QueryOp
 from aqt.utils import showWarning, tooltip, tr
 
 from .assets import ExportAssetManager
-from .data import NoteNodes, PropertyNode, FieldNode
+from .data import FieldNode, NoteNodes, PropertyNode
 from .printer import print_notes
 
 
@@ -68,7 +68,8 @@ class NotesExporter(Exporter):
       guid=FieldNode(name="id", value=anki_note.guid),
       fields=[
         FieldNode.from_html(name, html, asset_manager.recorder(col, anki_note.guid, name))
-        for name, html in anki_note.items() if html
+        for name, html in anki_note.items()
+        if html
       ],
     )
 
@@ -86,9 +87,7 @@ class NotesExporter(Exporter):
 
   def _note_ids_for_card_ids(self, col: Collection, card_ids: Sequence[CardId]) -> Sequence[NoteId]:
     if card_ids:
-      return col.db.list(
-        f"select distinct nid from cards where id in {ids2str(card_ids)} order by nid"
-      )
+      return col.db.list(f"select distinct nid from cards where id in {ids2str(card_ids)} order by nid")
     return ()
 
   def _deck_name(self, col: Collection, note: Note) -> str:

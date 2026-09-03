@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "scripts": {
     "postinstall": "uv sync",
+    "format": "uv run ruff format",
+    "check": "uv run ruff check --fix",
     "test": "uv run pytest",
+    "mypy": "uv run mypy .",
     "build": "./build.sh"
   }
 }

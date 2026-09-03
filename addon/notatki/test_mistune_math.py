@@ -181,8 +181,7 @@ def test_math_content_is_not_retokenized_as_markdown():
   assert render("\\[\n**bold**\n\\]") == "<p><dm>**bold**</dm></p>"
   assert render("$$\n**bold**\n$$") == "<p><dm>**bold**</dm></p>"
   assert (
-    render("\\[\n`code` and _em_ and [link](http://x)\n\\]")
-    == "<p><dm>`code` and _em_ and [link](http://x)</dm></p>"
+    render("\\[\n`code` and _em_ and [link](http://x)\n\\]") == "<p><dm>`code` and _em_ and [link](http://x)</dm></p>"
   )
 
 

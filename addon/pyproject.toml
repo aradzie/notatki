@@ -5,13 +5,18 @@ description = "Notatki text notes importer addon for Anki"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "markdownify>=1.2.2",
-  "mistune>=3.2.0",
+  "markdownify>=1.2.3",
+  "mistune>=3.3.4",
 ]
 
 [dependency-groups]
 dev = [
-  "aqt>=25.9.2",
-  "mypy>=1.19.1",
-  "pytest>=9.0.2",
+  "aqt>=26.8.1",
+  "mypy>=2.3.1",
+  "pytest>=9.1.1",
+  "ruff>=0.16.5",
 ]
+
+[tool.ruff]
+line-length = 120
+indent-width = 2

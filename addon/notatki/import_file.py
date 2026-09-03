@@ -2,7 +2,7 @@ from pathlib import Path
 
 from anki.collection import Collection
 from aqt import AnkiQt
-from aqt.import_export.importing import Importer, IMPORTERS
+from aqt.import_export.importing import IMPORTERS, Importer
 from aqt.operations import QueryOp
 
 from .import_state import ImportState

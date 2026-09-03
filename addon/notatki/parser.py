@@ -3,10 +3,10 @@ from enum import StrEnum, auto
 
 from .data import (
   FieldNode,
+  Location,
   ModelCardNode,
   ModelFieldNode,
   ModelNodes,
-  Location,
   NoteNodes,
   NoteState,
   ParseError,
@@ -85,7 +85,7 @@ class NoteParser:
         tags=self._tags,
         guid=self._guid,
         fields=self._fields,
-        end=Location(path=self._path, line=self._line)
+        end=Location(path=self._path, line=self._line),
       ),
     )
     self._note_location = None

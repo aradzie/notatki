@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from html import escape
-from typing import TYPE_CHECKING, Match, NamedTuple
+from re import Match
+from typing import TYPE_CHECKING, NamedTuple
 
 if TYPE_CHECKING:
   from mistune import Plugin
@@ -100,7 +101,10 @@ def math(renderer: MathRenderer | None = None) -> "Plugin":
     # the start of another block (heading/list/blockquote/etc.) -- before any built-in block rule
     # gets a chance to intercept it.
     md.block.register(
-      "block_display_math", BLOCK_DISPLAY_MATH_PATTERN, _parse_block_display_math, before="fenced_code"
+      "block_display_math",
+      BLOCK_DISPLAY_MATH_PATTERN,
+      _parse_block_display_math,
+      before="fenced_code",
     )
     md.block.register(
       "block_display_math_alt",

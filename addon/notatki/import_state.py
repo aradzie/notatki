@@ -121,10 +121,7 @@ class ImportState:
       if not root.is_dir():
         raise NotADirectoryError(root)
       for root, dir_names, file_names in root.walk():
-        dir_names[:] = [
-          dir_name for dir_name in dir_names
-          if dir_name not in _IGNORED_DIR_NAMES
-        ]
+        dir_names[:] = [dir_name for dir_name in dir_names if dir_name not in _IGNORED_DIR_NAMES]
         for file_name in sorted(file_names):
           self.add_file(root / file_name)
     except Exception as err:
@@ -353,7 +350,7 @@ class ImportState:
         ParseError(
           path=my_note.path,
           line=my_note.line,
-          message=f"Cannot change note type from '{anki_type["name"]}' to '{my_type}'.",
+          message=f"Cannot change note type from '{anki_type['name']}' to '{my_type}'.",
         )
       )
       return False

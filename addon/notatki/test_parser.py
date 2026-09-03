@@ -1,12 +1,12 @@
 from .data import (
-  NoteNodes,
-  ParseError,
-  PropertyNode,
   FieldNode,
   Location,
   ModelCardNode,
   ModelFieldNode,
   ModelNodes,
+  NoteNodes,
+  ParseError,
+  PropertyNode,
   TombstoneNode,
 )
 from .parser import ModelParser, NoteParser

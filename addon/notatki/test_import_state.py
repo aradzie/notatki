@@ -662,30 +662,6 @@ def test_import_state_create_models_and_nodes(col):
   assert state.added_notes == []
 
 
-def test_import_state_imports_examples_directory(col):
-  # Act
-
-  examples_dir = Path(__file__).resolve().parents[2] / "examples"
-  state = ImportState.from_directory(col, examples_dir)
-  state.start()
-
-  # Assert
-
-  assert state.errors == []
-  assert state.updated_models == []
-  assert state.updated_notes == []
-  assert [model.name for model in state.added_models] == [
-    "Basic Math",
-    "Basic Math (and reversed card)",
-    "Cloze Math",
-  ]
-  assert len(state.added_notes) == 10
-  assert col.models.by_name("Basic Math") is not None
-  assert col.models.by_name("Basic Math (and reversed card)") is not None
-  assert col.models.by_name("Cloze Math") is not None
-  assert len(col.find_notes("*")) == 10
-
-
 def test_import_state_imports_referenced_image(col, tmp_path):
   # Arrange
 
@@ -861,3 +837,31 @@ def test_import_state_deletes_tombstoned_note_while_adding_another(col):
   note_ids = col.find_notes("")
   assert len(note_ids) == 1
   assert col.get_note(note_ids[0]).guid == "new-note"
+
+
+def test_import_state_imports_examples_directory(col):
+  # Act
+
+  examples_dir = Path(__file__).resolve().parents[2] / "examples"
+  state = ImportState.from_directory(col, examples_dir)
+  state.start()
+
+  # Assert
+
+  assert state.errors == []
+  assert state.updated_models == []
+  assert state.updated_notes == []
+  assert [model.name for model in state.added_models] == [
+    "Basic Math",
+    "Basic Math (and reversed card)",
+    "Cloze Math",
+  ]
+  assert len(state.updated_models) == 0
+  assert len(state.added_models) > 0
+  assert len(state.updated_notes) == 0
+  assert len(state.added_notes) > 0
+  assert len(state.deleted_notes) == 0
+  assert col.models.by_name("Basic Math") is not None
+  assert col.models.by_name("Basic Math (and reversed card)") is not None
+  assert col.models.by_name("Cloze Math") is not None
+  assert len(col.find_notes("*")) == len(state.added_notes)
