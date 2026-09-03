@@ -1,4 +1,3 @@
-# a leading comment
 <keyword.control.anki-notes>!delete:</keyword.control.anki-notes> aaaaaaaaaa
 <keyword.control.anki-notes>!DELETE:</keyword.control.anki-notes> bbbbbbbbbb
 
@@ -9,16 +8,8 @@
 <keyword.anki-notes>!back:</keyword.anki-notes> Answer
 <keyword.anki-notes>~~~</keyword.anki-notes>
 
-# a comment between two notes
-
 <keyword.control.anki-notes>!delete:</keyword.control.anki-notes> cccccccc
 
 <keyword.anki-notes>!front:</keyword.anki-notes> Note without explicit properties
 <keyword.anki-notes>!back:</keyword.anki-notes> Another value
-<keyword.anki-notes>~~~</keyword.anki-notes>
-
-<keyword.anki-notes>!front:</keyword.anki-notes> A multiline field body
-<keyword.anki-notes>!back:</keyword.anki-notes> First line
-# to the real parser this is field content, not a comment,
-# since a note's fields have already begun
 <keyword.anki-notes>~~~</keyword.anki-notes>

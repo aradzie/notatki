@@ -4,11 +4,10 @@ export type Node = {
   loc: LocationRange;
 };
 
-export type NoteListItemNode = NoteNode | TombstoneNode | CommentNode;
+export type NoteListItemNode = NoteNode | TombstoneNode;
 
 export function isNoteNode(node: NoteListItemNode): node is NoteNode;
 export function isTombstoneNode(node: NoteListItemNode): node is TombstoneNode;
-export function isCommentNode(node: NoteListItemNode): node is CommentNode;
 
 export type NoteNode = {
   type: "note";
@@ -30,11 +29,6 @@ export type FieldNode = {
 export type TombstoneNode = {
   type: "tombstone";
   id: Token;
-} & Node;
-
-export type CommentNode = {
-  type: "comment";
-  lines: string[];
 } & Node;
 
 export type ModelNode = {

@@ -241,27 +241,3 @@ test("parse tombstones", () => {
   ]);
 });
 
-test("parse comments", () => {
-  like(parseNoteList("# a comment\n"), [{ type: "comment", lines: [" a comment"] }]);
-  like(parseNoteList("#a comment\n"), [{ type: "comment", lines: ["a comment"] }]);
-  // Adjacent comment lines (no blank line between them) merge into a single node.
-  like(parseNoteList("# first\n# second\n!a:1\n~~~\n"), [
-    { type: "comment", lines: [" first", " second"] },
-    { fields: [{ name: { text: "a" } }] },
-  ]);
-  like(parseNoteList("# first\n# second\n# third\n"), [{ type: "comment", lines: [" first", " second", " third"] }]);
-  // A blank line breaks the run, so each side becomes its own node.
-  like(parseNoteList("# first\n\n# second\n"), [
-    { type: "comment", lines: [" first"] },
-    { type: "comment", lines: [" second"] },
-  ]);
-  like(parseNoteList("# before\n\n!delete:1\n\n# after\n"), [
-    { type: "comment", lines: [" before"] },
-    { type: "tombstone", id: { text: "1" } },
-    { type: "comment", lines: [" after"] },
-  ]);
-  // A `#` is only a comment where a new entry may start, not once a note's fields have begun.
-  like(parseNoteList("!a:1\n# not a comment\n~~~\n"), [
-    { fields: [{ name: { text: "a" }, value: { text: "1\n# not a comment" } }] },
-  ]);
-});

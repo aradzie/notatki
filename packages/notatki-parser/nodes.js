@@ -6,8 +6,4 @@ function isTombstoneNode(node) {
   return node.type === "tombstone";
 }
 
-function isCommentNode(node) {
-  return node.type === "comment";
-}
-
-export { isCommentNode, isNoteNode, isTombstoneNode };
+export { isNoteNode, isTombstoneNode };

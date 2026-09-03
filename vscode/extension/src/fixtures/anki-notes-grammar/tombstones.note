@@ -1,0 +1,15 @@
+!delete: aaaaaaaaaa
+!DELETE: bbbbbbbbbb
+
+!type: Basic
+!deck: Math
+!id: abc123
+!front: Question
+!back: Answer
+~~~
+
+!delete: cccccccc
+
+!front: Note without explicit properties
+!back: Another value
+~~~

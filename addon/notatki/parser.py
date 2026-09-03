@@ -26,7 +26,6 @@ def _field_name_pattern() -> str:
 class NoteParser:
   _FIELD_RE = re.compile(rf"^!(?P<name>{_field_name_pattern()}):(?P<value>.*)$")
   _END_RE = re.compile(r"^~~~[ \t]*$")
-  _COMMENT_RE = re.compile(r"^#")
 
   def __init__(self, path: str) -> None:
     self.errors: list[ParseError] = []
@@ -48,8 +47,6 @@ class NoteParser:
       self._handle_field_like(m)
     elif self._END_RE.match(line):
       self._handle_end()
-    elif self._current_field is None and self._COMMENT_RE.match(line):
-      pass  # Comment line; discarded.
     else:
       self._handle_text(line)
     self._line += 1

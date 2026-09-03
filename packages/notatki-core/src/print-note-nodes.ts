@@ -1,5 +1,5 @@
-import { type CommentNode, type NoteListItemNode, type NoteNode, type TombstoneNode } from "@notatki/parser";
-import { Output, reindentLines } from "./output.ts";
+import { type NoteListItemNode, type NoteNode, type TombstoneNode } from "@notatki/parser";
+import { Output } from "./output.ts";
 
 export function printNoteNodes(nodes: Iterable<NoteListItemNode>): string {
   const out = new Output();
@@ -10,9 +10,6 @@ export function printNoteNodes(nodes: Iterable<NoteListItemNode>): string {
         break;
       case "tombstone":
         printTombstone(out, node);
-        break;
-      case "comment":
-        printComment(out, node);
         break;
     }
   }
@@ -47,11 +44,4 @@ function printNote(out: Output, { properties, fields, end }: NoteNode): void {
 function printTombstone(out: Output, { id }: TombstoneNode): void {
   out.separate();
   out.print(id.text ? `!delete: ${id.text}` : `!delete:`);
-}
-
-function printComment(out: Output, { lines }: CommentNode): void {
-  out.separate();
-  for (const line of reindentLines(lines, 1)) {
-    out.print(`#${line}`);
-  }
 }

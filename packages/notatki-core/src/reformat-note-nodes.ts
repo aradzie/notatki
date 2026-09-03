@@ -1,5 +1,4 @@
 import {
-  type CommentNode,
   type FieldNode,
   type NoteListItemNode,
   type NoteNode,
@@ -19,8 +18,6 @@ export function reformatNoteNodes(
         return mapNoteNode(node);
       case "tombstone":
         return mapTombstoneNode(node);
-      case "comment":
-        return mapCommentNode(node);
     }
   }
 
@@ -38,14 +35,6 @@ export function reformatNoteNodes(
     return {
       type: "tombstone",
       id: { text: node.id.text, loc },
-      loc,
-    };
-  }
-
-  function mapCommentNode(node: CommentNode): CommentNode {
-    return {
-      type: "comment",
-      lines: [...node.lines],
       loc,
     };
   }

@@ -8,8 +8,7 @@ NoteList =
   { return list; }
 
 NoteListItem =
-  Comment
-  / Tombstone
+  Tombstone
   / Note
 
 Note =
@@ -57,14 +56,6 @@ Tombstone "tombstone" =
 TombstoneId =
   text:Text
   { return { text, loc: location() }; }
-
-Comment "comment" =
-  head:CommentLine lines:( Newline @CommentLine )*
-  { return { type: "comment", lines: [head, ...lines], loc: location() }; }
-
-CommentLine =
-  "#" text:Text
-  { return text; }
 
 // Model file parser
 // -----------------
