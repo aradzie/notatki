@@ -4,6 +4,7 @@ from anki.cards import Card
 from anki.collection import AddNoteRequest, Collection
 from anki.models import NotetypeDict
 from anki.notes import Note, NoteId
+from aqt.qt import QWidget
 from aqt.utils import showInfo, showWarning
 
 from .assets import ImportAssetManager
@@ -99,13 +100,16 @@ class ImportState:
     if self.errors:
       return
 
-  def report(self) -> None:
+  def report(self, parent: QWidget) -> None:
+    # The active window may be a progress dialog awaiting delayed cleanup.
+    # Use the main window so closing that dialog cannot dismiss the report.
     if self.errors:
       for error in self.errors:
         print(str(error))
-      showWarning("\n".join(str(error) for error in self.errors[:10]))
+      msg = "\n".join(str(error) for error in self.errors[:10])
+      showWarning(msg, parent=parent)
     else:
-      showInfo(
+      msg = (
         f"Added {len(self.added_models)} and "
         f"updated {len(self.updated_models)} models."
         "\n"
@@ -113,6 +117,7 @@ class ImportState:
         f"updated {len(self.updated_notes)}, and "
         f"deleted {len(self.deleted_notes)} notes."
       )
+      showInfo(msg, parent=parent)
 
   def find_files(self, root: Path) -> None:
     try:

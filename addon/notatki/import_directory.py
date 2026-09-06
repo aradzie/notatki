@@ -15,7 +15,7 @@ def init_import_directory(mw: AnkiQt) -> None:
     return state
 
   def on_success(state: ImportState) -> None:
-    state.report()
+    state.report(parent=mw)
     mw.reset()
 
   def import_dir() -> None:

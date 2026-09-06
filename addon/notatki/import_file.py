@@ -20,7 +20,7 @@ class FileImporter(Importer):
       return state
 
     def on_success(state: ImportState) -> None:
-      state.report()
+      state.report(parent=mw)
       mw.reset()
 
     QueryOp(
