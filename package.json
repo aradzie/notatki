@@ -33,7 +33,7 @@
     "vscode/extension"
   ],
   "dependencies": {
-    "katex": "^0.18.4",
+    "katex": "^0.18.7",
     "rich-assert": "^0.0.3"
   },
   "devDependencies": {
@@ -42,13 +42,13 @@
     "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-simple-import-sort": "^14.0.0",
-    "prettier": "^3.9.6",
-    "stylelint": "^17.14.1",
+    "prettier": "^3.9.7",
+    "stylelint": "^17.15.0",
     "stylelint-config-recommended": "^18.0.0",
     "stylelint-order": "^8.1.1",
     "stylelint-plugin-logical-css": "^2.1.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.67.0"
+    "typescript-eslint": "^8.70.0"
   },
   "scripts": {
     "compile": "npm run compile --workspaces --if-present",
