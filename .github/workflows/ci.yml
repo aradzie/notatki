@@ -8,6 +8,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+      - name: Install Qt system libraries (needed to import aqt/PyQt6 in addon tests)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libegl1 libgl1 libxkbcommon0 libfontconfig1 libglib2.0-0t64 libdbus-1-3 \
+            libnss3 libxcomposite1 libxdamage1 libxrandr2 libxtst6 libxkbfile1 \
+            libasound2t64 libxcursor1 libxi6 libxrender1 libx11-xcb1
       - uses: actions/setup-node@v7
         with:
           node-version: "26.x"
